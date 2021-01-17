@@ -1999,13 +1999,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ["food"],
   data: function data() {
     this.food = JSON.parse(this.food);
     return {
+      seen: true,
       quantityCount: this.food.quantity,
       image: this.food.image,
       name: this.food.name,
@@ -2032,9 +2032,9 @@ __webpack_require__.r(__webpack_exports__);
     removeButton: function removeButton() {
       var _this2 = this;
 
-      console.log(this.food);
-      var index = this.food.id;
       axios.post("/remove/" + this.food.id).then(function (response) {
+        _this2.seen = !_this2.seen;
+
         _this2.$store.commit("removeButton", response.data.quantity);
       });
     }
@@ -41633,72 +41633,76 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("table", { staticClass: "table" }, [
-    _c("tbody", [
-      _c("tr", [
-        _c("td", [_c("span", [_vm._v(_vm._s(_vm.name))])]),
-        _vm._v(" "),
-        _c("td", [_vm._v(_vm._s(_vm.price))]),
-        _vm._v(" "),
-        _c("td", [
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-success",
-              attrs: { type: "button" },
-              on: { click: _vm.sumButton }
-            },
-            [_vm._v("\n              +\n            ")]
-          ),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.quantityCount,
-                expression: "quantityCount"
-              }
-            ],
-            staticStyle: { width: "40px" },
-            domProps: { value: _vm.quantityCount },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
+  return _vm.seen
+    ? _c("table", { staticClass: "table" }, [
+        _c("tbody", [
+          _c("tr", [
+            _c("td", [_c("span", [_vm._v(_vm._s(_vm.name))])]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(_vm.price))]),
+            _vm._v(" "),
+            _c("td", [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-success",
+                  attrs: { type: "button" },
+                  on: { click: _vm.sumButton }
+                },
+                [_vm._v("\n              +\n            ")]
+              ),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.quantityCount,
+                    expression: "quantityCount"
+                  }
+                ],
+                staticStyle: { width: "40px" },
+                domProps: { value: _vm.quantityCount },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.quantityCount = $event.target.value
+                  }
                 }
-                _vm.quantityCount = $event.target.value
-              }
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-warning",
-              attrs: { type: "button" },
-              on: { click: _vm.subButton }
-            },
-            [_vm._v("\n              -\n            ")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("td", [_vm._v("\n        " + _vm._s(_vm.sub_total) + "\n        ")]),
-        _vm._v(" "),
-        _c("td", [
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-dark",
-              attrs: { type: "button" },
-              on: { click: _vm.removeButton }
-            },
-            [_vm._v("Törlés")]
-          )
+              }),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-warning",
+                  attrs: { type: "button" },
+                  on: { click: _vm.subButton }
+                },
+                [_vm._v("\n              -\n            ")]
+              )
+            ]),
+            _vm._v(" "),
+            _c("td", [
+              _vm._v("\n        " + _vm._s(_vm.sub_total) + "\n        ")
+            ]),
+            _vm._v(" "),
+            _c("td", [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-dark",
+                  attrs: { type: "button" },
+                  on: { click: _vm.removeButton }
+                },
+                [_vm._v("Törlés")]
+              )
+            ])
+          ])
         ])
       ])
-    ])
-  ])
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true

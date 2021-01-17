@@ -1,5 +1,5 @@
 <template>
-<table class="table">
+<table class="table" v-if="seen">
   <tbody>
         <tr>
           <td>
@@ -29,8 +29,7 @@
         {{sub_total}}
         </td>
           <td>
-              <button type="button" class="btn btn-dark" @click="removeButton">Törlés</button>
- <!--           <a href="{{route('cart.remove', [$id])}}">Delete</a>-->
+              <button type="button" class="btn btn-dark" v-on:click="removeButton">Törlés</button>
           </td>
         </tr>
 
@@ -45,6 +44,7 @@ export default {
   data() {
       this.food = JSON.parse(this.food);
     return {
+      seen: true,
       quantityCount: this.food.quantity,
       image: this.food.image,
       name: this.food.name,
@@ -71,12 +71,11 @@ export default {
         this.$store.commit("subButton");
     },
     removeButton(){
-        console.log(this.food);
-        const index = this.food.id;
         axios.post("/remove/" + this.food.id)
             .then((response) => {
+            this.seen = !this.seen;
             this.$store.commit("removeButton", response.data.quantity);
-            })
+      })
     }
   },
 

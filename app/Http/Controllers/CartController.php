@@ -46,13 +46,12 @@ class CartController extends Controller
         $cart = session()->get('cart');
         $quantity=0;
         if (isset($cart[$id])) {
-            $removeId = $id;
             $quantity += $cart[$id]['quantity'];
             unset($cart[$id]);
             session()->put('cart', $cart);
         }
 
-        return response()->json(['quantity' => $quantity, 'id' => $removeId]);
+        return response()->json(['quantity' => $quantity]);
 
 
     }
