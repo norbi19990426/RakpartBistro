@@ -1,5 +1,5 @@
 const state = {
-    badgeCount: 0,
+    badgeCount: 0
 },
 mutations = {
     cartButton(state){
@@ -7,7 +7,7 @@ mutations = {
     },
     sumButton(state){
         state.badgeCount++
-    },
+        },
     subButton(state){
         state.badgeCount--
     },

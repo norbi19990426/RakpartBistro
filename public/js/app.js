@@ -1927,21 +1927,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['cart'],
   data: function data() {
     this.cart = JSON.parse(this.cart);
     return {
-      cart: this.cart
+      cartFood: this.cart,
+      totalPrice: 0
     };
   }
 });
@@ -1999,6 +1991,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ["food"],
@@ -2007,7 +2001,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       seen: true,
       quantityCount: this.food.quantity,
-      image: this.food.image,
+      image: "storage/" + this.food.image,
       name: this.food.name,
       price: this.food.price,
       sub_total: this.food.price * this.food.quantity
@@ -2027,15 +2021,54 @@ __webpack_require__.r(__webpack_exports__);
       this.$store.commit("sumButton");
     },
     subButton: function subButton() {
+      var _this2 = this;
+
+      axios.post("/updateSub/" + this.food.id).then(function (response) {
+        if (response.data.quantity >= 1) {
+          _this2.quantityCount = response.data.quantity;
+          _this2.sub_total = response.data.sub_total;
+        } else {
+          sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire({
+            title: "Biztos benne?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            cancelButtonText: "Mégse",
+            confirmButtonText: "Igen, törlöm!"
+          }).then(function (result) {
+            if (result.isConfirmed) {
+              sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire("Termék törölve!");
+              _this2.seen = !_this2.seen;
+            }
+          });
+        }
+      })["catch"](function (error) {
+        console.log(error);
+        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire("Error", error.message, "error");
+      });
       this.$store.commit("subButton");
     },
     removeButton: function removeButton() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.post("/remove/" + this.food.id).then(function (response) {
-        _this2.seen = !_this2.seen;
+        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire({
+          title: "Biztos benne?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          cancelButtonText: "Mégse",
+          confirmButtonText: "Igen, törlöm!"
+        }).then(function (result) {
+          if (result.isConfirmed) {
+            sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire("Termék törölve!");
+            _this3.seen = !_this3.seen;
 
-        _this2.$store.commit("removeButton", response.data.quantity);
+            _this3.$store.commit("removeButton", response.data.quantity);
+          }
+        });
       });
     }
   }
@@ -2061,6 +2094,7 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js").default;
 
+Vue.prototype.$eventBus = new Vue();
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -41556,58 +41590,49 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" }, [
-    _c("table", { staticClass: "table" }, [
+  return _c(
+    "div",
+    { staticClass: "container" },
+    [
       _vm._m(0),
       _vm._v(" "),
-      _c(
-        "tbody",
-        _vm._l(_vm.cart, function(foodItem) {
-          return _c(
-            "div",
-            { key: foodItem.id },
-            [
-              _c("cart-item-component", {
-                attrs: { food: JSON.stringify(foodItem) }
-              })
-            ],
-            1
-          )
-        }),
-        0
-      ),
+      _vm._l(_vm.cartFood, function(foodItem) {
+        return _c(
+          "div",
+          { key: foodItem.id },
+          [
+            _c("cart-item-component", {
+              attrs: { food: JSON.stringify(foodItem) }
+            })
+          ],
+          1
+        )
+      }),
       _vm._v(" "),
-      _vm._m(1)
-    ])
-  ])
+      _c("div", { staticClass: "d-flex justify-content-end" }, [
+        _vm._v("\n        Totalprice: " + _vm._s(_vm.totalPrice) + "\n    ")
+      ])
+    ],
+    2
+  )
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("Food")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("price")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("qty")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("sub total")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("tfoot", [
-      _c("tr", [
-        _c("td", { attrs: { colspan: "2" } }),
-        _vm._v(" "),
-        _c("td", [_c("strong")])
-      ])
+    return _c("div", { staticClass: "row pb-2" }, [
+      _c("div", { staticClass: "col-2" }),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-2" }, [_vm._v("Étel")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-2" }, [_vm._v("Étel ár")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-2 pl-5" }, [_vm._v("Darab")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-2" }, [_vm._v("Összérték")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-2" })
     ])
   }
 ]
@@ -41634,14 +41659,27 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _vm.seen
-    ? _c("table", { staticClass: "table" }, [
-        _c("tbody", [
-          _c("tr", [
-            _c("td", [_c("span", [_vm._v(_vm._s(_vm.name))])]),
+    ? _c("div", [
+        _c(
+          "div",
+          {
+            staticClass: "row pt-3 pb-3",
+            staticStyle: { "border-top": "1px solid black" }
+          },
+          [
+            _c("div", { staticClass: "col-md-2" }, [
+              _c("img", { attrs: { src: _vm.image } })
+            ]),
             _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(_vm.price))]),
+            _c("div", { staticClass: "col-md-2" }, [
+              _c("h3", [_vm._v(_vm._s(_vm.name))])
+            ]),
             _vm._v(" "),
-            _c("td", [
+            _c("div", { staticClass: "col-md-2" }, [
+              _vm._v("\n          " + _vm._s(_vm.price) + " Ft\n      ")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md" }, [
               _c(
                 "button",
                 {
@@ -41649,7 +41687,7 @@ var render = function() {
                   attrs: { type: "button" },
                   on: { click: _vm.sumButton }
                 },
-                [_vm._v("\n              +\n            ")]
+                [_vm._v("\n              +\n          ")]
               ),
               _vm._v(" "),
               _c("input", {
@@ -41661,7 +41699,7 @@ var render = function() {
                     expression: "quantityCount"
                   }
                 ],
-                staticStyle: { width: "40px" },
+                staticStyle: { width: "35px" },
                 domProps: { value: _vm.quantityCount },
                 on: {
                   input: function($event) {
@@ -41680,15 +41718,15 @@ var render = function() {
                   attrs: { type: "button" },
                   on: { click: _vm.subButton }
                 },
-                [_vm._v("\n              -\n            ")]
+                [_vm._v("\n              -\n          ")]
               )
             ]),
             _vm._v(" "),
-            _c("td", [
-              _vm._v("\n        " + _vm._s(_vm.sub_total) + "\n        ")
+            _c("div", { staticClass: "col-md-2" }, [
+              _vm._v("\n          " + _vm._s(_vm.sub_total) + " Ft\n      ")
             ]),
             _vm._v(" "),
-            _c("td", [
+            _c("div", { staticClass: "col-md-2" }, [
               _c(
                 "button",
                 {
@@ -41696,11 +41734,11 @@ var render = function() {
                   attrs: { type: "button" },
                   on: { click: _vm.removeButton }
                 },
-                [_vm._v("Törlés")]
+                [_vm._v("\n              Törlés\n          ")]
               )
             ])
-          ])
-        ])
+          ]
+        )
       ])
     : _vm._e()
 }

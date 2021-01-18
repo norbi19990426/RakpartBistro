@@ -5,8 +5,9 @@
 </template>
 
 <script>
-import BadgeComponent from './BadgeComponent'
+import BadgeComponent from './BadgeComponent';
     export default {
+
         props: ['foodId'],
         methods:{
             cartButton(){
@@ -14,7 +15,7 @@ import BadgeComponent from './BadgeComponent'
                     .then(response => {
                         response.data
                     })
-            this.$store.commit("cartButton");
+                this.$store.commit("cartButton");
             },
         }
     }

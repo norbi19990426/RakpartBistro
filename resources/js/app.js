@@ -6,8 +6,10 @@
 
 require('./bootstrap');
 
+
 window.Vue = require('vue').default;
 import store from "./store/index"
+Vue.prototype.$eventBus = new Vue();
 
 /**
  * The following block of code may be used to automatically register your

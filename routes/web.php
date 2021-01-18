@@ -32,7 +32,7 @@ Route::get('/cart', 'App\Http\Controllers\CartController@index')->name('cart.ind
 
 Route::post('/remove/{id}', 'App\Http\Controllers\CartController@removeFromCart');
 Route::post('/updateSum/{id}', 'App\Http\Controllers\CartController@updateSum');
-Route::get('/updateSub/{id}', 'App\Http\Controllers\CartController@updateSub')->name('cart.updateSub');
+Route::post('/updateSub/{id}', 'App\Http\Controllers\CartController@updateSub');
 
 
 Route::get('/menu', 'App\Http\Controllers\MenuController@index')->name('menu.index');

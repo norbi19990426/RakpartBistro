@@ -77,7 +77,7 @@ class CartController extends Controller
         (
         [
             'quantity' => $cart[$id]['quantity'],
-            'sub_total' => $cart[$id]['price'] * $cart[$id]['quantity']
+            'sub_total' => $cart[$id]['price'] * $cart[$id]['quantity'],
         ],
             200
         );
@@ -85,12 +85,28 @@ class CartController extends Controller
     public function updateSub($id)
     {
         $cart = session()->get('cart');
-
         if (isset($cart[$id])) {
-            $cart[$id]['quantity']--;
-            session()->put('cart', $cart);
+            if($cart[$id]['quantity'] == 1){
+                $cart[$id]['quantity']--;
+                unset($cart[$id]);
+                session()->put('cart', $cart);
+            }
+            else if($cart[$id]['quantity'] > 1){
+                $cart[$id]['quantity']--;
+                session()->put('cart', $cart);
+
+                return response()->json
+                (
+                [
+                    'quantity' => $cart[$id]['quantity'],
+                    'sub_total' => $cart[$id]['price'] * $cart[$id]['quantity'],
+                ],
+                    200
+                );
+            }
         }
-        return back();
+        return response([]);
+
     }
 
     protected function sessionData(Food $food)
