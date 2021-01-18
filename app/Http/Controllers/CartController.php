@@ -77,7 +77,7 @@ class CartController extends Controller
         (
         [
             'quantity' => $cart[$id]['quantity'],
-            'sub_total' => $cart[$id]['price'] * $cart[$id]['quantity'],
+            'sub_total' => $cart[$id]['price'] * $cart[$id]['quantity']
         ],
             200
         );
