@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Response;
 use Illuminate\Http\Request;
 use App\Models\Food;
+use DateTime;
 use GrahamCampbell\ResultType\Success;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Support\Facades\View;
@@ -52,11 +53,13 @@ class CartController extends Controller
         }
 
         return response()->json(['quantity' => $quantity]);
-
-
     }
     public function updateSum($id)
     {
+
+        $file=fopen('../storage/app/test.json','w');
+        $line = date("h:i:sa:u");
+        fwrite($file,json_encode($line)."\r");
         $cart = session()->get('cart');
         if (isset($cart[$id])) {
             $cart[$id]['quantity']++;
@@ -71,8 +74,10 @@ class CartController extends Controller
             ],
                 404
             );
-
         }
+        $line = date("h:i:sa:u");
+        fwrite($file,json_encode($line));
+        fclose($file);
         return response()->json
         (
         [
@@ -82,31 +87,23 @@ class CartController extends Controller
             200
         );
     }
+
     public function updateSub($id)
     {
         $cart = session()->get('cart');
         if (isset($cart[$id])) {
-            if($cart[$id]['quantity'] == 1){
-                $cart[$id]['quantity']--;
-                unset($cart[$id]);
-                session()->put('cart', $cart);
-            }
-            else if($cart[$id]['quantity'] > 1){
-                $cart[$id]['quantity']--;
-                session()->put('cart', $cart);
+            $cart[$id]['quantity']--;
+            session()->put('cart', $cart);
 
-                return response()->json
-                (
-                [
-                    'quantity' => $cart[$id]['quantity'],
-                    'sub_total' => $cart[$id]['price'] * $cart[$id]['quantity'],
-                ],
-                    200
-                );
-            }
         }
-        return response([]);
-
+        return response()->json
+        (
+            [
+                'quantity' => $cart[$id]['quantity'],
+                'sub_total' => $cart[$id]['price'] * $cart[$id]['quantity'],
+            ],
+            200
+        );
     }
 
     protected function sessionData(Food $food)

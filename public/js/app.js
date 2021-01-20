@@ -1909,6 +1909,90 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
 /* harmony export */ });
+/* harmony import */ var _CartItemComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CartItemComponent */ "./resources/js/components/CartItemComponent.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: ['cart'],
+  components: {
+    CartItemComponent: _CartItemComponent__WEBPACK_IMPORTED_MODULE_0__.default
+  },
+  data: function data() {
+    this.cart = JSON.parse(this.cart);
+    return {
+      cartFood: this.cart,
+      totalPrice: 0,
+      cartItemsData: []
+    };
+  },
+  beforeMount: function beforeMount() {
+    this.defaultTotalPrice();
+  },
+  created: function created() {
+    this.sumTotalPrice();
+    this.defaultTotalPrice();
+  },
+  methods: {
+    getCartItemData: function getCartItemData(cartItemData) {
+      this.cartItemsData[cartItemData.id] = cartItemData.sub_total;
+      this.sumTotalPrice();
+    },
+    getRemove: function getRemove(cartItemData) {
+      this.cartItemsData[cartItemData.id] = cartItemData.sub_total;
+      this.sumTotalPrice();
+    },
+    sumTotalPrice: function sumTotalPrice() {
+      var _this = this;
+
+      this.totalPrice = 0;
+      this.cartItemsData.forEach(function (cartItemData) {
+        _this.totalPrice += cartItemData;
+      });
+    },
+    defaultTotalPrice: function defaultTotalPrice() {
+      var _this2 = this;
+
+      var keys = Object.keys(this.cartFood);
+      keys.forEach(function (key) {
+        var item = _this2.cartFood[key];
+        _this2.cartItemsData[item.id] = item.price * item.quantity;
+
+        _this2.sumTotalPrice();
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/CartItemComponent.vue?vue&type=script&lang=js&":
+/*!************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/CartItemComponent.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ });
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_0__);
 //
@@ -1950,29 +2034,45 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ["cart"],
+  props: ["food"],
   data: function data() {
-    this.food = JSON.parse(this.cart);
+    this.foodItem = JSON.parse(this.food);
     return {
       seen: true,
-      id: this.food.id,
-      quantityCount: this.food.quantity,
-      image: "storage/" + this.food.image,
-      name: this.food.name,
-      price: this.food.price,
-      sub_total: this.food.price * this.food.quantity
+      id: this.foodItem.id,
+      quantityCount: this.foodItem.quantity,
+      image: "storage/" + this.foodItem.image,
+      name: this.foodItem.name,
+      price: this.foodItem.price,
+      sub_total: this.foodItem.price * this.foodItem.quantity
     };
   },
   watch: {
-    sumButton: function sumButton() {
-      this.$emit("total-price", this.price);
+    sub_total: function sub_total() {
+      this.$emit("total-price", {
+        id: this.id,
+        sub_total: this.sub_total
+      });
+    },
+    seen: function seen() {
+      this.$emit("remove", {
+        id: this.id,
+        sub_total: 0
+      });
     }
   },
   methods: {
+    getFormattedDate: function getFormattedDate() {
+      var date = new Date();
+      var str = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+      return str;
+    },
     sumButton: function sumButton() {
       var _this = this;
 
-      axios.post("/updateSum/" + this.food.id).then(function (response) {
+      console.log("start", this.getFormattedDate());
+      axios.put("/updateSum/" + this.id).then(function (response) {
+        console.log("a vég", _this.getFormattedDate());
         _this.quantityCount = response.data.quantity;
         _this.sub_total = response.data.sub_total;
       })["catch"](function (error) {
@@ -1984,94 +2084,38 @@ __webpack_require__.r(__webpack_exports__);
     subButton: function subButton() {
       var _this2 = this;
 
-      axios.post("/updateSub/" + this.food.id).then(function (response) {
-        if (response.data.quantity >= 1) {
+      if (this.quantityCount == 1) {
+        this.removeButton();
+      } else {
+        axios.put("/updateSub/" + this.id).then(function (response) {
           _this2.quantityCount = response.data.quantity;
           _this2.sub_total = response.data.sub_total;
 
           _this2.$store.commit("subButton");
-        } else {
-          sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire({
-            title: "Biztos benne?",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            cancelButtonText: "Mégse",
-            confirmButtonText: "Igen, törlöm!"
-          }).then(function (result) {
-            if (result.isConfirmed) {
-              sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire("Termék törölve!");
-              _this2.seen = !_this2.seen;
-
-              _this2.$store.commit("subButton");
-            }
-          });
-        }
-      })["catch"](function (error) {
-        console.log(error);
-        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire("Error", error.message, "error");
-      });
+        });
+      }
     },
     removeButton: function removeButton() {
       var _this3 = this;
 
-      axios.post("/remove/" + this.food.id).then(function (response) {
-        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire({
-          title: "Biztos benne?",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          cancelButtonText: "Mégse",
-          confirmButtonText: "Igen, törlöm!"
-        }).then(function (result) {
-          if (result.isConfirmed) {
-            sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire("Termék törölve!");
+      sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire({
+        title: "Biztos benne?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        cancelButtonText: "Mégse",
+        confirmButtonText: "Igen, törlöm!"
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire("Termék törölve!");
+          axios["delete"]("/remove/" + _this3.id).then(function (response) {
             _this3.seen = !_this3.seen;
 
             _this3.$store.commit("removeButton", response.data.quantity);
-          }
-        });
+          });
+        }
       });
-    }
-  }
-});
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/CartItemComponent.vue?vue&type=script&lang=js&":
-/*!************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/CartItemComponent.vue?vue&type=script&lang=js& ***!
-  \************************************************************************************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
-/* harmony export */ });
-/* harmony import */ var _CartComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CartComponent */ "./resources/js/components/CartComponent.vue");
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  comments: {
-    CartComponent: _CartComponent__WEBPACK_IMPORTED_MODULE_0__.default
-  },
-  data: function data() {
-    return {
-      totalPrice: 0
-    };
-  },
-  methods: {
-    price: function price(params) {
-      this.totalPrice = params.price;
     }
   }
 });
@@ -41592,6 +41636,75 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "container" },
+    [
+      _vm._m(0),
+      _vm._v(" "),
+      _vm._l(_vm.cartFood, function(foodItem) {
+        return _c(
+          "div",
+          { key: foodItem.id },
+          [
+            _c("cart-item-component", {
+              attrs: { food: JSON.stringify(foodItem) },
+              on: { "total-price": _vm.getCartItemData, remove: _vm.getRemove }
+            })
+          ],
+          1
+        )
+      }),
+      _vm._v(" "),
+      _c("div", { staticClass: "d-flex justify-content-end" }, [
+        _c("h4", [_vm._v("Teljes összeg: " + _vm._s(_vm.totalPrice) + " HUF")])
+      ])
+    ],
+    2
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row pb-2" }, [
+      _c("div", { staticClass: "col-2" }),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-2" }, [_vm._v("Étel")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-2" }, [_vm._v("Étel ár")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-2 pl-5" }, [_vm._v("Darab")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-2" }, [_vm._v("Összérték")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-2" })
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/CartItemComponent.vue?vue&type=template&id=cc53cfe2&":
+/*!*****************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/CartItemComponent.vue?vue&type=template&id=cc53cfe2& ***!
+  \*****************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => /* binding */ render,
+/* harmony export */   "staticRenderFns": () => /* binding */ staticRenderFns
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
     _vm.seen
       ? _c("div", [
@@ -41619,7 +41732,7 @@ var render = function() {
                   "button",
                   {
                     staticClass: "btn btn-success",
-                    attrs: { type: "button", id: "sumButton" },
+                    attrs: { type: "button" },
                     on: { click: _vm.sumButton }
                   },
                   [_vm._v("\n          +\n        ")]
@@ -41658,7 +41771,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "col-md-2" }, [
-                _vm._v(_vm._s(_vm.sub_total) + " Ft")
+                _vm._v(_vm._s(_vm.sub_total) + " HUF")
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "col-md-2" }, [
@@ -41677,31 +41790,6 @@ var render = function() {
         ])
       : _vm._e()
   ])
-}
-var staticRenderFns = []
-render._withStripped = true
-
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/CartItemComponent.vue?vue&type=template&id=cc53cfe2&":
-/*!*****************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/CartItemComponent.vue?vue&type=template&id=cc53cfe2& ***!
-  \*****************************************************************************************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => /* binding */ render,
-/* harmony export */   "staticRenderFns": () => /* binding */ staticRenderFns
-/* harmony export */ });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "app" })
 }
 var staticRenderFns = []
 render._withStripped = true
