@@ -57,9 +57,9 @@ class CartController extends Controller
     public function updateSum($id)
     {
 
-        $file=fopen('../storage/app/test.json','w');
-        $line = date("h:i:sa:u");
-        fwrite($file,json_encode($line)."\r");
+       // $file=fopen('../storage/app/test.json','w');
+        //line = date("h:i:sa:u");
+        //fwrite($file,json_encode($line)."\r");
         $cart = session()->get('cart');
         if (isset($cart[$id])) {
             $cart[$id]['quantity']++;
@@ -75,9 +75,9 @@ class CartController extends Controller
                 404
             );
         }
-        $line = date("h:i:sa:u");
+        /*$line = date("h:i:sa:u");
         fwrite($file,json_encode($line));
-        fclose($file);
+        fclose($file);*/
         return response()->json
         (
         [

@@ -15,4 +15,11 @@ class MenuController extends Controller
 
         return view('foods.menu', compact('categories', 'foods'));
     }
+    public function indexAdmin()
+    {
+        $categories = Category::all();
+        $foods = Food::all();
+
+        return view('admin.menu', compact('categories', 'foods'));
+    }
 }

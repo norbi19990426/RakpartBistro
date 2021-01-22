@@ -61,18 +61,18 @@ watch:{
       }
   },
   methods: {
-      getFormattedDate() {
+     /* getFormattedDate() {
     var date = new Date();
     var str = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " +  date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
 
     return str;
-},
+    },*/
     sumButton() {
-        console.log("start", this.getFormattedDate());
+     //   console.log("start", this.getFormattedDate());
       axios
         .put("/updateSum/" + this.id)
         .then((response) => {
-         console.log("a vég", this.getFormattedDate());
+        // console.log("a vég", this.getFormattedDate());
           this.quantityCount = response.data.quantity;
           this.sub_total = response.data.sub_total;
         })

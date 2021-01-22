@@ -6,7 +6,6 @@
 </template>
 <script>
 import { mapState } from 'vuex'
-import AddToCartComponent from './AddToCartComponent'
 export default {
 
     computed: mapState({

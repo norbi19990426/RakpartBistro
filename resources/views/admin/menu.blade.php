@@ -3,6 +3,7 @@
 @section('content')
 <div class="container-fluid">
     <div class="container">
+        <a href="{{route('categories.create')}}">Új Kategória</a>
         <div class="row d-flex">
         @foreach ($categories as $category)
                 <div class="list-group p-2">
@@ -11,6 +12,7 @@
         @endforeach
         </div>
     </div>
+        <a href="{{route('foods.create')}}">Új Ételek</a>
         @foreach ($categories as $category)
             <h2 class="pt-5">{{$category->categoryName}}</h2>
                 <div class="row">
@@ -34,6 +36,7 @@
                                 </div>
                             </div>
                         @endif
+
                     @endforeach
                 <br>
             </div>

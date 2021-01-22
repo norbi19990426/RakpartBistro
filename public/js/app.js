@@ -1878,18 +1878,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
 /* harmony export */ });
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.mjs");
-/* harmony import */ var _AddToCartComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AddToCartComponent */ "./resources/js/components/AddToCartComponent.vue");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.mjs");
 //
 //
 //
 //
 //
 //
-
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  computed: (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapState)({
+  computed: (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapState)({
     badgeCount: function badgeCount(state) {
       return state.count.badgeCount;
     }
@@ -2062,17 +2060,17 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    getFormattedDate: function getFormattedDate() {
-      var date = new Date();
-      var str = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-      return str;
-    },
+    /* getFormattedDate() {
+    var date = new Date();
+    var str = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " +  date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+    return str;
+    },*/
     sumButton: function sumButton() {
       var _this = this;
 
-      console.log("start", this.getFormattedDate());
+      //   console.log("start", this.getFormattedDate());
       axios.put("/updateSum/" + this.id).then(function (response) {
-        console.log("a vég", _this.getFormattedDate());
+        // console.log("a vég", this.getFormattedDate());
         _this.quantityCount = response.data.quantity;
         _this.sub_total = response.data.sub_total;
       })["catch"](function (error) {
