@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Food;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class MenuController extends Controller
 {
@@ -12,8 +15,14 @@ class MenuController extends Controller
     {
         $categories = Category::all();
         $foods = Food::all();
+        if(Auth::check()){
+            $id = Auth::id();
+        }
+        else{
+            $id = 0;
+        }
 
-        return view('foods.menu', compact('categories', 'foods'));
+        return view('foods.menu', compact('categories', 'foods', 'id'));
     }
     public function indexAdmin()
     {

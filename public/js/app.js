@@ -1845,21 +1845,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
 /* harmony export */ });
-/* harmony import */ var _BadgeComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BadgeComponent */ "./resources/js/components/BadgeComponent.vue");
 //
 //
 //
 //
 //
 //
-
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['foodId'],
+  props: ['foodId', 'userId'],
   methods: {
     cartButton: function cartButton() {
       axios.post('/add-to-cart/' + this.foodId).then(function (response) {
         response.data;
       });
+
+      if (this.userId != 0) {
+        axios.post('/addToUserCart/' + this.foodId + "/" + this.userId).then(function (response) {
+          console.log(response.data);
+        });
+      }
+
       this.$store.commit("cartButton");
     }
   }
@@ -1926,9 +1931,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['cart'],
+  props: ['cart', 'userId', 'user'],
   components: {
     CartItemComponent: _CartItemComponent__WEBPACK_IMPORTED_MODULE_0__.default
   },
@@ -2032,7 +2038,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ["food"],
+  props: ["food", 'userId', 'user'],
   data: function data() {
     this.foodItem = JSON.parse(this.food);
     return {
@@ -2069,7 +2075,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       //   console.log("start", this.getFormattedDate());
-      axios.put("/updateSum/" + this.id).then(function (response) {
+      axios.put("/updateItemSum/" + this.id).then(function (response) {
         // console.log("a vég", this.getFormattedDate());
         _this.quantityCount = response.data.quantity;
         _this.sub_total = response.data.sub_total;
@@ -2077,6 +2083,11 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
         sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire("Error", error.message, "error");
       });
+
+      if (this.userId != 0) {
+        axios.post('/addToUserCart/' + this.id + "/" + this.userId);
+      }
+
       this.$store.commit("sumButton");
     },
     subButton: function subButton() {
@@ -2085,12 +2096,16 @@ __webpack_require__.r(__webpack_exports__);
       if (this.quantityCount == 1) {
         this.removeButton();
       } else {
-        axios.put("/updateSub/" + this.id).then(function (response) {
+        axios.put("/updateItemSub/" + this.id).then(function (response) {
           _this2.quantityCount = response.data.quantity;
           _this2.sub_total = response.data.sub_total;
 
           _this2.$store.commit("subButton");
         });
+
+        if (this.userId != 0) {
+          axios.post('/addToUserCart/' + this.id + "/" + this.userId);
+        }
       }
     },
     removeButton: function removeButton() {
@@ -2107,11 +2122,15 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (result) {
         if (result.isConfirmed) {
           sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire("Termék törölve!");
-          axios["delete"]("/remove/" + _this3.id).then(function (response) {
+          axios["delete"]("/itemRemove/" + _this3.id).then(function (response) {
             _this3.seen = !_this3.seen;
 
             _this3.$store.commit("removeButton", response.data.quantity);
           });
+
+          if (_this3.userId != 0) {
+            axios["delete"]('/userItemRemove/' + _this3.id + "/" + _this3.userId);
+          }
         }
       });
     }
@@ -41646,7 +41665,11 @@ var render = function() {
           { key: foodItem.id },
           [
             _c("cart-item-component", {
-              attrs: { food: JSON.stringify(foodItem) },
+              attrs: {
+                "user-id": _vm.userId,
+                user: _vm.user,
+                food: JSON.stringify(foodItem)
+              },
               on: { "total-price": _vm.getCartItemData, remove: _vm.getRemove }
             })
           ],

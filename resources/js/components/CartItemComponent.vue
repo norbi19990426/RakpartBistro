@@ -38,7 +38,7 @@
 <script>
 import Swal from "sweetalert2";
 export default {
-  props: ["food"],
+  props: ["food", 'userId', 'user'],
   data() {
     this.foodItem = JSON.parse(this.food);
     return {
@@ -70,7 +70,7 @@ watch:{
     sumButton() {
      //   console.log("start", this.getFormattedDate());
       axios
-        .put("/updateSum/" + this.id)
+        .put("/updateItemSum/" + this.id)
         .then((response) => {
         // console.log("a vég", this.getFormattedDate());
           this.quantityCount = response.data.quantity;
@@ -80,6 +80,9 @@ watch:{
           console.log(error);
           Swal.fire("Error", error.message, "error");
         });
+        if(this.userId != 0){
+            axios.post('/addToUserCart/' + this.id + "/" + this.userId)
+        }
       this.$store.commit("sumButton");
     },
 
@@ -89,12 +92,15 @@ watch:{
         }
         else{
             axios
-            .put("/updateSub/" + this.id)
+            .put("/updateItemSub/" + this.id)
                 .then((response) => {
                 this.quantityCount = response.data.quantity;
                 this.sub_total = response.data.sub_total;
                 this.$store.commit("subButton");
             })
+            if(this.userId != 0){
+                axios.post('/addToUserCart/' + this.id + "/" + this.userId)
+            }
         }
     },
     removeButton() {
@@ -109,11 +115,14 @@ watch:{
         }).then((result) => {
           if (result.isConfirmed) {
             Swal.fire("Termék törölve!");
-            axios.delete("/remove/" + this.id)
+            axios.delete("/itemRemove/" + this.id)
             .then((response) => {
                 this.seen = !this.seen;
                 this.$store.commit("removeButton", response.data.quantity);
             });
+        if(this.userId != 0){
+            axios.delete('/userItemRemove/' + this.id + "/" + this.userId)
+        }
           }
         });
     },

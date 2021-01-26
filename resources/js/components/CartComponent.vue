@@ -9,18 +9,19 @@
     <div class="col-2"></div>
 </div>
     <div v-for="foodItem in cartFood" :key="foodItem.id" >
-        <cart-item-component @total-price="getCartItemData" @remove="getRemove" :food="JSON.stringify(foodItem)"></cart-item-component>
+        <cart-item-component @total-price="getCartItemData" @remove="getRemove" :user-id="(userId)" :user="(user)" :food="JSON.stringify(foodItem)"></cart-item-component>
     </div>
     <div class="d-flex justify-content-end" >
         <h4>Teljes összeg: {{totalPrice}} HUF</h4>
     </div>
 </div>
+
 </template>
 <script>
 import CartItemComponent from "./CartItemComponent";
 
 export default {
-    props: ['cart'],
+    props: ['cart', 'userId', 'user'],
     components: { CartItemComponent },
     data(){
         this.cart = JSON.parse(this.cart);

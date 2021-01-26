@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 
@@ -32,15 +34,21 @@ Route::middleware(['auth:sanctum', 'verified', 'authadmin'])->group(function(){
     Route::post('/c', 'App\Http\Controllers\CategoriesController@store');
 });
 
+Route::post('/addToUserCart/{foodId}/{userId}', 'App\Http\Controllers\CartsController@addToUserCart')->middleware('auth');
+Route::delete('/userItemRemove/{foodId}/{userId}', 'App\Http\Controllers\CartsController@removeFromUserCart')->middleware('auth');
+Route::put('/updateUserItemSum/{foodId}/{userId}', 'App\Http\Controllers\CartsController@updateUserItemSum')->middleware('auth');
+Route::put('/updateUserItemSub/{foodId}/{userId}', 'App\Http\Controllers\CartsController@updateUserItemSub')->middleware('auth');
+
+
 Route::get('/menu', 'App\Http\Controllers\MenuController@index')->name('menu.index');
 
-Route::post('/add-to-cart/{food}', 'App\Http\Controllers\CartController@addToCart');
-Route::get('/cart', 'App\Http\Controllers\CartController@index')->name('cart.index');
+Route::post('/add-to-cart/{food}', 'App\Http\Controllers\CartsController@addToCart');
+Route::get('/cart', 'App\Http\Controllers\CartsController@index')->name('cart.index');
 
-Route::delete('/remove/{id}', 'App\Http\Controllers\CartController@removeFromCart');
+Route::delete('/itemRemove/{id}', 'App\Http\Controllers\CartsController@removeFromCart');
 
-Route::put('/updateSum/{id}', 'App\Http\Controllers\CartController@updateSum');
-Route::put('/updateSub/{id}', 'App\Http\Controllers\CartController@updateSub');
+Route::put('/updateItemSum/{id}', 'App\Http\Controllers\CartsController@updateItemSum');
+Route::put('/updateItemSub/{id}', 'App\Http\Controllers\CartsController@updateItemSub');
 
 
 

@@ -5,16 +5,22 @@
 </template>
 
 <script>
-import BadgeComponent from './BadgeComponent';
     export default {
 
-        props: ['foodId'],
+        props: ['foodId','userId'],
         methods:{
             cartButton(){
                 axios.post('/add-to-cart/' + this.foodId)
                     .then(response => {
                         response.data
                     })
+                if(this.userId != 0){
+                    axios.post('/addToUserCart/' + this.foodId + "/" + this.userId)
+                    .then(response =>{
+                        console.log(response.data);
+                    })
+                }
+
                 this.$store.commit("cartButton");
             },
         }

@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
 <div class="container-fluid">
     <div class="container">
         <div class="row d-flex">
@@ -27,7 +28,7 @@
                                         </div>
                                         <p class="card-text">{{$food->description}}</p>
                                         <div class="d-flex justify-content-end">
-                                            <addtocart-component food-id="{{$food->id}}"></addtocart-component>
+                                            <addtocart-component food-id="{{$food->id}}" user-id="{{$id}}"></addtocart-component>
                                         </div>
                                     </div>
                                 </div>
