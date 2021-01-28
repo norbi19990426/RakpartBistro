@@ -38,7 +38,7 @@
 <script>
 import Swal from "sweetalert2";
 export default {
-  props: ["food", 'userId', 'user'],
+  props: ["food", 'userId'],
   data() {
     this.foodItem = JSON.parse(this.food);
     return {
@@ -48,7 +48,7 @@ export default {
       image: "storage/" + this.foodItem.image,
       name: this.foodItem.name,
       price: this.foodItem.price,
-      sub_total: this.foodItem.price * this.foodItem.quantity,
+      sub_total: this.foodItem.price * this.foodItem.quantity
     };
   },
 
@@ -58,7 +58,10 @@ watch:{
       },
       seen:function(){
          this.$emit("remove", {id:this.id, sub_total:0} );
-      }
+      },
+      quantityCount:function(){
+          this.$emit("badgeCount", {id:this.id, quantityCount:this.quantityCount});
+      },
   },
   methods: {
      /* getFormattedDate() {
@@ -83,7 +86,6 @@ watch:{
         if(this.userId != 0){
             axios.post('/addToUserCart/' + this.id + "/" + this.userId)
         }
-      this.$store.commit("sumButton");
     },
 
     subButton() {
@@ -96,7 +98,6 @@ watch:{
                 .then((response) => {
                 this.quantityCount = response.data.quantity;
                 this.sub_total = response.data.sub_total;
-                this.$store.commit("subButton");
             })
             if(this.userId != 0){
                 axios.post('/addToUserCart/' + this.id + "/" + this.userId)
@@ -118,11 +119,12 @@ watch:{
             axios.delete("/itemRemove/" + this.id)
             .then((response) => {
                 this.seen = !this.seen;
-                this.$store.commit("removeButton", response.data.quantity);
+             this.$store.commit("removeButton", response.data.quantity);
             });
-        if(this.userId != 0){
-            axios.delete('/userItemRemove/' + this.id + "/" + this.userId)
-        }
+            if(this.userId != 0){
+                axios.delete('/userItemRemove/' + this.id + "/" + this.userId)
+
+            }
           }
         });
     },

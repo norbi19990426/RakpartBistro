@@ -24,10 +24,8 @@ Vue.prototype.$eventBus = new Vue();
 
 Vue.component('addtocart-component', require('./components/AddToCartComponent.vue').default);
 Vue.component('badge-component', require('./components/BadgeComponent.vue').default);
-Vue.component('remove-component', require('./components/RemoveComponent.vue').default);
 Vue.component('cart-item-component', require('./components/CartItemComponent.vue').default);
 Vue.component('cart-component', require('./components/CartComponent.vue').default);
-
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

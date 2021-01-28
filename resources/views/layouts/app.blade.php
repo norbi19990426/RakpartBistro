@@ -106,9 +106,9 @@
                             @endif
                             <li>
                                 <a href="{{route('cart.index')}}" class="nav-link">
-                                    <badge-component></badge-component>
-                                </a>
-                            </li>
+                                <badge-component cart="{{json_encode(session()->get('cart'))}}"></badge-component>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>

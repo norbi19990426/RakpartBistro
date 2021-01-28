@@ -1855,14 +1855,10 @@ __webpack_require__.r(__webpack_exports__);
   props: ['foodId', 'userId'],
   methods: {
     cartButton: function cartButton() {
-      axios.post('/add-to-cart/' + this.foodId).then(function (response) {
-        response.data;
-      });
+      axios.post('/add-to-cart/' + this.foodId);
 
       if (this.userId != 0) {
-        axios.post('/addToUserCart/' + this.foodId + "/" + this.userId).then(function (response) {
-          console.log(response.data);
-        });
+        axios.post('/addToUserCart/' + this.foodId + "/" + this.userId);
       }
 
       this.$store.commit("cartButton");
@@ -1892,11 +1888,38 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: ['cart'],
+  data: function data() {
+    this.cartItem = JSON.parse(this.cart);
+    return {
+      count: 0
+    };
+  },
   computed: (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapState)({
     badgeCount: function badgeCount(state) {
       return state.count.badgeCount;
     }
-  })
+  }),
+  created: function created() {
+    this.userLog();
+  },
+  methods: {
+    userLog: function userLog() {
+      var _this = this;
+
+      if (this.cartItem === null || this.cartItem === []) {
+        this.$store.commit("userLog", 0);
+        return;
+      }
+
+      var keys = Object.keys(this.cartItem);
+      keys.forEach(function (key) {
+        var item = _this.cartItem[key];
+        _this.count += item.quantity;
+      });
+      this.$store.commit("userLog", this.count);
+    }
+  }
 });
 
 /***/ }),
@@ -1939,19 +1962,23 @@ __webpack_require__.r(__webpack_exports__);
     CartItemComponent: _CartItemComponent__WEBPACK_IMPORTED_MODULE_0__.default
   },
   data: function data() {
-    this.cart = JSON.parse(this.cart);
+    this.cartFood = JSON.parse(this.cart);
     return {
-      cartFood: this.cart,
       totalPrice: 0,
-      cartItemsData: []
+      badgeCount: 0,
+      cartItemsData: [],
+      cartItemsCount: []
     };
   },
   beforeMount: function beforeMount() {
     this.defaultTotalPrice();
+    this.defaultTotalCount();
   },
   created: function created() {
     this.sumTotalPrice();
     this.defaultTotalPrice();
+    this.sumBridgeCount();
+    this.defaultTotalCount();
   },
   methods: {
     getCartItemData: function getCartItemData(cartItemData) {
@@ -1979,6 +2006,30 @@ __webpack_require__.r(__webpack_exports__);
         _this2.cartItemsData[item.id] = item.price * item.quantity;
 
         _this2.sumTotalPrice();
+      });
+    },
+    getQuantity: function getQuantity(cartItemCount) {
+      this.cartItemsCount[cartItemCount.id] = cartItemCount.quantityCount;
+      this.sumBridgeCount();
+    },
+    sumBridgeCount: function sumBridgeCount() {
+      var _this3 = this;
+
+      this.badgeCount = 0;
+      this.cartItemsCount.forEach(function (cartItemCount) {
+        _this3.badgeCount += cartItemCount;
+      });
+      this.$store.commit("sumBridgeCount", this.badgeCount);
+    },
+    defaultTotalCount: function defaultTotalCount() {
+      var _this4 = this;
+
+      var keys = Object.keys(this.cartFood);
+      keys.forEach(function (key) {
+        var item = _this4.cartFood[key];
+        _this4.cartItemsCount[item.id] = item.quantity;
+
+        _this4.sumBridgeCount();
       });
     }
   }
@@ -2038,7 +2089,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ["food", 'userId', 'user'],
+  props: ["food", 'userId'],
   data: function data() {
     this.foodItem = JSON.parse(this.food);
     return {
@@ -2063,6 +2114,12 @@ __webpack_require__.r(__webpack_exports__);
         id: this.id,
         sub_total: 0
       });
+    },
+    quantityCount: function quantityCount() {
+      this.$emit("badgeCount", {
+        id: this.id,
+        quantityCount: this.quantityCount
+      });
     }
   },
   methods: {
@@ -2086,9 +2143,8 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.userId != 0) {
         axios.post('/addToUserCart/' + this.id + "/" + this.userId);
-      }
+      } // this.$store.commit("sumButton");
 
-      this.$store.commit("sumButton");
     },
     subButton: function subButton() {
       var _this2 = this;
@@ -2098,9 +2154,7 @@ __webpack_require__.r(__webpack_exports__);
       } else {
         axios.put("/updateItemSub/" + this.id).then(function (response) {
           _this2.quantityCount = response.data.quantity;
-          _this2.sub_total = response.data.sub_total;
-
-          _this2.$store.commit("subButton");
+          _this2.sub_total = response.data.sub_total; //this.$store.commit("subButton");
         });
 
         if (this.userId != 0) {
@@ -2279,14 +2333,14 @@ var state = {
   cartButton: function cartButton(state) {
     state.badgeCount++;
   },
-  sumButton: function sumButton(state) {
-    state.badgeCount++;
-  },
-  subButton: function subButton(state) {
-    state.badgeCount--;
-  },
   removeButton: function removeButton(state, n) {
     state.badgeCount -= n;
+  },
+  sumBridgeCount: function sumBridgeCount(state, n) {
+    state.badgeCount = n;
+  },
+  userLog: function userLog(state, n) {
+    state.badgeCount = n;
   }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -41665,12 +41719,12 @@ var render = function() {
           { key: foodItem.id },
           [
             _c("cart-item-component", {
-              attrs: {
-                "user-id": _vm.userId,
-                user: _vm.user,
-                food: JSON.stringify(foodItem)
-              },
-              on: { "total-price": _vm.getCartItemData, remove: _vm.getRemove }
+              attrs: { "user-id": _vm.userId, food: JSON.stringify(foodItem) },
+              on: {
+                "total-price": _vm.getCartItemData,
+                remove: _vm.getRemove,
+                badgeCount: _vm.getQuantity
+              }
             })
           ],
           1

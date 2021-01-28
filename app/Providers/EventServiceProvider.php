@@ -19,7 +19,8 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
         'Illuminate\Auth\Events\Login' => [
-            'App\Listeners\AddToLoggedUserCart@handle',
+            'App\Listeners\AddToLoggedUserCart@table',
+            'App\Listeners\AddToLoggedUserCart@cart'
         ],
 
     ];

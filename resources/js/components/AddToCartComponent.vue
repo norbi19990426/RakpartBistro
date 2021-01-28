@@ -10,15 +10,10 @@
         props: ['foodId','userId'],
         methods:{
             cartButton(){
-                axios.post('/add-to-cart/' + this.foodId)
-                    .then(response => {
-                        response.data
-                    })
+                axios.post('/add-to-cart/' + this.foodId);
+
                 if(this.userId != 0){
-                    axios.post('/addToUserCart/' + this.foodId + "/" + this.userId)
-                    .then(response =>{
-                        console.log(response.data);
-                    })
+                    axios.post('/addToUserCart/' + this.foodId + "/" + this.userId);
                 }
 
                 this.$store.commit("cartButton");

@@ -18,12 +18,10 @@ class CartsController extends Controller
 {
     public function index()
     {
-        if(Auth::check()){
+        if (Auth::check()) {
             $id = Auth::id();
             $user = Cart::all();
-           $this->loggedUserCart();
-        }
-        else{
+        } else {
             $id = 0;
             $user = 0;
         }
@@ -58,7 +56,7 @@ class CartsController extends Controller
     public function removeFromCart($id)
     {
         $cart = session()->get('cart');
-            $quantity=0;
+        $quantity = 0;
         if (isset($cart[$id])) {
             $quantity += $cart[$id]['quantity'];
             unset($cart[$id]);
@@ -70,35 +68,32 @@ class CartsController extends Controller
     public function updateItemSum($id)
     {
 
-       // $file=fopen('../storage/app/test.json','w');
+        // $file=fopen('../storage/app/test.json','w');
         //line = date("h:i:sa:u");
         //fwrite($file,json_encode($line)."\r");
         $cart = session()->get('cart');
         if (isset($cart[$id])) {
             $cart[$id]['quantity']++;
             session()->put('cart', $cart);
-        }
-        else{
+        } else {
             //Akkor jön ide ha nem található a kosárba ezzel az id-al food
-            return response()->json
-            (
-            [
-                'message' => "not found"
-            ],
-                404
-            );
+            return response()->json(
+                    [
+                        'message' => "not found"
+                    ],
+                    404
+                );
         }
         /*$line = date("h:i:sa:u");
         fwrite($file,json_encode($line));
         fclose($file);*/
-        return response()->json
-        (
-        [
-            'quantity' => $cart[$id]['quantity'],
-            'sub_total' => $cart[$id]['price'] * $cart[$id]['quantity']
-        ],
-            200
-        );
+        return response()->json(
+                [
+                    'quantity' => $cart[$id]['quantity'],
+                    'sub_total' => $cart[$id]['price'] * $cart[$id]['quantity']
+                ],
+                200
+            );
     }
 
     public function updateItemSub($id)
@@ -107,69 +102,45 @@ class CartsController extends Controller
         if (isset($cart[$id])) {
             $cart[$id]['quantity']--;
             session()->put('cart', $cart);
-
         }
-        return response()->json
-        (
-            [
-                'quantity' => $cart[$id]['quantity'],
-                'sub_total' => $cart[$id]['price'] * $cart[$id]['quantity'],
-            ],
-            200
-        );
-
+        return response()->json(
+                [
+                    'quantity' => $cart[$id]['quantity'],
+                    'sub_total' => $cart[$id]['price'] * $cart[$id]['quantity'],
+                ],
+                200
+            );
     }
     //REGISZTRÁLT FELHASZNÁLÓ CART-JA
-    public function addToUserCart($foodId, $userId){
 
-            $cart = session()->get('cart');
-            $decision = DB::table('carts')->whereIn('user_id', [$userId])->whereIn('food_id', [$foodId])->get();
+    public function addToUserCart($foodId, $userId)
+    {
 
-            if(count($decision) == 0){
-           DB::table('carts')
-                ->insert(['user_id' => $userId,
-                'food_id' => $cart[$foodId]['id'],
-                'qty' => $cart[$foodId]['quantity']]);
-            }
+        $cart = session()->get('cart');
+        $decision = DB::table('carts')->whereIn('user_id', [$userId])->whereIn('food_id', [$foodId])->get();
+
+        if (count($decision) == 0) {
             DB::table('carts')
-                ->where('user_id', "=", $userId)
-                ->where('food_id', '=', $foodId)
-                ->update(['qty' => $cart[$foodId]['quantity']]);
+                ->insert([
+                    'user_id' => $userId,
+                    'food_id' => $cart[$foodId]['id'],
+                    'qty' => $cart[$foodId]['quantity']
+                ]);
+        }
+        DB::table('carts')
+            ->where('user_id', "=", $userId)
+            ->where('food_id', '=', $foodId)
+            ->update(['qty' => $cart[$foodId]['quantity']]);
 
-                session()->put('cart', $cart);
+        session()->put('cart', $cart);
+        // return $this->cart();
     }
-    public function removeFromUserCart($foodId, $userId){
+    public function removeFromUserCart($foodId, $userId)
+    {
 
         DB::table('carts')
             ->whereIn('user_id', [$userId])
             ->whereIn('food_id', [$foodId])->delete();
-
-    }
-    // A hozzáadás gombbal vannak problémák, ki-be lépés vagy már helyszínen, ha be van jelentkezve (Esetleges probléma hogy
-    // a hozzáadás növelés csökkentés egy functionon van)
-    public function loggedUserCart(){
-        if(count(DB::table('carts')->get()) != 0){
-            $userCart = Cart::all();
-            $food = Food::all();
-            $cart = session()->get('cart');
-                foreach($userCart as $cartItem){
-                    foreach($food as $foodItem){
-                        if($cartItem['food_id'] == $foodItem['id'] && $cartItem['user_id'] === Auth::id()){
-
-                            $userFood[] = [
-                                'id'        => $foodItem['id'],
-                                'name'      => $foodItem['foodName'],
-                                'quantity'  => $cartItem['qty'],
-                                'price'     => $foodItem['price'],
-                                'image'     => $foodItem['image']
-                            ];
-
-                            $cart = $userFood;
-                            session()->put('cart', $cart);
-                    }
-                }
-            }
-        }
     }
 
     protected function sessionData(Food $food)
