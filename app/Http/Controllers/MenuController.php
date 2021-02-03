@@ -22,7 +22,7 @@ class MenuController extends Controller
             $id = 0;
         }
 
-        return view('foods.menu', compact('categories', 'foods', 'id'));
+        return view('more-page.menu', compact('categories', 'foods', 'id'));
     }
     public function indexAdmin()
     {

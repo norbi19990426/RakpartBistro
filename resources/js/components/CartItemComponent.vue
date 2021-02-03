@@ -1,5 +1,4 @@
 <template>
-  <div class="container">
     <div v-if="seen">
       <div class="row pt-3 pb-3" style="border-top: 1px solid black">
         <div class="col-md-2">
@@ -19,7 +18,7 @@
 
           <input style="width: 35px" v-model="quantityCount" />
 
-          <button type="button" class="btn btn-warning" @click="subButton">
+          <button type="button" :disabled="requestProcessing" class="btn btn-warning" @click="subButton">
             -
           </button>
         </div>
@@ -33,7 +32,6 @@
         </div>
       </div>
     </div>
-  </div>
 </template>
 <script>
 import Swal from "sweetalert2";
@@ -48,7 +46,8 @@ export default {
       image: "storage/" + this.foodItem.image,
       name: this.foodItem.name,
       price: this.foodItem.price,
-      sub_total: this.foodItem.price * this.foodItem.quantity
+      sub_total: this.foodItem.price * this.foodItem.quantity,
+      requestProcessing: false
     };
   },
 
@@ -57,25 +56,17 @@ watch:{
          this.$emit("total-price", {id:this.id, sub_total:this.sub_total} );
       },
       seen:function(){
-         this.$emit("remove", {id:this.id, sub_total:0} );
+         this.$emit("remove", {id:this.id, sub_total:0});
       },
       quantityCount:function(){
-          this.$emit("badgeCount", {id:this.id, quantityCount:this.quantityCount});
+          this.$emit("badgeCount", {id:this.id, quantityCount:this.quantityCount,name:this.name,price:this.price});
       },
   },
   methods: {
-     /* getFormattedDate() {
-    var date = new Date();
-    var str = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " +  date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-
-    return str;
-    },*/
     sumButton() {
-     //   console.log("start", this.getFormattedDate());
       axios
         .put("/updateItemSum/" + this.id)
         .then((response) => {
-        // console.log("a vég", this.getFormattedDate());
           this.quantityCount = response.data.quantity;
           this.sub_total = response.data.sub_total;
         })
@@ -93,11 +84,13 @@ watch:{
             this.removeButton();
         }
         else{
+            this.requestProcessing = true;
             axios
             .put("/updateItemSub/" + this.id)
                 .then((response) => {
                 this.quantityCount = response.data.quantity;
                 this.sub_total = response.data.sub_total;
+                this.requestProcessing = false;
             })
             if(this.userId != 0){
                 axios.post('/addToUserCart/' + this.id + "/" + this.userId)
@@ -118,8 +111,8 @@ watch:{
             Swal.fire("Termék törölve!");
             axios.delete("/itemRemove/" + this.id)
             .then((response) => {
-                this.seen = !this.seen;
-             this.$store.commit("removeButton", response.data.quantity);
+                this.seen = false;
+                this.$store.commit("removeButton", response.data.quantity);
             });
             if(this.userId != 0){
                 axios.delete('/userItemRemove/' + this.id + "/" + this.userId)

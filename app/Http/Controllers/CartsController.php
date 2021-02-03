@@ -7,12 +7,8 @@ use App\Models\Cart;
 use Illuminate\Http\Request;
 use App\Models\Food;
 use App\Models\User;
-use DateTime;
-use GrahamCampbell\ResultType\Success;
-use Illuminate\Contracts\Session\Session;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\View;
 
 class CartsController extends Controller
 {
@@ -26,7 +22,7 @@ class CartsController extends Controller
             $user = 0;
         }
 
-        return view('foods.cart', compact('id', 'user'));
+        return view('more-page.cart', compact('id', 'user'));
     }
 
     //VENDÉG CART-JA
@@ -67,10 +63,6 @@ class CartsController extends Controller
     }
     public function updateItemSum($id)
     {
-
-        // $file=fopen('../storage/app/test.json','w');
-        //line = date("h:i:sa:u");
-        //fwrite($file,json_encode($line)."\r");
         $cart = session()->get('cart');
         if (isset($cart[$id])) {
             $cart[$id]['quantity']++;
@@ -84,9 +76,6 @@ class CartsController extends Controller
                     404
                 );
         }
-        /*$line = date("h:i:sa:u");
-        fwrite($file,json_encode($line));
-        fclose($file);*/
         return response()->json(
                 [
                     'quantity' => $cart[$id]['quantity'],
@@ -133,7 +122,6 @@ class CartsController extends Controller
             ->update(['qty' => $cart[$foodId]['quantity']]);
 
         session()->put('cart', $cart);
-        // return $this->cart();
     }
     public function removeFromUserCart($foodId, $userId)
     {

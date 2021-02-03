@@ -39,13 +39,14 @@ Route::delete('/userItemRemove/{foodId}/{userId}', 'App\Http\Controllers\CartsCo
 
 Route::get('/menu', 'App\Http\Controllers\MenuController@index')->name('menu.index');
 
-Route::post('/add-to-cart/{food}', 'App\Http\Controllers\CartsController@addToCart');
 Route::get('/cart', 'App\Http\Controllers\CartsController@index')->name('cart.index');
-
+Route::post('/add-to-cart/{food}', 'App\Http\Controllers\CartsController@addToCart');
 Route::delete('/itemRemove/{id}', 'App\Http\Controllers\CartsController@removeFromCart');
-
 Route::put('/updateItemSum/{id}', 'App\Http\Controllers\CartsController@updateItemSum');
 Route::put('/updateItemSub/{id}', 'App\Http\Controllers\CartsController@updateItemSub');
 
+Route::get('/checkout', 'App\Http\Controllers\CheckoutController@index')->name('checkout.index');
 
+Route::post('/order', 'App\Http\Controllers\OrdersController@createOrderFromRequest');
+Route::post('/orderItem/{orderId}', 'App\Http\Controllers\OrderItemsController@createOrderItems');
 

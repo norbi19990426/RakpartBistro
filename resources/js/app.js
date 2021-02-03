@@ -8,8 +8,11 @@ require('./bootstrap');
 
 
 window.Vue = require('vue').default;
+import Form from './Form';
+window.Form = Form;
 import store from "./store/index"
 Vue.prototype.$eventBus = new Vue();
+
 
 /**
  * The following block of code may be used to automatically register your
@@ -26,6 +29,8 @@ Vue.component('addtocart-component', require('./components/AddToCartComponent.vu
 Vue.component('badge-component', require('./components/BadgeComponent.vue').default);
 Vue.component('cart-item-component', require('./components/CartItemComponent.vue').default);
 Vue.component('cart-component', require('./components/CartComponent.vue').default);
+Vue.component('checkout-component', require('./components/CheckoutComponent.vue').default);
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
