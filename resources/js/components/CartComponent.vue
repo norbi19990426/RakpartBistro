@@ -11,14 +11,16 @@
         <div class="col-md-4">
             <h5>A KOSÁR ÖSSZESEN</h5>
             <p>ÖSSZEG {{totalPrice}}</p>
-            <button @click="checkoutButton">Tovább a pénztárhoz</button>
+            <button class="btn btn-primary" @click="checkoutButton">Tovább a pénztárhoz</button>
+            <!--<a class="btn btn-primary" v-bind:href="menuRoute">Vissza a menübe</a>-->
         </div>
         <div class="pt-2 pl-2 col-md-8" style="border-top: 1px black solid" >
         </div>
     </div>
     <div v-show="(hideCheckout)">
         <div v-if="hideCart == false">
-            <checkout-component @checkout="getCart" :checkout-food-id="JSON.stringify(checkout)" :total-price="(totalPrice)"></checkout-component>
+            <checkout-component @checkout="getCart" :checkout-food-id="JSON.stringify(checkout)"
+            :payment-route="(paymentRoute)" :total-price="(totalPrice)"></checkout-component>
         </div>
     </div>
 </div>
@@ -27,7 +29,7 @@
 import CartItemComponent from "./CartItemComponent";
 import CheckoutComponent from './CheckoutComponent.vue';
 export default {
-    props: ['cart', 'userId', 'user'],
+    props: ['cart', 'userId', 'user', 'paymentRoute'],
     components: { CartItemComponent, CheckoutComponent},
     data(){
         this.cartFood = JSON.parse(this.cart);

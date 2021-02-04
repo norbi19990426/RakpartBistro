@@ -14,6 +14,7 @@ import store from "./store/index"
 Vue.prototype.$eventBus = new Vue();
 
 
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -30,6 +31,9 @@ Vue.component('badge-component', require('./components/BadgeComponent.vue').defa
 Vue.component('cart-item-component', require('./components/CartItemComponent.vue').default);
 Vue.component('cart-component', require('./components/CartComponent.vue').default);
 Vue.component('checkout-component', require('./components/CheckoutComponent.vue').default);
+Vue.component('admin-button-component', require('./components/AdminButtonComponent.vue').default);
+Vue.component('admin-menu-component', require('./components/AdminMenuComponent.vue').default);
+Vue.component('sidebar-component', require('./components/SidebarComponent.vue').default);
 
 
 /**

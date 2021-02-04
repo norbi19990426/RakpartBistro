@@ -45,8 +45,7 @@ Route::delete('/itemRemove/{id}', 'App\Http\Controllers\CartsController@removeFr
 Route::put('/updateItemSum/{id}', 'App\Http\Controllers\CartsController@updateItemSum');
 Route::put('/updateItemSub/{id}', 'App\Http\Controllers\CartsController@updateItemSub');
 
-Route::get('/checkout', 'App\Http\Controllers\CheckoutController@index')->name('checkout.index');
-
 Route::post('/order', 'App\Http\Controllers\OrdersController@createOrderFromRequest');
 Route::post('/orderItem/{orderId}', 'App\Http\Controllers\OrderItemsController@createOrderItems');
 
+Route::get('/paymentSuccessFull', 'App\Http\Controllers\PaymentSuccessFullController@index')->name('paymentSuccess.index');

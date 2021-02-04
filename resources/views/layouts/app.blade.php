@@ -43,6 +43,8 @@
                             @if (Route::has('login'))
                                 @auth
                                     @if (Auth::user()->utype === 'ADM')
+                                        <admin-menu-component></admin-menu-component>
+
                                         <li class="nav-item">
                                             <a class="nav-link" href="{{route('menu.indexAdmin')}}" >AdminMenü</a>
                                         </li>

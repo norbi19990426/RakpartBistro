@@ -3,8 +3,7 @@
 @section('content')
 
 <div class="container-fluid">
-    <div class="container">
-        <div class="row d-flex">
+        <div class="row d-flex justify-content-center">
         @foreach ($categories as $category)
                 <div class="list-group p-2">
                     <a href="#" class="list-group-item list-group-item-action"> {{ $category->categoryName }}</a>
@@ -39,5 +38,5 @@
                 <br>
             </div>
         @endforeach
-        </div>
+    </div>
 @endsection

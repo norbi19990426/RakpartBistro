@@ -33,6 +33,7 @@ class OrdersController extends Controller
             'message' => $data['message'],
             'totalPrice' =>$data['totalPrice']
         ]);
+
         $cart = session()->get('cart');
         foreach($cart as $cartItem){
             DB::table('order_items')
@@ -41,6 +42,10 @@ class OrdersController extends Controller
             'qty' => $cartItem['quantity']]);
         }
         session()->forget('cart');
-        return response()->json($data);
+
+        date_default_timezone_set('Europe/Budapest');
+        $timestamp = time() + 60*60;
+        $time = date("H:i", $timestamp);
+        return redirect()->route('paymentSuccess.index')->with(['time' => $time]);
     }
 }

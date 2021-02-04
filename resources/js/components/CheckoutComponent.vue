@@ -1,9 +1,9 @@
 <template>
     <div class="row ml-5 mr-5">
         <div class="col-md-8">
-            <form method="POST" enctype="multipart/form-data" @submit.prevent="submitOrder">
+            <form method="POST" enctype="multipart/form-data">
                 <div class="d-flex">
-                    <div class="form-group">
+                    <div class="form-group pr-5">
                         <label for="vezeteknev">Vezetéknév:</label>
                         <input type="text" v-model="form.vezeteknev" class="form-control" style="width: 400px"
                         :class="{'is-invalid' : form.errors.has('vezeteknev')}"
@@ -20,7 +20,7 @@
                     </div>
                 </div>
                 <div class="d-flex">
-                    <div class="form-gorup">
+                    <div class="form-gorup pr-5">
                         <label for="iranyitoszam">Irányítószám:</label>
                         <input type="text"
                         v-model="form.iranyitoszam" class="form-control" style="width: 400px"
@@ -40,19 +40,19 @@
                 <div class="form-group">
                     <label for="address">Utca, házszám:</label>
                     <input type="text" placeholder="Utcanév, házszám"
-                    v-model="form.address" class="form-control" style="width: 800px"
+                    v-model="form.address" class="form-control" style="width: 850px"
                     :class="{'is-invalid' : form.errors.has('address')}"
                     @keydown="form.errors.clear('address')">
                     <div class="invalid-feedback" v-show="form.errors.has('address')" v-text="form.errors.get('address')"></div>
                 </div>
                 <div class="form-group">
                     <input type="text" placeholder="Lépcsőház, emelet, ajtó, stb. (nem kötelező)"
-                    v-model="form.emelet" class="form-control" style="width: 800px">
+                    v-model="form.emelet" class="form-control" style="width: 850px">
                 </div>
                 <div class="form-group">
                     <label for="telefonszam">Telefonszám:</label>
                     <input type="text" v-model="form.telefonszam"
-                    class="form-control" style="width: 800px"
+                    class="form-control" style="width: 850px"
                       :class="{'is-invalid' : form.errors.has('telefonszam')}"
                         @keydown="form.errors.clear('telefonszam')">
                         <div class="invalid-feedback" v-show="form.errors.has('telefonszam')" v-text="form.errors.get('telefonszam')"></div>
@@ -60,22 +60,25 @@
                 <div class="form-group">
                     <label for="email">E-mail cím:</label>
                     <input type="email" v-model="form.email"
-                    class="form-control" style="width: 800px"
+                    class="form-control" style="width: 850px"
                       :class="{'is-invalid' : form.errors.has('email')}"
                         @keydown="form.errors.clear('email')">
                         <div class="invalid-feedback" v-show="form.errors.has('email')" v-text="form.errors.get('email')"></div>
                 </div>
                 <div class="form-group">
                     <label for="message">Rendeléshez megjegyzés:</label>
-                    <textarea class="textarea" placeholder="Megjegyzés"
-                    v-model="form.message" style="width: 800px"></textarea>
+                    <textarea class="form-control" placeholder="Megjegyzés"
+                    v-model="form.message" style="width: 850px"></textarea>
                 </div>
-                <input type="submit" class="btn btn-success">
+                <div class="justify-content-between">
+                    <a v-bind:href="paymentRoute" @click="submitOrder" class="btn btn-primary ">Fizetés</a>
+                </div>
+
             </form>
         </div>
         <div class="col-md-4 p-5">
             <h5>RENDELÉS TARTALMA</h5>
-            <button @click="cartButton">Visszatérés a kosárhoz</button>
+            <button class="btn btn-primary" @click="cartButton">Visszatérés a kosárhoz</button>
             <div class="d-flex justify-content-between pt-3" style="border-bottom: 1px solid black">
                 <h5>Termék</h5>
                 <h5>Összeg</h5>
@@ -99,7 +102,7 @@
 <script>
 
 export default {
-    props: ['checkoutFoodId','totalPrice'],
+    props: ['checkoutFoodId','totalPrice', 'paymentRoute'],
     data(){
     this.foodItem = JSON.parse(this.checkoutFoodId);
         return{
@@ -127,6 +130,7 @@ export default {
     methods: {
         cartButton(){
             this.cart = true;
+            console.log(this.menuRoute);
         },
         submitOrder(){
             let data = new FormData();
