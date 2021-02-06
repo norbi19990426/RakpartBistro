@@ -10,8 +10,10 @@ require('./bootstrap');
 window.Vue = require('vue').default;
 import Form from './Form';
 window.Form = Form;
-import store from "./store/index"
+import store from "./store/index";
 Vue.prototype.$eventBus = new Vue();
+import VueJSModal from 'vue-js-modal';
+Vue.use(VueJSModal);
 
 
 
@@ -31,9 +33,11 @@ Vue.component('badge-component', require('./components/BadgeComponent.vue').defa
 Vue.component('cart-item-component', require('./components/CartItemComponent.vue').default);
 Vue.component('cart-component', require('./components/CartComponent.vue').default);
 Vue.component('checkout-component', require('./components/CheckoutComponent.vue').default);
+
 Vue.component('admin-button-component', require('./components/AdminButtonComponent.vue').default);
 Vue.component('admin-menu-component', require('./components/AdminMenuComponent.vue').default);
 Vue.component('sidebar-component', require('./components/SidebarComponent.vue').default);
+Vue.component('order-management-component', require('./components/OrderManagementComponent.vue').default);
 
 
 /**

@@ -6,9 +6,9 @@
 
    <sidebar-component>
      <ul class="sidebar-panel-nav">
-       <li><a href="#home">Home</a></li>
-       <li><a href="#about">About</a></li>
-       <li><a href="#contact">Contact</a></li>
+       <li><a v-bind:href="createCategory">Új kategória</a></li>
+       <li><a v-bind:href="createFood">Új étel</a></li>
+       <li><a v-bind:href="orderManagement">Rendelések</a></li>
      </ul>
    </sidebar-component>
  </div>
@@ -18,19 +18,20 @@ import AdminButtonComponent from './AdminButtonComponent.vue';
 import SidebarComponent from './SidebarComponent.vue';
 
 export default {
- components: {
-   AdminButtonComponent,
-   SidebarComponent
- }
+    props:['createCategory', 'createFood', 'orderManagement'],
+    components: {
+    AdminButtonComponent,
+    SidebarComponent
+    }
 }
 </script>
 <style>
- .logo {
+/*  .logo {
    align-self: center;
    color: #fff;
    font-weight: bold;
    font-family: 'Lato'
- }
+ } */
 
  .main-nav {
    display: flex;

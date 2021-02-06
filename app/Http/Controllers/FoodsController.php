@@ -43,7 +43,7 @@ class FoodsController extends Controller
             'category_id' => $data['category_id'],
         ]);
 
-            return redirect('/adminMenu');
+            return redirect('/menu');
 
     }
 }

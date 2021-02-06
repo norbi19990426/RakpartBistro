@@ -86,8 +86,6 @@
                         <button class="btn btn-primary mt-4">Új étel hozzáadása</button>
                     </div>
                 </div>
-
-
             </div>
         </div>
     </form>

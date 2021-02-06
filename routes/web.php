@@ -24,14 +24,15 @@ Auth::routes();
 
 //Admin
 Route::middleware(['auth:sanctum', 'verified', 'authadmin'])->group(function(){
-
-    Route::get('/adminMenu', 'App\Http\Controllers\MenuController@indexAdmin')->name('menu.indexAdmin');
-
     Route::get('/f/create', 'App\Http\Controllers\FoodsController@create')->name('foods.create');
     Route::post('/f', 'App\Http\Controllers\FoodsController@store');
 
     Route::get('/c/create', 'App\Http\Controllers\CategoriesController@create')->name('categories.create');
     Route::post('/c', 'App\Http\Controllers\CategoriesController@store');
+
+    Route::get('/orderManagement', 'App\Http\Controllers\OrderManagementController@index')->name('orderManagement.index');
+    Route::delete('/orderRemove/{id}', 'App\Http\Controllers\OrderManagementController@orderRemove');
+
 });
 
 Route::post('/addToUserCart/{foodId}/{userId}', 'App\Http\Controllers\CartsController@addToUserCart')->middleware('auth');

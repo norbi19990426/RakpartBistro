@@ -24,11 +24,4 @@ class MenuController extends Controller
 
         return view('more-page.menu', compact('categories', 'foods', 'id'));
     }
-    public function indexAdmin()
-    {
-        $categories = Category::all();
-        $foods = Food::all();
-
-        return view('admin.menu', compact('categories', 'foods'));
-    }
 }

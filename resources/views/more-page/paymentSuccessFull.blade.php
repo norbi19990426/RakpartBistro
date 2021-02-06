@@ -29,6 +29,7 @@
     </style>
 </head>
 <body>
+    @csrf
     <div class="container" id="fullheight" style="background: #F8FAFC;">
         <div class="row justify-content-center">
             <img src="/logo/rakpartSzinesLogo.png" style="height: 150px;">
@@ -57,7 +58,9 @@
         </div>
         <div class="row justify-content-center" >
             @php
-                $time = session()->get('time');
+                date_default_timezone_set('Europe/Budapest');
+                $timestamp = time() + 60*60;
+                $time = date("H:i", $timestamp);
             @endphp
             <h5>{{$time}}</h5>
         </div>

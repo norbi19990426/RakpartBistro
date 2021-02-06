@@ -92,7 +92,7 @@ import { menuStore, mutations } from '../menuStore.js';
     }
 
     #burger.active .burger-bar {
-        background-color: #fff;
+        background-color: #000;
     }
 
     #burger.active .burger-bar--1 {

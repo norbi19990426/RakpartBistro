@@ -14,14 +14,15 @@ class OrdersController extends Controller
         $data = request()->validate([
             'vezeteknev' => 'required',
             'keresztnev' => 'required',
-            'iranyitoszam' => 'required',
+            'iranyitoszam' => 'required|min:4|max:4',
             'email' => 'required|email',
             'varos' => 'required',
             'address' => 'required',
-            'telefonszam' => 'required',
+            'telefonszam' => 'required|min:11|max:15',
             'message' => '',
             'totalPrice' => ''
         ]);
+
         $order = Order::create([
             'vezeteknev' => $data['vezeteknev'],
             'keresztnev' => $data['keresztnev'],
@@ -42,10 +43,5 @@ class OrdersController extends Controller
             'qty' => $cartItem['quantity']]);
         }
         session()->forget('cart');
-
-        date_default_timezone_set('Europe/Budapest');
-        $timestamp = time() + 60*60;
-        $time = date("H:i", $timestamp);
-        return redirect()->route('paymentSuccess.index')->with(['time' => $time]);
     }
 }

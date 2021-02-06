@@ -1,7 +1,7 @@
 <template>
     <div class="row ml-5 mr-5">
         <div class="col-md-8">
-            <form method="POST" enctype="multipart/form-data">
+            <form method="POST" enctype="multipart/form-data" @submit.prevent="submitOrder">
                 <div class="d-flex">
                     <div class="form-group pr-5">
                         <label for="vezeteknev">Vezetéknév:</label>
@@ -22,7 +22,7 @@
                 <div class="d-flex">
                     <div class="form-gorup pr-5">
                         <label for="iranyitoszam">Irányítószám:</label>
-                        <input type="text"
+                        <input type="number"
                         v-model="form.iranyitoszam" class="form-control" style="width: 400px"
                         :class="{'is-invalid' : form.errors.has('iranyitoszam')}"
                         @keydown="form.errors.clear('iranyitoszam')">
@@ -51,7 +51,7 @@
                 </div>
                 <div class="form-group">
                     <label for="telefonszam">Telefonszám:</label>
-                    <input type="text" v-model="form.telefonszam"
+                    <input type="number" placeholder="Pl.: 0630 123 4567" v-model="form.telefonszam"
                     class="form-control" style="width: 850px"
                       :class="{'is-invalid' : form.errors.has('telefonszam')}"
                         @keydown="form.errors.clear('telefonszam')">
@@ -71,7 +71,7 @@
                     v-model="form.message" style="width: 850px"></textarea>
                 </div>
                 <div class="justify-content-between">
-                    <a v-bind:href="paymentRoute" @click="submitOrder" class="btn btn-primary ">Fizetés</a>
+                    <button type="submit" class="btn btn-primary">Fizetés</button>
                 </div>
 
             </form>
@@ -130,7 +130,6 @@ export default {
     methods: {
         cartButton(){
             this.cart = true;
-            console.log(this.menuRoute);
         },
         submitOrder(){
             let data = new FormData();
@@ -150,7 +149,9 @@ export default {
             data.append('totalPrice', this.totalPrice);
             axios.post('/order', data)
             .then((response) => {
+                console.log(response.data);
                 this.form.reset();
+                location.href = '/paymentSuccessFull';
               })
              .catch(error => this.form.errors.record(error.response.data));
         }
