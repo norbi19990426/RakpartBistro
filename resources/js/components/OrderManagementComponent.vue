@@ -13,32 +13,32 @@
                 <th scope="col">Státusz</th>
             </tr>
         </thead>
-              <tbody v-for="orderItem in ordersTable" :key="orderItem.id" >
+              <tbody v-for="order in ordersTable" :key="order.id" >
                 <tr>
-                    <td><input type="checkbox" :value="orderItem.id"  v-model="selectId"></td>
-                    <th @click.prevent="show(orderItem.id)" scope="row">#{{orderItem.id}}</th>
-                    <td @click.prevent="show(orderItem.id)">{{orderItem.created_at}}</td>
-                    <td @click.prevent="show(orderItem.id)">{{orderItem.vezeteknev}} {{orderItem.keresztnev}}</td>
-                    <td @click.prevent="show(orderItem.id)">{{orderItem.email}}</td>
-                    <td @click.prevent="show(orderItem.id)">{{orderItem.totalPrice}} HUF</td>
+                    <td><input type="checkbox" :value="order.id"  v-model="selectId"></td>
+                    <th @click.prevent="show(order.id)" scope="row">#{{order.id}}</th>
+                    <td @click.prevent="show(order.id)">{{order.created_at}}</td>
+                    <td @click.prevent="show(order.id)">{{order.vezeteknev}} {{order.keresztnev}}</td>
+                    <td @click.prevent="show(order.id)">{{order.email}}</td>
+                    <td @click.prevent="show(order.id)">{{order.totalPrice}} HUF</td>
                     <td>
-                       <select >
-                           <option v-for="option in options" v-bind:value="option.value">
-                               {{option.text}}
+                       <select class="form-control" v-model="order.status" @change="changeOrderStatus(order.id, order.status)" >
+                           <option v-for="status in statuses" :key="status.id" :value="status.id">
+                                {{status.statusName}}
                            </option>
                         </select>
                     </td>
                 </tr>
         </tbody>
     </table>
-    <modal name="order-info" height="auto" > <!-- scrollable="true"-->
+    <modal name="order-info" id="order_info" height="auto" >
         <div class="modal-mask">
             <div class="modal-container" >
                 <div class="modal-header">
                     <h3>Rendelés információk</h3>
                 </div>
-                <div  v-for="orderItem in ordersTable" :key="orderItem.id">
-                    <div class="modal-body" v-if="orderId == orderItem.id">
+                <div  v-for="order in ordersTable" :key="order.id">
+                    <div class="modal-body" v-if="orderId == order.id">
                         <table>
                             <thead>
                                     <th scope="col">Rendelő neve:</th>
@@ -46,14 +46,14 @@
                                     <th scope="col">Lakcím:</th>
                             </thead>
                             <tbody>
-                                    <td class="pr-5" scope="row" >{{orderItem.vezeteknev}} {{orderItem.keresztnev}}</th>
-                                    <td class="pr-5">{{orderItem.varos}}, {{orderItem.iranyitoszam}}</td>
-                                    <td class="pr-5">{{orderItem.address}}</td>
+                                    <td class="pr-5" scope="row" >{{order.vezeteknev}} {{order.keresztnev}}</th>
+                                    <td class="pr-5">{{order.varos}}, {{order.iranyitoszam}}</td>
+                                    <td class="pr-5">{{order.address}}</td>
                             </tbody>
 
                         </table>
                         <h5 class="mt-3"><strong>Rendelő megjegyzés:</strong></h5>
-                        <p class="messageText">{{orderItem.message}}</p>
+                        <p class="messageText">{{order.message}}</p>
 
                         <h5 class="mt-3"><strong>Megrendelés összesítő:</strong></h5>
                         <table>
@@ -87,18 +87,15 @@
 <script>
 import Swal from "sweetalert2";
 export default {
-    props:['orderManagement','orderItems', 'food'],
+    props:['orderManagement','orderItems', 'food', 'orderStatuses'],
     data() {
+        console.log(this.orderStatuses);
+        this.statuses = JSON.parse(this.orderStatuses);
         this.orders = JSON.parse(this.orderManagement);
         this.orderItem = JSON.parse(this.orderItems);
         this.foodItem = JSON.parse(this.food);
         return{
             selectOption: [],
-            options: [
-                {text: "Elékszítés alatt", value: "Elékszítés alatt"},
-                {text: "Kiszállítás alatt", value: "Kiszállítás alatt"},
-                {text: "Kiszállítva", value: "Kiszállítva"}
-            ],
             selectId: [],
             ordersTable: [],
             orderItemsTable: [{
@@ -112,17 +109,14 @@ export default {
     },
     beforeMount(){
         this.getOrdersTable();
-        this.getSelectedOptions();
     },
     methods:{
-        getSelectedOptions(){
-            //this.selectOption.forEach(selectElement => {
-
-            //})
-            console.log(this.selectOption);
-        },
         getOrdersTable:function(){
             this.ordersTable = this.orders;
+            console.log(this.orders);
+        },
+        changeOrderStatus(orderId, statusId){
+            axios.put('/status/' + orderId + "/" +statusId);
         },
         ordersDelete(){
             Swal.fire({
@@ -149,8 +143,6 @@ export default {
         },
         show(event){
             this.orderId = event;
-
-            console.log(this.selectOption);
             let keys = Object.keys(this.orderItemsTable);
             keys.forEach(key => {
             let item = this.orderItemsTable[key];
@@ -171,9 +163,7 @@ export default {
                 })
             })
             this.duplicate = false;
-            this.$modal.show('order-info',
-            { scrollable: Boolean }
-            );
+            this.$modal.show('order-info');
         },
         hide(){
             this.$modal.hide('order-info');
@@ -185,5 +175,8 @@ export default {
 .messageText{
     max-width:550px;
     word-wrap:break-word;
+}
+#order_info{
+    overflow: scroll;
 }
 </style>

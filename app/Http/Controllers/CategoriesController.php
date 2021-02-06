@@ -18,6 +18,6 @@ class CategoriesController extends Controller
 
         Category::create($data);
 
-        return redirect('/menu.index');
+        return redirect('/menu');
     }
 }

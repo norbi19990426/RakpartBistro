@@ -2581,23 +2581,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['orderManagement', 'orderItems', 'food'],
+  props: ['orderManagement', 'orderItems', 'food', 'orderStatuses'],
   data: function data() {
+    console.log(this.orderStatuses);
+    this.statuses = JSON.parse(this.orderStatuses);
     this.orders = JSON.parse(this.orderManagement);
     this.orderItem = JSON.parse(this.orderItems);
     this.foodItem = JSON.parse(this.food);
     return {
       selectOption: [],
-      options: [{
-        text: "Elékszítés alatt",
-        value: "Elékszítés alatt"
-      }, {
-        text: "Kiszállítás alatt",
-        value: "Kiszállítás alatt"
-      }, {
-        text: "Kiszállítva",
-        value: "Kiszállítva"
-      }],
       selectId: [],
       ordersTable: [],
       orderItemsTable: [{
@@ -2611,16 +2603,14 @@ __webpack_require__.r(__webpack_exports__);
   },
   beforeMount: function beforeMount() {
     this.getOrdersTable();
-    this.getSelectedOptions();
   },
   methods: {
-    getSelectedOptions: function getSelectedOptions() {
-      //this.selectOption.forEach(selectElement => {
-      //})
-      console.log(this.selectOption);
-    },
     getOrdersTable: function getOrdersTable() {
       this.ordersTable = this.orders;
+      console.log(this.orders);
+    },
+    changeOrderStatus: function changeOrderStatus(orderId, statusId) {
+      axios.put('/status/' + orderId + "/" + statusId);
     },
     ordersDelete: function ordersDelete() {
       var _this = this;
@@ -2654,7 +2644,6 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       this.orderId = event;
-      console.log(this.selectOption);
       var keys = Object.keys(this.orderItemsTable);
       keys.forEach(function (key) {
         var item = _this2.orderItemsTable[key];
@@ -2676,9 +2665,7 @@ __webpack_require__.r(__webpack_exports__);
         });
       });
       this.duplicate = false;
-      this.$modal.show('order-info', {
-        scrollable: Boolean
-      });
+      this.$modal.show('order-info');
     },
     hide: function hide() {
       this.$modal.hide('order-info');
@@ -7662,7 +7649,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.messageText{\n    max-width:550px;\n    word-wrap:break-word;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.messageText{\n    max-width:550px;\n    word-wrap:break-word;\n}\n#order_info{\n    overflow: scroll;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -44381,8 +44368,8 @@ var render = function() {
         [
           _vm._m(0),
           _vm._v(" "),
-          _vm._l(_vm.ordersTable, function(orderItem) {
-            return _c("tbody", { key: orderItem.id }, [
+          _vm._l(_vm.ordersTable, function(order) {
+            return _c("tbody", { key: order.id }, [
               _c("tr", [
                 _c("td", [
                   _c("input", {
@@ -44396,9 +44383,9 @@ var render = function() {
                     ],
                     attrs: { type: "checkbox" },
                     domProps: {
-                      value: orderItem.id,
+                      value: order.id,
                       checked: Array.isArray(_vm.selectId)
-                        ? _vm._i(_vm.selectId, orderItem.id) > -1
+                        ? _vm._i(_vm.selectId, order.id) > -1
                         : _vm.selectId
                     },
                     on: {
@@ -44407,7 +44394,7 @@ var render = function() {
                           $$el = $event.target,
                           $$c = $$el.checked ? true : false
                         if (Array.isArray($$a)) {
-                          var $$v = orderItem.id,
+                          var $$v = order.id,
                             $$i = _vm._i($$a, $$v)
                           if ($$el.checked) {
                             $$i < 0 && (_vm.selectId = $$a.concat([$$v]))
@@ -44432,11 +44419,11 @@ var render = function() {
                     on: {
                       click: function($event) {
                         $event.preventDefault()
-                        return _vm.show(orderItem.id)
+                        return _vm.show(order.id)
                       }
                     }
                   },
-                  [_vm._v("#" + _vm._s(orderItem.id))]
+                  [_vm._v("#" + _vm._s(order.id))]
                 ),
                 _vm._v(" "),
                 _c(
@@ -44445,11 +44432,11 @@ var render = function() {
                     on: {
                       click: function($event) {
                         $event.preventDefault()
-                        return _vm.show(orderItem.id)
+                        return _vm.show(order.id)
                       }
                     }
                   },
-                  [_vm._v(_vm._s(orderItem.created_at))]
+                  [_vm._v(_vm._s(order.created_at))]
                 ),
                 _vm._v(" "),
                 _c(
@@ -44458,15 +44445,13 @@ var render = function() {
                     on: {
                       click: function($event) {
                         $event.preventDefault()
-                        return _vm.show(orderItem.id)
+                        return _vm.show(order.id)
                       }
                     }
                   },
                   [
                     _vm._v(
-                      _vm._s(orderItem.vezeteknev) +
-                        " " +
-                        _vm._s(orderItem.keresztnev)
+                      _vm._s(order.vezeteknev) + " " + _vm._s(order.keresztnev)
                     )
                   ]
                 ),
@@ -44477,11 +44462,11 @@ var render = function() {
                     on: {
                       click: function($event) {
                         $event.preventDefault()
-                        return _vm.show(orderItem.id)
+                        return _vm.show(order.id)
                       }
                     }
                   },
-                  [_vm._v(_vm._s(orderItem.email))]
+                  [_vm._v(_vm._s(order.email))]
                 ),
                 _vm._v(" "),
                 _c(
@@ -44490,24 +44475,59 @@ var render = function() {
                     on: {
                       click: function($event) {
                         $event.preventDefault()
-                        return _vm.show(orderItem.id)
+                        return _vm.show(order.id)
                       }
                     }
                   },
-                  [_vm._v(_vm._s(orderItem.totalPrice) + " HUF")]
+                  [_vm._v(_vm._s(order.totalPrice) + " HUF")]
                 ),
                 _vm._v(" "),
                 _c("td", [
                   _c(
                     "select",
-                    _vm._l(_vm.options, function(option) {
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: order.status,
+                          expression: "order.status"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      on: {
+                        change: [
+                          function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.$set(
+                              order,
+                              "status",
+                              $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            )
+                          },
+                          function($event) {
+                            return _vm.changeOrderStatus(order.id, order.status)
+                          }
+                        ]
+                      }
+                    },
+                    _vm._l(_vm.statuses, function(status) {
                       return _c(
                         "option",
-                        { domProps: { value: option.value } },
+                        { key: status.id, domProps: { value: status.id } },
                         [
                           _vm._v(
-                            "\n                               " +
-                              _vm._s(option.text) +
+                            "\n                                " +
+                              _vm._s(status.statusName) +
                               "\n                           "
                           )
                         ]
@@ -44523,150 +44543,159 @@ var render = function() {
         2
       ),
       _vm._v(" "),
-      _c("modal", { attrs: { name: "order-info", height: "auto" } }, [
-        _c("div", { staticClass: "modal-mask" }, [
-          _c(
-            "div",
-            { staticClass: "modal-container" },
-            [
-              _c("div", { staticClass: "modal-header" }, [
-                _c("h3", [_vm._v("Rendelés információk")])
-              ]),
-              _vm._v(" "),
-              _vm._l(_vm.ordersTable, function(orderItem) {
-                return _c("div", { key: orderItem.id }, [
-                  _vm.orderId == orderItem.id
-                    ? _c("div", { staticClass: "modal-body" }, [
-                        _c("table", [
-                          _c("thead", [
-                            _c("th", { attrs: { scope: "col" } }, [
-                              _vm._v("Rendelő neve:")
+      _c(
+        "modal",
+        { attrs: { name: "order-info", id: "order_info", height: "auto" } },
+        [
+          _c("div", { staticClass: "modal-mask" }, [
+            _c(
+              "div",
+              { staticClass: "modal-container" },
+              [
+                _c("div", { staticClass: "modal-header" }, [
+                  _c("h3", [_vm._v("Rendelés információk")])
+                ]),
+                _vm._v(" "),
+                _vm._l(_vm.ordersTable, function(order) {
+                  return _c("div", { key: order.id }, [
+                    _vm.orderId == order.id
+                      ? _c("div", { staticClass: "modal-body" }, [
+                          _c("table", [
+                            _c("thead", [
+                              _c("th", { attrs: { scope: "col" } }, [
+                                _vm._v("Rendelő neve:")
+                              ]),
+                              _vm._v(" "),
+                              _c("th", { attrs: { scope: "col" } }, [
+                                _vm._v("Város:")
+                              ]),
+                              _vm._v(" "),
+                              _c("th", { attrs: { scope: "col" } }, [
+                                _vm._v("Lakcím:")
+                              ])
                             ]),
                             _vm._v(" "),
-                            _c("th", { attrs: { scope: "col" } }, [
-                              _vm._v("Város:")
-                            ]),
-                            _vm._v(" "),
-                            _c("th", { attrs: { scope: "col" } }, [
-                              _vm._v("Lakcím:")
+                            _c("tbody", [
+                              _c(
+                                "td",
+                                {
+                                  staticClass: "pr-5",
+                                  attrs: { scope: "row" }
+                                },
+                                [
+                                  _vm._v(
+                                    _vm._s(order.vezeteknev) +
+                                      " " +
+                                      _vm._s(order.keresztnev)
+                                  )
+                                ]
+                              ),
+                              _c("td", { staticClass: "pr-5" }, [
+                                _vm._v(
+                                  _vm._s(order.varos) +
+                                    ", " +
+                                    _vm._s(order.iranyitoszam)
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("td", { staticClass: "pr-5" }, [
+                                _vm._v(_vm._s(order.address))
+                              ])
                             ])
                           ]),
                           _vm._v(" "),
-                          _c("tbody", [
-                            _c(
-                              "td",
-                              { staticClass: "pr-5", attrs: { scope: "row" } },
-                              [
-                                _vm._v(
-                                  _vm._s(orderItem.vezeteknev) +
-                                    " " +
-                                    _vm._s(orderItem.keresztnev)
-                                )
-                              ]
-                            ),
-                            _c("td", { staticClass: "pr-5" }, [
-                              _vm._v(
-                                _vm._s(orderItem.varos) +
-                                  ", " +
-                                  _vm._s(orderItem.iranyitoszam)
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("td", { staticClass: "pr-5" }, [
-                              _vm._v(_vm._s(orderItem.address))
-                            ])
-                          ])
-                        ]),
-                        _vm._v(" "),
-                        _c("h5", { staticClass: "mt-3" }, [
-                          _c("strong", [_vm._v("Rendelő megjegyzés:")])
-                        ]),
-                        _vm._v(" "),
-                        _c("p", { staticClass: "messageText" }, [
-                          _vm._v(_vm._s(orderItem.message))
-                        ]),
-                        _vm._v(" "),
-                        _c("h5", { staticClass: "mt-3" }, [
-                          _c("strong", [_vm._v("Megrendelés összesítő:")])
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "table",
-                          [
-                            _c("thead", [
-                              _c("tr", [
-                                _c("th", { attrs: { scope: "col" } }, [
-                                  _vm._v("#")
-                                ]),
-                                _vm._v(" "),
-                                _c("th", { attrs: { scope: "col" } }, [
-                                  _vm._v("Étel")
-                                ]),
-                                _vm._v(" "),
-                                _c("th", { attrs: { scope: "col" } }, [
-                                  _vm._v("Darab")
-                                ]),
-                                _vm._v(" "),
-                                _c("th", { attrs: { scope: "col" } }, [
-                                  _vm._v("Étel ár")
+                          _c("h5", { staticClass: "mt-3" }, [
+                            _c("strong", [_vm._v("Rendelő megjegyzés:")])
+                          ]),
+                          _vm._v(" "),
+                          _c("p", { staticClass: "messageText" }, [
+                            _vm._v(_vm._s(order.message))
+                          ]),
+                          _vm._v(" "),
+                          _c("h5", { staticClass: "mt-3" }, [
+                            _c("strong", [_vm._v("Megrendelés összesítő:")])
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "table",
+                            [
+                              _c("thead", [
+                                _c("tr", [
+                                  _c("th", { attrs: { scope: "col" } }, [
+                                    _vm._v("#")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("th", { attrs: { scope: "col" } }, [
+                                    _vm._v("Étel")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("th", { attrs: { scope: "col" } }, [
+                                    _vm._v("Darab")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("th", { attrs: { scope: "col" } }, [
+                                    _vm._v("Étel ár")
+                                  ])
                                 ])
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _vm._l(_vm.orderItemsTable, function(foodItem) {
-                              return _c("tbody", [
-                                foodItem.order_id === _vm.orderId
-                                  ? _c("tr", [
-                                      _c(
-                                        "th",
-                                        {
-                                          staticClass: "pr-5",
-                                          attrs: { scope: "row" }
-                                        },
-                                        [_vm._v("#")]
-                                      ),
-                                      _vm._v(" "),
-                                      _c("td", { staticClass: "pr-5" }, [
-                                        _vm._v(_vm._s(foodItem.foodName))
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("td", { staticClass: "pr-5" }, [
-                                        _vm._v(_vm._s(foodItem.qty))
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("td", { staticClass: "pr-5" }, [
-                                        _vm._v(_vm._s(foodItem.price) + " HUF")
+                              ]),
+                              _vm._v(" "),
+                              _vm._l(_vm.orderItemsTable, function(foodItem) {
+                                return _c("tbody", [
+                                  foodItem.order_id === _vm.orderId
+                                    ? _c("tr", [
+                                        _c(
+                                          "th",
+                                          {
+                                            staticClass: "pr-5",
+                                            attrs: { scope: "row" }
+                                          },
+                                          [_vm._v("#")]
+                                        ),
+                                        _vm._v(" "),
+                                        _c("td", { staticClass: "pr-5" }, [
+                                          _vm._v(_vm._s(foodItem.foodName))
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("td", { staticClass: "pr-5" }, [
+                                          _vm._v(_vm._s(foodItem.qty))
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("td", { staticClass: "pr-5" }, [
+                                          _vm._v(
+                                            _vm._s(foodItem.price) + " HUF"
+                                          )
+                                        ])
                                       ])
-                                    ])
-                                  : _vm._e()
-                              ])
-                            })
-                          ],
-                          2
-                        )
-                      ])
-                    : _vm._e()
-                ])
-              }),
-              _vm._v(" "),
-              _c("div", { staticClass: "modal-footer text-right" }, [
-                _c(
-                  "button",
-                  {
-                    on: {
-                      click: function($event) {
-                        return _vm.$modal.hide("order-info")
+                                    : _vm._e()
+                                ])
+                              })
+                            ],
+                            2
+                          )
+                        ])
+                      : _vm._e()
+                  ])
+                }),
+                _vm._v(" "),
+                _c("div", { staticClass: "modal-footer text-right" }, [
+                  _c(
+                    "button",
+                    {
+                      on: {
+                        click: function($event) {
+                          return _vm.$modal.hide("order-info")
+                        }
                       }
-                    }
-                  },
-                  [_vm._v("Kilépés")]
-                )
-              ])
-            ],
-            2
-          )
-        ])
-      ])
+                    },
+                    [_vm._v("Kilépés")]
+                  )
+                ])
+              ],
+              2
+            )
+          ])
+        ]
+      )
     ],
     1
   )

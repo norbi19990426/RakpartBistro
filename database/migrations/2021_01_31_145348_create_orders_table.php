@@ -24,6 +24,7 @@ class CreateOrdersTable extends Migration
             $table->string('telefonszam');
             $table->longtext('message')->nullable();
             $table->Integer('totalPrice');
+            $table->unsignedBigInteger('status')->default(1);
             $table->timestamps();
         });
     }

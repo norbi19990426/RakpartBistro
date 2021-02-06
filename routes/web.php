@@ -32,6 +32,7 @@ Route::middleware(['auth:sanctum', 'verified', 'authadmin'])->group(function(){
 
     Route::get('/orderManagement', 'App\Http\Controllers\OrderManagementController@index')->name('orderManagement.index');
     Route::delete('/orderRemove/{id}', 'App\Http\Controllers\OrderManagementController@orderRemove');
+    Route::put('/status/{orderId}/{statusId}', 'App\Http\Controllers\OrderManagementController@changeOrderStatus');
 
 });
 

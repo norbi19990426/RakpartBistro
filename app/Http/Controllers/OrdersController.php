@@ -20,7 +20,8 @@ class OrdersController extends Controller
             'address' => 'required',
             'telefonszam' => 'required|min:11|max:15',
             'message' => '',
-            'totalPrice' => ''
+            'totalPrice' => '',
+            'status' => ''
         ]);
 
         $order = Order::create([
@@ -32,7 +33,8 @@ class OrdersController extends Controller
             'address' => $data['address'],
             'telefonszam' => $data['telefonszam'],
             'message' => $data['message'],
-            'totalPrice' =>$data['totalPrice']
+            'totalPrice' =>$data['totalPrice'],
+            'status' => 1
         ]);
 
         $cart = session()->get('cart');

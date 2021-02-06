@@ -9,7 +9,10 @@ class Order extends Model
 {
     protected $guarded = [];
 
+    public function orderstatus(){
+        return $this->belongsTo(OrderStatus::class);
+    }
     public function orderitem(){
-        $this->hasMany(OrderItem::class);
+        return $this->hasMany(OrderItem::class);
     }
 }
