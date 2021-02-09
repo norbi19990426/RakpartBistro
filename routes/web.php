@@ -24,15 +24,20 @@ Auth::routes();
 
 //Admin
 Route::middleware(['auth:sanctum', 'verified', 'authadmin'])->group(function(){
-    Route::get('/f/create', 'App\Http\Controllers\FoodsController@create')->name('foods.create');
+    Route::get('/f/create', 'App\Http\Controllers\FoodsController@create')->name('admin.foods.create');
     Route::post('/f', 'App\Http\Controllers\FoodsController@store');
 
-    Route::get('/c/create', 'App\Http\Controllers\CategoriesController@create')->name('categories.create');
+    Route::get('/c/create', 'App\Http\Controllers\CategoriesController@create')->name('admin.categories.create');
     Route::post('/c', 'App\Http\Controllers\CategoriesController@store');
 
-    Route::get('/orderManagement', 'App\Http\Controllers\OrderManagementController@index')->name('orderManagement.index');
+    Route::get('/coupon/create', 'App\Http\Controllers\CouponController@create')->name('admin.createCoupon.create');
+    Route::post('/coupon', 'App\Http\Controllers\CouponController@store');
+
+    Route::get('/orderManagement', 'App\Http\Controllers\OrderManagementController@index')->name('admin.orderManagement.index');
     Route::delete('/orderRemove/{id}', 'App\Http\Controllers\OrderManagementController@orderRemove');
     Route::put('/status/{orderId}/{statusId}', 'App\Http\Controllers\OrderManagementController@changeOrderStatus');
+
+    Route::get('/couponManagement', 'App\Http\Controllers\CouponManagementController@index')->name('admin.couponManagement.index');
 
 });
 

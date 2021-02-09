@@ -1937,10 +1937,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['createCategory', 'createFood', 'orderManagement'],
+  props: ['createCategory', 'createFood', 'orderManagement', 'createCoupon', 'couponManagement'],
   components: {
     AdminButtonComponent: _AdminButtonComponent_vue__WEBPACK_IMPORTED_MODULE_0__.default,
     SidebarComponent: _SidebarComponent_vue__WEBPACK_IMPORTED_MODULE_1__.default
@@ -2045,10 +2047,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['cart', 'userId', 'user', 'paymentRoute'],
+  props: ['cart', 'userId', 'paymentRoute', 'ordered', 'check'],
   components: {
     CartItemComponent: _CartItemComponent__WEBPACK_IMPORTED_MODULE_0__.default,
     CheckoutComponent: _CheckoutComponent_vue__WEBPACK_IMPORTED_MODULE_1__.default
@@ -2416,13 +2419,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['checkoutFoodId', 'totalPrice', 'paymentRoute'],
+  props: ['checkoutFoodId', 'totalPrice', 'paymentRoute', 'ordered', 'check'],
   data: function data() {
     this.foodItem = JSON.parse(this.checkoutFoodId);
     return {
       cart: false,
       total: this.totalPrice,
+      coupon: false,
       form: new Form({
         vezeteknev: '',
         keresztnev: '',
@@ -2432,9 +2444,13 @@ __webpack_require__.r(__webpack_exports__);
         address: '',
         emelet: '',
         telefonszam: '',
-        message: ''
+        message: '',
+        userOrdered: 0
       })
     };
+  },
+  created: function created() {
+    this.getUserOrdered();
   },
   watch: {
     cart: function cart() {
@@ -2443,11 +2459,25 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    getUserOrdered: function getUserOrdered() {
+      var _this = this;
+
+      if (this.check == true) {
+        this.getOrdered = JSON.parse(this.ordered);
+        this.getOrdered.forEach(function (element) {
+          _this.userOrdered = element.ordered;
+        });
+      }
+
+      if (this.userOrdered == 1) {
+        this.coupon = true;
+      }
+    },
     cartButton: function cartButton() {
       this.cart = true;
     },
     submitOrder: function submitOrder() {
-      var _this = this;
+      var _this2 = this;
 
       var data = new FormData();
       data.append('vezeteknev', this.form.vezeteknev);
@@ -2468,13 +2498,54 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('/order', data).then(function (response) {
         console.log(response.data);
 
-        _this.form.reset();
+        _this2.form.reset();
 
         location.href = '/paymentSuccessFull';
       })["catch"](function (error) {
-        return _this.form.errors.record(error.response.data);
+        return _this2.form.errors.record(error.response.data);
       });
     }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/CouponManagementComponent.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/CouponManagementComponent.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: ['coupons'],
+  data: function data() {
+    this.allCoupon = JSON.parse(this.coupons);
+    return {};
   }
 });
 
@@ -2583,7 +2654,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['orderManagement', 'orderItems', 'food', 'orderStatuses'],
   data: function data() {
-    console.log(this.orderStatuses);
     this.statuses = JSON.parse(this.orderStatuses);
     this.orders = JSON.parse(this.orderManagement);
     this.orderItem = JSON.parse(this.orderItems);
@@ -2607,7 +2677,6 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     getOrdersTable: function getOrdersTable() {
       this.ordersTable = this.orders;
-      console.log(this.orders);
     },
     changeOrderStatus: function changeOrderStatus(orderId, statusId) {
       axios.put('/status/' + orderId + "/" + statusId);
@@ -2996,6 +3065,7 @@ Vue.component('admin-button-component', __webpack_require__(/*! ./components/Adm
 Vue.component('admin-menu-component', __webpack_require__(/*! ./components/AdminMenuComponent.vue */ "./resources/js/components/AdminMenuComponent.vue").default);
 Vue.component('sidebar-component', __webpack_require__(/*! ./components/SidebarComponent.vue */ "./resources/js/components/SidebarComponent.vue").default);
 Vue.component('order-management-component', __webpack_require__(/*! ./components/OrderManagementComponent.vue */ "./resources/js/components/OrderManagementComponent.vue").default);
+Vue.component('coupon-management-component', __webpack_require__(/*! ./components/CouponManagementComponent.vue */ "./resources/js/components/CouponManagementComponent.vue").default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -7625,7 +7695,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*  .logo {\n   align-self: center;\n   color: #fff;\n   font-weight: bold;\n   font-family: 'Lato'\n } */\n.main-nav {\n   display: flex;\n   justify-content: space-between;\n   padding: 0.5rem 0.8rem;\n}\nul.sidebar-panel-nav {\n   list-style-type: none;\n}\nul.sidebar-panel-nav > li > a {\n   color: #fff;\n   text-decoration: none;\n   font-size: 1.5rem;\n   display: block;\n   padding-bottom: 0.5em;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*  .logo {\n   align-self: center;\n   color: #fff;\n   font-weight: bold;\n   font-family: 'Lato'\n } */\n.main-nav {\n   display: flex;\n   justify-content: space-between;\n   padding: 0.5rem 0.8rem;\n}\nul.sidebar-panel-nav {\n   list-style-type: none;\n}\nul.sidebar-panel-nav > li > a {\n   color: #fff;\n   text-decoration: none;\n   font-size: 1.5rem;\n   display: block;\n   padding-bottom: 0.5em;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -42976,6 +43046,45 @@ component.options.__file = "resources/js/components/CheckoutComponent.vue"
 
 /***/ }),
 
+/***/ "./resources/js/components/CouponManagementComponent.vue":
+/*!***************************************************************!*\
+  !*** ./resources/js/components/CouponManagementComponent.vue ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _CouponManagementComponent_vue_vue_type_template_id_2f7bf819___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CouponManagementComponent.vue?vue&type=template&id=2f7bf819& */ "./resources/js/components/CouponManagementComponent.vue?vue&type=template&id=2f7bf819&");
+/* harmony import */ var _CouponManagementComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CouponManagementComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/CouponManagementComponent.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _CouponManagementComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _CouponManagementComponent_vue_vue_type_template_id_2f7bf819___WEBPACK_IMPORTED_MODULE_0__.render,
+  _CouponManagementComponent_vue_vue_type_template_id_2f7bf819___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/CouponManagementComponent.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/components/OrderManagementComponent.vue":
 /*!**************************************************************!*\
   !*** ./resources/js/components/OrderManagementComponent.vue ***!
@@ -43167,6 +43276,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CheckoutComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./CheckoutComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/CheckoutComponent.vue?vue&type=script&lang=js&");
  /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CheckoutComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
+/***/ "./resources/js/components/CouponManagementComponent.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************!*\
+  !*** ./resources/js/components/CouponManagementComponent.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CouponManagementComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./CouponManagementComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/CouponManagementComponent.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CouponManagementComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
 
 /***/ }),
 
@@ -43373,6 +43498,23 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/CouponManagementComponent.vue?vue&type=template&id=2f7bf819&":
+/*!**********************************************************************************************!*\
+  !*** ./resources/js/components/CouponManagementComponent.vue?vue&type=template&id=2f7bf819& ***!
+  \**********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CouponManagementComponent_vue_vue_type_template_id_2f7bf819___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CouponManagementComponent_vue_vue_type_template_id_2f7bf819___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CouponManagementComponent_vue_vue_type_template_id_2f7bf819___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./CouponManagementComponent.vue?vue&type=template&id=2f7bf819& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/CouponManagementComponent.vue?vue&type=template&id=2f7bf819&");
+
+
+/***/ }),
+
 /***/ "./resources/js/components/OrderManagementComponent.vue?vue&type=template&id=67704992&":
 /*!*********************************************************************************************!*\
   !*** ./resources/js/components/OrderManagementComponent.vue?vue&type=template&id=67704992& ***!
@@ -43526,7 +43668,7 @@ var render = function() {
         _c("ul", { staticClass: "sidebar-panel-nav" }, [
           _c("li", [
             _c("a", { attrs: { href: _vm.createCategory } }, [
-              _vm._v("Új kategória")
+              _vm._v("Új étel kategória")
             ])
           ]),
           _vm._v(" "),
@@ -43537,6 +43679,16 @@ var render = function() {
           _c("li", [
             _c("a", { attrs: { href: _vm.orderManagement } }, [
               _vm._v("Rendelések")
+            ])
+          ]),
+          _vm._v(" "),
+          _c("li", [
+            _c("a", { attrs: { href: _vm.createCoupon } }, [_vm._v("Új kupon")])
+          ]),
+          _vm._v(" "),
+          _c("li", [
+            _c("a", { attrs: { href: _vm.couponManagement } }, [
+              _vm._v("Kuponok")
             ])
           ])
         ])
@@ -43686,7 +43838,9 @@ var render = function() {
                   attrs: {
                     "checkout-food-id": JSON.stringify(_vm.checkout),
                     "payment-route": _vm.paymentRoute,
-                    "total-price": _vm.totalPrice
+                    "total-price": _vm.totalPrice,
+                    ordered: _vm.ordered,
+                    check: _vm.check
                   },
                   on: { checkout: _vm.getCart }
                 })
@@ -44294,6 +44448,23 @@ var render = function() {
             _vm._v(" "),
             _c("div", [_vm._v(_vm._s(_vm.total) + " HUF")])
           ]
+        ),
+        _vm._v(" "),
+        _c(
+          "form",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.coupon,
+                expression: "coupon"
+              }
+            ],
+            staticClass: "mt-3",
+            attrs: { action: "" }
+          },
+          [_vm._m(2), _vm._v(" "), _vm._m(3)]
         )
       ],
       2
@@ -44325,6 +44496,91 @@ var staticRenderFns = [
       },
       [_c("h5", [_vm._v("Termék")]), _vm._v(" "), _c("h5", [_vm._v("Összeg")])]
     )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group" }, [
+      _c("input", {
+        staticClass: "form-control form-control-lg",
+        attrs: { type: "text", placeholder: "Kuponkód" }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group" }, [
+      _c(
+        "button",
+        { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+        [_vm._v("Kupon beváltása")]
+      )
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/CouponManagementComponent.vue?vue&type=template&id=2f7bf819&":
+/*!*************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/CouponManagementComponent.vue?vue&type=template&id=2f7bf819& ***!
+  \*************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "container" }, [
+    _c(
+      "table",
+      [
+        _vm._m(0),
+        _vm._v(" "),
+        _vm._l(_vm.allCoupon, function(coupon) {
+          return _c("tbody", { key: coupon.id }, [
+            _c("tr", [
+              _c("th", { attrs: { scope: "row" } }, [_vm._v("#")]),
+              _vm._v(" "),
+              _c("td", [_vm._v(_vm._s(coupon.couponName))]),
+              _vm._v(" "),
+              _c("td", [_vm._v(_vm._s(coupon.couponPercent))]),
+              _vm._v(" "),
+              _c("td", [_vm._v(_vm._s(coupon.couponOneUsed))])
+            ])
+          ])
+        })
+      ],
+      2
+    )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("th", { attrs: { scope: "col" } }),
+      _vm._v(" "),
+      _c("th", { attrs: { scope: "col" } }, [_vm._v("Kupon neve")]),
+      _vm._v(" "),
+      _c("th", { attrs: { scope: "col" } }, [_vm._v("Százalék mennyisége")]),
+      _vm._v(" "),
+      _c("th", { attrs: { scope: "col" } }, [_vm._v("Használhatóság")])
+    ])
   }
 ]
 render._withStripped = true
@@ -44562,9 +44818,14 @@ var render = function() {
                       ? _c("div", { staticClass: "modal-body" }, [
                           _c("table", [
                             _c("thead", [
-                              _c("th", { attrs: { scope: "col" } }, [
-                                _vm._v("Rendelő neve:")
-                              ]),
+                              _c(
+                                "th",
+                                {
+                                  staticClass: "pr-5",
+                                  attrs: { scope: "col" }
+                                },
+                                [_vm._v("Rendelő neve:")]
+                              ),
                               _vm._v(" "),
                               _c("th", { attrs: { scope: "col" } }, [
                                 _vm._v("Város:")
@@ -44576,20 +44837,14 @@ var render = function() {
                             ]),
                             _vm._v(" "),
                             _c("tbody", [
-                              _c(
-                                "td",
-                                {
-                                  staticClass: "pr-5",
-                                  attrs: { scope: "row" }
-                                },
-                                [
-                                  _vm._v(
-                                    _vm._s(order.vezeteknev) +
-                                      " " +
-                                      _vm._s(order.keresztnev)
-                                  )
-                                ]
-                              ),
+                              _c("td", [
+                                _vm._v(
+                                  _vm._s(order.vezeteknev) +
+                                    " " +
+                                    _vm._s(order.keresztnev) +
+                                    " "
+                                )
+                              ]),
                               _c("td", { staticClass: "pr-5" }, [
                                 _vm._v(
                                   _vm._s(order.varos) +
@@ -44598,9 +44853,7 @@ var render = function() {
                                 )
                               ]),
                               _vm._v(" "),
-                              _c("td", { staticClass: "pr-5" }, [
-                                _vm._v(_vm._s(order.address))
-                              ])
+                              _c("td", [_vm._v(_vm._s(order.address))])
                             ])
                           ]),
                           _vm._v(" "),

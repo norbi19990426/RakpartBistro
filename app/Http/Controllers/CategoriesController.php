@@ -9,7 +9,7 @@ class CategoriesController extends Controller
 {
     public function create(){
 
-        return view('categories.create');
+        return view('admin.categories.create');
     }
     public function store(){
         $data = request()->validate([

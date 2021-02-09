@@ -16,7 +16,7 @@ class FoodsController extends Controller
         $categoryNames = DB::table('categories')->groupBy('categoryName')->get();
 
 
-        return view('foods.create', compact('categoryNames'));
+        return view('admin.foods.create', compact('categoryNames'));
     }
 
     public function store(){

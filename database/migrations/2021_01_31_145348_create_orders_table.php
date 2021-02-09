@@ -25,6 +25,7 @@ class CreateOrdersTable extends Migration
             $table->longtext('message')->nullable();
             $table->Integer('totalPrice');
             $table->unsignedBigInteger('status')->default(1);
+            $table->integer('coupon_id')->default(0);
             $table->timestamps();
         });
     }

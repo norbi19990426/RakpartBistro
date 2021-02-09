@@ -62,8 +62,13 @@
                                                 </form>
                                             </div>
                                         </li>
-                                        <admin-menu-component create-category="{{route('categories.create')}}"
-                                        create-food="{{route('foods.create')}}" order-management="{{route('orderManagement.index')}}"></admin-menu-component>
+                                        <admin-menu-component
+                                            create-category="{{route('admin.categories.create')}}"
+                                            create-food="{{route('admin.foods.create')}}"
+                                            order-management="{{route('admin.orderManagement.index')}}"
+                                            create-coupon="{{route('admin.createCoupon.create')}}"
+                                            coupon-management="{{route('admin.couponManagement.index')}}">
+                                        </admin-menu-component>
                                     @else
                                         <li class="nav-item dropdown">
                                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

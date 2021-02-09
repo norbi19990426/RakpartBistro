@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class OrdersController extends Controller
@@ -21,7 +22,6 @@ class OrdersController extends Controller
             'telefonszam' => 'required|min:11|max:15',
             'message' => '',
             'totalPrice' => '',
-            'status' => ''
         ]);
 
         $order = Order::create([
@@ -34,8 +34,8 @@ class OrdersController extends Controller
             'telefonszam' => $data['telefonszam'],
             'message' => $data['message'],
             'totalPrice' =>$data['totalPrice'],
-            'status' => 1
         ]);
+
 
         $cart = session()->get('cart');
         foreach($cart as $cartItem){
@@ -43,7 +43,18 @@ class OrdersController extends Controller
             ->insert(['order_id' => $order->id,
             'food_id' => $cartItem['id'],
             'qty' => $cartItem['quantity']]);
+            if(Auth::check()){
+                DB::table('carts')
+                ->whereIn('user_id', [Auth::id()])
+                ->whereIn('food_id', [$cartItem['id']])->delete();
+            }
         }
         session()->forget('cart');
+
+        if(Auth::check()){
+            DB::table('users')
+            ->whereIn('id', [Auth::id()])
+            ->update(['ordered' => 1]);
+        }
     }
 }

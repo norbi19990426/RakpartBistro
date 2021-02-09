@@ -38,6 +38,7 @@ Vue.component('admin-button-component', require('./components/AdminButtonCompone
 Vue.component('admin-menu-component', require('./components/AdminMenuComponent.vue').default);
 Vue.component('sidebar-component', require('./components/SidebarComponent.vue').default);
 Vue.component('order-management-component', require('./components/OrderManagementComponent.vue').default);
+Vue.component('coupon-management-component', require('./components/CouponManagementComponent.vue').default);
 
 
 /**

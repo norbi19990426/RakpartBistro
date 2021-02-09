@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Response;
 use App\Models\Cart;
-use Illuminate\Http\Request;
 use App\Models\Food;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -16,13 +14,16 @@ class CartsController extends Controller
     {
         if (Auth::check()) {
             $id = Auth::id();
-            $user = Cart::all();
-        } else {
+            $ordered = DB::table('users')
+            ->select('ordered')
+            ->whereIn('id', [Auth::id()])->get();
+        }
+        else {
             $id = 0;
-            $user = 0;
+            $ordered = 0;
         }
 
-        return view('more-page.cart', compact('id', 'user'));
+        return view('more-page.cart', compact('id', 'ordered'));
     }
 
     //VENDÉG CART-JA

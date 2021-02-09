@@ -41,14 +41,14 @@
                     <div class="modal-body" v-if="orderId == order.id">
                         <table>
                             <thead>
-                                    <th scope="col">Rendelő neve:</th>
+                                    <th scope="col" class="pr-5">Rendelő neve:</th>
                                     <th scope="col">Város:</th>
                                     <th scope="col">Lakcím:</th>
                             </thead>
                             <tbody>
-                                    <td class="pr-5" scope="row" >{{order.vezeteknev}} {{order.keresztnev}}</th>
+                                    <td >{{order.vezeteknev}} {{order.keresztnev}} </th>
                                     <td class="pr-5">{{order.varos}}, {{order.iranyitoszam}}</td>
-                                    <td class="pr-5">{{order.address}}</td>
+                                    <td>{{order.address}}</td>
                             </tbody>
 
                         </table>
@@ -89,7 +89,6 @@ import Swal from "sweetalert2";
 export default {
     props:['orderManagement','orderItems', 'food', 'orderStatuses'],
     data() {
-        console.log(this.orderStatuses);
         this.statuses = JSON.parse(this.orderStatuses);
         this.orders = JSON.parse(this.orderManagement);
         this.orderItem = JSON.parse(this.orderItems);
@@ -113,7 +112,6 @@ export default {
     methods:{
         getOrdersTable:function(){
             this.ordersTable = this.orders;
-            console.log(this.orders);
         },
         changeOrderStatus(orderId, statusId){
             axios.put('/status/' + orderId + "/" +statusId);

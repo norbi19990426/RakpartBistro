@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->string('utype')->default('USR')->comment('ADM = Admin, USR = User vagy Customer');
+            $table->integer('ordered')->default(0);
             $table->timestamps();
         });
     }

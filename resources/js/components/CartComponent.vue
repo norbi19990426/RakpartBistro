@@ -5,7 +5,8 @@
     <div class="row" v-show="(hideCart)">
         <div class="col-md-8" >
             <div v-for="foodItem in cartFood" :key="foodItem.id">
-                <cart-item-component @total-price="getCartItemData" @remove="getRemove" @badgeCount="getQuantity" :user-id="(userId)" :food="JSON.stringify(foodItem)"></cart-item-component>
+                <cart-item-component @total-price="getCartItemData" @remove="getRemove" @badgeCount="getQuantity" :user-id="(userId)"
+                :food="JSON.stringify(foodItem)"></cart-item-component>
             </div>
         </div>
         <div class="col-md-4">
@@ -20,7 +21,7 @@
     <div v-show="(hideCheckout)">
         <div v-if="hideCart == false">
             <checkout-component @checkout="getCart" :checkout-food-id="JSON.stringify(checkout)"
-            :payment-route="(paymentRoute)" :total-price="(totalPrice)"></checkout-component>
+            :payment-route="(paymentRoute)" :total-price="(totalPrice)" :ordered="(ordered)" :check="(check)"></checkout-component>
         </div>
     </div>
 </div>
@@ -29,7 +30,7 @@
 import CartItemComponent from "./CartItemComponent";
 import CheckoutComponent from './CheckoutComponent.vue';
 export default {
-    props: ['cart', 'userId', 'user', 'paymentRoute'],
+    props: ['cart', 'userId', 'paymentRoute', 'ordered', 'check'],
     components: { CartItemComponent, CheckoutComponent},
     data(){
         this.cartFood = JSON.parse(this.cart);
@@ -46,6 +47,7 @@ export default {
     beforeMount(){
         this.defaultTotalPrice();
         this.defaultTotalCount();
+
     },
     created(){
         this.sumTotalPrice();
