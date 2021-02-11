@@ -46,7 +46,7 @@
                                     <th scope="col">Lakcím:</th>
                             </thead>
                             <tbody>
-                                    <td >{{order.vezeteknev}} {{order.keresztnev}} </th>
+                                    <td >{{order.vezeteknev}} {{order.keresztnev}} </td>
                                     <td class="pr-5">{{order.varos}}, {{order.iranyitoszam}}</td>
                                     <td>{{order.address}}</td>
                             </tbody>

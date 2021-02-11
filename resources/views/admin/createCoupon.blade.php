@@ -16,8 +16,8 @@
                 <input type="number" class="form-control" id="couponPercent" name="couponPercent">
             </div>
             <div class="form-group row">
-                <label for="couponOneUsed">Egyszer vagy többször használatos kupon:</label>
-                <select class="form-control" name="couponOneUsed" id="couponOneUsed">
+                <label for="usages_id">Egyszer vagy többször használatos kupon:</label>
+                <select class="form-control" name="usages_id" id="usages_id">
                     <option value="1">Egyszer használatos</option>
                     <option value="2">Többször használatos</option>
                 </select>

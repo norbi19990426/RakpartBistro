@@ -38,6 +38,9 @@ Route::middleware(['auth:sanctum', 'verified', 'authadmin'])->group(function(){
     Route::put('/status/{orderId}/{statusId}', 'App\Http\Controllers\OrderManagementController@changeOrderStatus');
 
     Route::get('/couponManagement', 'App\Http\Controllers\CouponManagementController@index')->name('admin.couponManagement.index');
+    Route::delete('/couponsRemove/{id}', 'App\Http\Controllers\CouponManagementController@couponsRemove');
+    Route::put('/usage/{couponId}/{usageId}', 'App\Http\Controllers\CouponManagementController@changeCouponUsage');
+    Route::put('/couponEdit/{couponId}', 'App\Http\Controllers\CouponManagementController@couponEdit');
 
 });
 

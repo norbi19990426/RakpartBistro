@@ -2521,6 +2521,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -2541,11 +2543,141 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['coupons'],
+  props: ['coupons', 'usage'],
   data: function data() {
     this.allCoupon = JSON.parse(this.coupons);
-    return {};
+    this.couponUsage = JSON.parse(this.usage);
+    return {
+      couponSelectName: "",
+      selectId: [],
+      couponsTable: [],
+      couponId: 0,
+      couponName: '',
+      couponPercent: ''
+    };
+  },
+  beforeMount: function beforeMount() {
+    this.getCouponsTable();
+  },
+  methods: {
+    getCouponsTable: function getCouponsTable() {
+      this.couponsTable = this.allCoupon;
+    },
+    changeCouponUsage: function changeCouponUsage(couponId, usageId) {
+      axios.put('/usage/' + couponId + "/" + usageId);
+    },
+    couponsDelete: function couponsDelete() {
+      var _this = this;
+
+      sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire({
+        title: "Biztos benne?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        cancelButtonText: "Mégse",
+        confirmButtonText: "Igen, törlöm!"
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire("Termék törölve!");
+
+          _this.selectId.forEach(function (element) {
+            _this.couponsTable.forEach(function (x, y) {
+              //id és az index párja
+              if (element == x.id) {
+                axios["delete"]("/couponsRemove/" + x.id);
+
+                _this.couponsTable.splice(y, 1);
+              }
+            });
+          });
+        }
+      });
+    },
+    submitCouponEdit: function submitCouponEdit($couponId, $couponName, $couponPercent) {
+      var _this2 = this;
+
+      if (this.couponName == "" && this.couponPercent == "") {
+        this.couponName = $couponName;
+        this.couponPercent = $couponPercent;
+      } else if (this.couponName == "") {
+        this.couponName = $couponName;
+      } else if (this.couponPercent == "") {
+        this.couponPercent = $couponPercent;
+      }
+
+      sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire({
+        title: "Biztos benne?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        cancelButtonText: "Mégse",
+        confirmButtonText: "Igen, szerkeztem!"
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire("Kupon szerkeztve!");
+          axios.put('/couponEdit/' + $couponId, {
+            couponName: _this2.couponName,
+            couponPercent: _this2.couponPercent
+          }).then(function (response) {
+            _this2.couponsTable.forEach(function (element) {
+              if (element.id == $couponId) {
+                element.couponName = response.data.couponName;
+                element.couponPercent = response.data.couponPercent;
+              }
+            });
+          });
+
+          _this2.$modal.hide('coupon-form');
+        }
+      });
+    },
+    show: function show(event) {
+      this.couponId = event;
+      this.$modal.show('coupon-form');
+    },
+    hide: function hide() {
+      this.$modal.hide('coupon-form');
+    }
   }
 });
 
@@ -44543,29 +44675,267 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" }, [
-    _c(
-      "table",
-      [
-        _vm._m(0),
-        _vm._v(" "),
-        _vm._l(_vm.allCoupon, function(coupon) {
-          return _c("tbody", { key: coupon.id }, [
-            _c("tr", [
-              _c("th", { attrs: { scope: "row" } }, [_vm._v("#")]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(coupon.couponName))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(coupon.couponPercent))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(coupon.couponOneUsed))])
+  return _c(
+    "div",
+    { staticClass: "container" },
+    [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-primary mb-3",
+          on: { click: _vm.couponsDelete }
+        },
+        [_vm._v("Kijelölt kuponok törlése")]
+      ),
+      _vm._v(" "),
+      _c(
+        "table",
+        { staticClass: "table" },
+        [
+          _vm._m(0),
+          _vm._v(" "),
+          _vm._l(_vm.couponsTable, function(coupon) {
+            return _c("tbody", { key: coupon.id }, [
+              _c("tr", [
+                _c("td", [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.selectId,
+                        expression: "selectId"
+                      }
+                    ],
+                    attrs: { type: "checkbox" },
+                    domProps: {
+                      value: coupon.id,
+                      checked: Array.isArray(_vm.selectId)
+                        ? _vm._i(_vm.selectId, coupon.id) > -1
+                        : _vm.selectId
+                    },
+                    on: {
+                      change: function($event) {
+                        var $$a = _vm.selectId,
+                          $$el = $event.target,
+                          $$c = $$el.checked ? true : false
+                        if (Array.isArray($$a)) {
+                          var $$v = coupon.id,
+                            $$i = _vm._i($$a, $$v)
+                          if ($$el.checked) {
+                            $$i < 0 && (_vm.selectId = $$a.concat([$$v]))
+                          } else {
+                            $$i > -1 &&
+                              (_vm.selectId = $$a
+                                .slice(0, $$i)
+                                .concat($$a.slice($$i + 1)))
+                          }
+                        } else {
+                          _vm.selectId = $$c
+                        }
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("th", { attrs: { scope: "row" } }, [
+                  _vm._v("# " + _vm._s(coupon.id))
+                ]),
+                _vm._v(" "),
+                _c(
+                  "td",
+                  {
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.show(coupon.id)
+                      }
+                    }
+                  },
+                  [_vm._v(_vm._s(coupon.couponName))]
+                ),
+                _vm._v(" "),
+                _c(
+                  "td",
+                  {
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.show(coupon.id)
+                      }
+                    }
+                  },
+                  [_vm._v(_vm._s(coupon.couponPercent) + " %")]
+                ),
+                _vm._v(" "),
+                _c("td", [
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: coupon.usages_id,
+                          expression: "coupon.usages_id"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      on: {
+                        change: [
+                          function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.$set(
+                              coupon,
+                              "usages_id",
+                              $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            )
+                          },
+                          function($event) {
+                            return _vm.changeCouponUsage(
+                              coupon.id,
+                              coupon.usages_id
+                            )
+                          }
+                        ]
+                      }
+                    },
+                    _vm._l(_vm.couponUsage, function(usage) {
+                      return _c(
+                        "option",
+                        { key: usage.id, domProps: { value: usage.id } },
+                        [
+                          _vm._v(
+                            "\n                           " +
+                              _vm._s(usage.usagesName) +
+                              "\n                       "
+                          )
+                        ]
+                      )
+                    }),
+                    0
+                  )
+                ])
+              ])
+            ])
+          })
+        ],
+        2
+      ),
+      _vm._v(" "),
+      _c("modal", { attrs: { name: "coupon-form", height: "auto" } }, [
+        _c("div", { staticClass: "modal-mask" }, [
+          _c("div", { staticClass: "modal-container" }, [
+            _c("div", { staticClass: "modal-header" }, [
+              _c("h3", [_vm._v("Kupon szerkeztés")])
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              _vm._l(_vm.couponsTable, function(coupon) {
+                return _c(
+                  "div",
+                  { key: coupon.id, staticClass: "modal-body" },
+                  [
+                    _vm.couponId == coupon.id
+                      ? _c(
+                          "form",
+                          {
+                            attrs: {
+                              method: "PUT",
+                              enctype: "multipart/form-data"
+                            },
+                            on: {
+                              submit: function($event) {
+                                $event.preventDefault()
+                                return _vm.submitCouponEdit(
+                                  coupon.id,
+                                  coupon.couponName,
+                                  coupon.couponPercent
+                                )
+                              }
+                            }
+                          },
+                          [
+                            _c("div", { staticClass: "form-group" }, [
+                              _c("label", { attrs: { for: "couponName" } }, [
+                                _vm._v("Kupon elnezevezés:")
+                              ]),
+                              _vm._v(" "),
+                              _c("input", {
+                                staticClass: "form-control",
+                                attrs: { type: "text" },
+                                domProps: { value: coupon.couponName },
+                                on: {
+                                  change: function($event) {
+                                    _vm.couponName = $event.target.value
+                                  }
+                                }
+                              })
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "form-group" }, [
+                              _c("label", { attrs: { for: "couponPercent" } }, [
+                                _vm._v("Százalék mennyisége:")
+                              ]),
+                              _vm._v(" "),
+                              _c("input", {
+                                staticClass: "form-control",
+                                attrs: { type: "number" },
+                                domProps: { value: coupon.couponPercent },
+                                on: {
+                                  change: function($event) {
+                                    _vm.couponPercent = $event.target.value
+                                  }
+                                }
+                              })
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-primary",
+                                attrs: { type: "submit" }
+                              },
+                              [_vm._v("Szerkeztés")]
+                            )
+                          ]
+                        )
+                      : _vm._e()
+                  ]
+                )
+              }),
+              0
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "modal-footer text-right" }, [
+              _c(
+                "button",
+                {
+                  on: {
+                    click: function($event) {
+                      return _vm.$modal.hide("coupon-form")
+                    }
+                  }
+                },
+                [_vm._v("Kilépés")]
+              )
             ])
           ])
-        })
-      ],
-      2
-    )
-  ])
+        ])
+      ])
+    ],
+    1
+  )
 }
 var staticRenderFns = [
   function() {
@@ -44574,6 +44944,8 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("th", { attrs: { scope: "col" } }),
+      _vm._v(" "),
+      _c("th", { attrs: { scope: "col" } }, [_vm._v("Kupon")]),
       _vm._v(" "),
       _c("th", { attrs: { scope: "col" } }, [_vm._v("Kupon neve")]),
       _vm._v(" "),
@@ -44845,6 +45217,7 @@ var render = function() {
                                     " "
                                 )
                               ]),
+                              _vm._v(" "),
                               _c("td", { staticClass: "pr-5" }, [
                                 _vm._v(
                                   _vm._s(order.varos) +

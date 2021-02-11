@@ -15,16 +15,16 @@ class CouponController extends Controller
         $data = request()->validate([
             'couponName' => 'required',
             'couponPercent' => 'required',
-            'couponOneUsed' => 'required'
+            'usages_id' => 'required'
         ]);
 
         Coupon::create([
             'couponName' => $data['couponName'],
             'couponPercent' => $data['couponPercent'],
-            'couponOneUsed' => $data['couponOneUsed']
+            'usages_id' => $data['usages_id']
         ]);
 
-            return redirect('/menu');
+            return redirect('/couponManagement');
 
     }
 }
