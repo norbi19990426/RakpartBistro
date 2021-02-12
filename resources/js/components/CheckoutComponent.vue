@@ -95,28 +95,17 @@
                 <div>Teljes Összeg</div>
                 <div>{{total}} HUF</div>
             </div>
-            <form class="mt-3" action="" v-show="coupon">
-                <div class="form-group">
-                    <input class="form-control form-control-lg" type="text" placeholder="Kuponkód">
-
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Kupon beváltása</button>
-                </div>
-            </form>
         </div>
     </div>
 </template>
 <script>
-
 export default {
-    props: ['checkoutFoodId','totalPrice', 'paymentRoute', 'ordered', 'check'],
+    props: ['checkoutFoodId','totalPrice', 'paymentRoute', 'ordered'],
     data(){
     this.foodItem = JSON.parse(this.checkoutFoodId);
         return{
             cart: false,
             total: this.totalPrice,
-            coupon: false,
             form: new Form({
                 vezeteknev: '',
                 keresztnev: '',
@@ -128,11 +117,9 @@ export default {
                 telefonszam: '',
                 message: '',
                 userOrdered: 0,
-            })
+            }),
+
         }
-    },
-    created(){
-        this.getUserOrdered();
     },
     watch:{
         cart:function(){
@@ -141,17 +128,6 @@ export default {
         }
     },
     methods: {
-        getUserOrdered(){
-            if(this.check == true){
-                this.getOrdered = JSON.parse(this.ordered);
-                this.getOrdered.forEach(element => {
-                this.userOrdered = element.ordered;
-            });
-            }
-            if(this.userOrdered == 1){
-                this.coupon = true;
-            }
-        },
         cartButton(){
             this.cart = true;
         },
@@ -173,7 +149,6 @@ export default {
             data.append('totalPrice', this.totalPrice);
             axios.post('/order', data)
             .then((response) => {
-                console.log(response.data);
                 this.form.reset();
                 location.href = '/paymentSuccessFull';
               })

@@ -46,6 +46,7 @@ Route::middleware(['auth:sanctum', 'verified', 'authadmin'])->group(function(){
 
 Route::post('/addToUserCart/{foodId}/{userId}', 'App\Http\Controllers\CartsController@addToUserCart')->middleware('auth');
 Route::delete('/userItemRemove/{foodId}/{userId}', 'App\Http\Controllers\CartsController@removeFromUserCart')->middleware('auth');
+Route::post('/userUseCoupon/{userId}/{couponId}', 'App\Http\Controllers\CartsController@userUseCoupon')->middleware('auth');
 
 Route::get('/menu', 'App\Http\Controllers\MenuController@index')->name('menu.index');
 

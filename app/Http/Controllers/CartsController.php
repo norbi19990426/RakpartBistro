@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\Coupon;
 use App\Models\Food;
+use App\Models\UsedCoupon;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +16,8 @@ class CartsController extends Controller
     {
         if (Auth::check()) {
             $id = Auth::id();
+            $coupons = Coupon::all();
+            $usedCoupons = UsedCoupon::all();
             $ordered = DB::table('users')
             ->select('ordered')
             ->whereIn('id', [Auth::id()])->get();
@@ -21,9 +25,11 @@ class CartsController extends Controller
         else {
             $id = 0;
             $ordered = 0;
+            $coupons = 0;
+            $usedCoupons = 0;
         }
 
-        return view('more-page.cart', compact('id', 'ordered'));
+        return view('more-page.cart', compact('id', 'ordered', 'coupons', 'usedCoupons'));
     }
 
     //VENDÉG CART-JA
@@ -131,7 +137,14 @@ class CartsController extends Controller
             ->whereIn('user_id', [$userId])
             ->whereIn('food_id', [$foodId])->delete();
     }
+    public function userUseCoupon($userId, $couponId){
 
+        UsedCoupon::create([
+            'user_id' => $userId,
+            'coupon_id' => $couponId
+        ]);
+
+    }
     protected function sessionData(Food $food)
     {
         return [

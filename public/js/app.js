@@ -2020,6 +2020,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _CartItemComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CartItemComponent */ "./resources/js/components/CartItemComponent.vue");
 /* harmony import */ var _CheckoutComponent_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CheckoutComponent.vue */ "./resources/js/components/CheckoutComponent.vue");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_2__);
 //
 //
 //
@@ -2048,16 +2050,39 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['cart', 'userId', 'paymentRoute', 'ordered', 'check'],
+  props: ['cart', 'userId', 'paymentRoute', 'ordered', 'check', 'coupons', 'usedCoupons'],
   components: {
     CartItemComponent: _CartItemComponent__WEBPACK_IMPORTED_MODULE_0__.default,
     CheckoutComponent: _CheckoutComponent_vue__WEBPACK_IMPORTED_MODULE_1__.default
   },
   data: function data() {
+    this.allCoupon = JSON.parse(this.coupons);
     this.cartFood = JSON.parse(this.cart);
+    this.allUsedCoupons = JSON.parse(this.usedCoupons);
     return {
       hideCart: true,
       hideCheckout: false,
@@ -2065,12 +2090,19 @@ __webpack_require__.r(__webpack_exports__);
       badgeCount: 0,
       cartItemsData: [],
       cartItemsCount: [],
-      checkout: []
+      checkout: [],
+      coupon: false,
+      couponText: "",
+      bool: false,
+      couponPrice: 1,
+      usedCoupon: false
     };
   },
   beforeMount: function beforeMount() {
+    this.getDefaultCoupon();
     this.defaultTotalPrice();
     this.defaultTotalCount();
+    this.getUserOrdered();
   },
   created: function created() {
     this.sumTotalPrice();
@@ -2079,42 +2111,98 @@ __webpack_require__.r(__webpack_exports__);
     this.defaultTotalCount();
   },
   methods: {
+    //ELKÜLD EGY POSTOT AZ USER_ID-VAL ÉS A COUPON_ID-VAL. ELDÖNTI HOGY LÉTEZIK-E A MEGADOTT KUPONKÓD
+    getCoupon: function getCoupon() {
+      var _this = this;
+
+      this.bool = false;
+      this.allCoupon.forEach(function (element) {
+        if (_this.couponText === element.couponName) {
+          _this.bool = true;
+          axios.post('/userUseCoupon/' + _this.userId + "/" + element.id).then(function (response) {
+            _this.usedCoupon = true;
+          });
+        }
+      });
+
+      if (this.bool == false) {
+        sweetalert2__WEBPACK_IMPORTED_MODULE_2___default().fire({
+          icon: 'error',
+          title: 'Helytelen kuponkód'
+        });
+      }
+    },
+    //ELDÖNTI HOGY A USER RENDELT-E MÁR VAGY SEM
+    getUserOrdered: function getUserOrdered() {
+      var _this2 = this;
+
+      if (this.check == true) {
+        this.getOrdered = JSON.parse(this.ordered);
+        this.getOrdered.forEach(function (element) {
+          _this2.userOrdered = element.ordered;
+        });
+      }
+
+      if (this.userOrdered == 1) {
+        this.coupon = true;
+      }
+    },
+    //HA A USER HASZNÁLT MÁR KUPONT EZ FOGJA ELLENŐRIZNI ÉS BEÁLLÍTANI A KUPON SZÁZALÉKOT
+    getDefaultCoupon: function getDefaultCoupon() {
+      var _this3 = this;
+
+      this.allUsedCoupons.forEach(function (usedCouponElement) {
+        _this3.allCoupon.forEach(function (couponElement) {
+          if (usedCouponElement.user_id == _this3.userId && usedCouponElement.coupon_id == couponElement.id) {
+            _this3.couponPrice = couponElement.couponPercent / 100;
+            _this3.usedCoupon = true;
+          }
+        });
+      });
+    },
+    //EZ A CART-RÓL A CHECKOUTRA MENŐ BUTTON
     checkoutButton: function checkoutButton() {
       this.hideCart = false;
       this.hideCheckout = true;
     },
+    //EZ A KASSZÁRÓL VALÓ VISSZATÉRÉST KEZELI
     getCart: function getCart() {
       this.hideCart = true;
       this.hideCheckout = false;
     },
+    //EZ TÁROLJA EL A CARTITEM-RŐL JÖVŐ ADATOKAT(TOTALPRICE)
     getCartItemData: function getCartItemData(cartItemData) {
       this.cartItemsData[cartItemData.id] = cartItemData.sub_total;
       this.sumTotalPrice();
     },
+    //EZ HA TÖRÖLNEK EGY ITEMET KIVONJA AZ ÖSSZÉRTÉKBŐL
     getRemove: function getRemove(cartItemData) {
       this.cartItemsData[cartItemData.id] = cartItemData.sub_total;
       this.checkout[cartItemData.id] = null;
       this.sumTotalPrice();
     },
+    //EZ AZ ÁRAK ÖSSZEADÁSA
     sumTotalPrice: function sumTotalPrice() {
-      var _this = this;
+      var _this4 = this;
 
       this.totalPrice = 0;
       this.cartItemsData.forEach(function (cartItemData) {
-        _this.totalPrice += cartItemData;
+        _this4.totalPrice += cartItemData * _this4.couponPrice;
       });
     },
+    //EZ TARTJA MEG AZ ÖSSZÉRTÉK ÉRTÉKÉT
     defaultTotalPrice: function defaultTotalPrice() {
-      var _this2 = this;
+      var _this5 = this;
 
       var keys = Object.keys(this.cartFood);
       keys.forEach(function (key) {
-        var item = _this2.cartFood[key];
-        _this2.cartItemsData[item.id] = item.price * item.quantity;
+        var item = _this5.cartFood[key];
+        _this5.cartItemsData[item.id] = item.price * item.quantity;
 
-        _this2.sumTotalPrice();
+        _this5.sumTotalPrice();
       });
     },
+    //EZ TÁROLJA EL A QUANTITY-T + FELHASZNÁLTAM A CHECKOUT-HOZ ÖSSZESÍTŐ KIJELZÉSÉBEN
     getQuantity: function getQuantity(cartItemCount) {
       this.cartItemsCount[cartItemCount.id] = cartItemCount.quantityCount;
       this.checkout[cartItemCount.id] = [{
@@ -2125,30 +2213,32 @@ __webpack_require__.r(__webpack_exports__);
       }];
       this.sumBridgeCount();
     },
+    //QUANTITY-T SZÁMOLJA ÖSSZE ÉS KÜLDI EL A VUEX-BE, HOGY A BADGECOUNT MEGKAPJA
     sumBridgeCount: function sumBridgeCount() {
-      var _this3 = this;
+      var _this6 = this;
 
       this.badgeCount = 0;
       this.cartItemsCount.forEach(function (cartItemCount) {
-        _this3.badgeCount += cartItemCount;
+        _this6.badgeCount += cartItemCount;
       });
       this.$store.commit("sumBridgeCount", this.badgeCount);
     },
+    //EZ TÁROLJA EL A BUDGECOUNT-OT + EZT IS FELHASZNÁLTAM A CHECKOUT TÁROLT ADATAIHOZ
     defaultTotalCount: function defaultTotalCount() {
-      var _this4 = this;
+      var _this7 = this;
 
       var keys = Object.keys(this.cartFood);
       keys.forEach(function (key) {
-        var item = _this4.cartFood[key];
-        _this4.cartItemsCount[item.id] = item.quantity;
-        _this4.checkout[item.id] = [{
+        var item = _this7.cartFood[key];
+        _this7.cartItemsCount[item.id] = item.quantity;
+        _this7.checkout[item.id] = [{
           'id': item.id,
           'foodName': item.name,
           'qty': item.quantity,
           'price': item.price
         }];
 
-        _this4.sumBridgeCount();
+        _this7.sumBridgeCount();
       });
     }
   }
@@ -2418,23 +2508,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['checkoutFoodId', 'totalPrice', 'paymentRoute', 'ordered', 'check'],
+  props: ['checkoutFoodId', 'totalPrice', 'paymentRoute', 'ordered'],
   data: function data() {
     this.foodItem = JSON.parse(this.checkoutFoodId);
     return {
       cart: false,
       total: this.totalPrice,
-      coupon: false,
       form: new Form({
         vezeteknev: '',
         keresztnev: '',
@@ -2449,9 +2529,6 @@ __webpack_require__.r(__webpack_exports__);
       })
     };
   },
-  created: function created() {
-    this.getUserOrdered();
-  },
   watch: {
     cart: function cart() {
       this.cart = false;
@@ -2459,25 +2536,11 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    getUserOrdered: function getUserOrdered() {
-      var _this = this;
-
-      if (this.check == true) {
-        this.getOrdered = JSON.parse(this.ordered);
-        this.getOrdered.forEach(function (element) {
-          _this.userOrdered = element.ordered;
-        });
-      }
-
-      if (this.userOrdered == 1) {
-        this.coupon = true;
-      }
-    },
     cartButton: function cartButton() {
       this.cart = true;
     },
     submitOrder: function submitOrder() {
-      var _this2 = this;
+      var _this = this;
 
       var data = new FormData();
       data.append('vezeteknev', this.form.vezeteknev);
@@ -2496,13 +2559,11 @@ __webpack_require__.r(__webpack_exports__);
       data.append('message', this.form.message);
       data.append('totalPrice', this.totalPrice);
       axios.post('/order', data).then(function (response) {
-        console.log(response.data);
-
-        _this2.form.reset();
+        _this.form.reset();
 
         location.href = '/paymentSuccessFull';
       })["catch"](function (error) {
-        return _this2.form.errors.record(error.response.data);
+        return _this.form.errors.record(error.response.data);
       });
     }
   }
@@ -43933,6 +43994,68 @@ var render = function() {
           _c("p", [_vm._v("ÖSSZEG " + _vm._s(_vm.totalPrice))]),
           _vm._v(" "),
           _c(
+            "form",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.coupon,
+                  expression: "coupon"
+                }
+              ],
+              staticClass: "mt-3",
+              attrs: { method: "POST", enctype: "multipart/form-data" },
+              on: {
+                submit: function($event) {
+                  $event.preventDefault()
+                  return _vm.getCoupon()
+                }
+              }
+            },
+            [
+              _c("div", { staticClass: "form-group" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.couponText,
+                      expression: "couponText"
+                    }
+                  ],
+                  staticClass: "form-control form-control-lg",
+                  attrs: {
+                    disabled: _vm.usedCoupon,
+                    type: "text",
+                    placeholder: "Kuponkód"
+                  },
+                  domProps: { value: _vm.couponText },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.couponText = $event.target.value
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "submit", disabled: _vm.usedCoupon }
+                  },
+                  [_vm._v("Kupon beváltása")]
+                )
+              ])
+            ]
+          ),
+          _vm._v(" "),
+          _c(
             "button",
             {
               staticClass: "btn btn-primary",
@@ -43972,7 +44095,8 @@ var render = function() {
                     "payment-route": _vm.paymentRoute,
                     "total-price": _vm.totalPrice,
                     ordered: _vm.ordered,
-                    check: _vm.check
+                    check: _vm.check,
+                    coupons: _vm.coupons
                   },
                   on: { checkout: _vm.getCart }
                 })
@@ -44580,23 +44704,6 @@ var render = function() {
             _vm._v(" "),
             _c("div", [_vm._v(_vm._s(_vm.total) + " HUF")])
           ]
-        ),
-        _vm._v(" "),
-        _c(
-          "form",
-          {
-            directives: [
-              {
-                name: "show",
-                rawName: "v-show",
-                value: _vm.coupon,
-                expression: "coupon"
-              }
-            ],
-            staticClass: "mt-3",
-            attrs: { action: "" }
-          },
-          [_vm._m(2), _vm._v(" "), _vm._m(3)]
         )
       ],
       2
@@ -44628,29 +44735,6 @@ var staticRenderFns = [
       },
       [_c("h5", [_vm._v("Termék")]), _vm._v(" "), _c("h5", [_vm._v("Összeg")])]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group" }, [
-      _c("input", {
-        staticClass: "form-control form-control-lg",
-        attrs: { type: "text", placeholder: "Kuponkód" }
-      })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group" }, [
-      _c(
-        "button",
-        { staticClass: "btn btn-primary", attrs: { type: "submit" } },
-        [_vm._v("Kupon beváltása")]
-      )
-    ])
   }
 ]
 render._withStripped = true

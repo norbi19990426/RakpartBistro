@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Coupon;
 use App\Models\Food;
 use App\Models\Order;
 use App\Models\OrderItem;
