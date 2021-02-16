@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsedCouponsTable extends Migration
+class CreateCouponUsedOncesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateUsedCouponsTable extends Migration
      */
     public function up()
     {
-        Schema::create('used_coupons', function (Blueprint $table) {
+        Schema::create('coupon_used_onces', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('user_id');
             $table->integer('coupon_id');
@@ -28,6 +28,6 @@ class CreateUsedCouponsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('used_coupons');
+        Schema::dropIfExists('coupon_used_onces');
     }
 }

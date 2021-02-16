@@ -100,7 +100,7 @@
 </template>
 <script>
 export default {
-    props: ['checkoutFoodId','totalPrice', 'paymentRoute', 'ordered'],
+    props: ['checkoutFoodId','totalPrice', 'paymentRoute', 'ordered', 'couponId'],
     data(){
     this.foodItem = JSON.parse(this.checkoutFoodId);
         return{
@@ -128,9 +128,11 @@ export default {
         }
     },
     methods: {
+        //CART-RA VISSZA GOMB
         cartButton(){
             this.cart = true;
         },
+        //RENDELÉS LEADÁSA, ÁTIRÁNYÍTÁS A SUCCESS OLDALRA
         submitOrder(){
             let data = new FormData();
             data.append('vezeteknev',this.form.vezeteknev);
@@ -147,6 +149,7 @@ export default {
             data.append('telefonszam',this.form.telefonszam);
             data.append('message',this.form.message);
             data.append('totalPrice', this.totalPrice);
+            data.append('couponId', this.couponId);
             axios.post('/order', data)
             .then((response) => {
                 this.form.reset();

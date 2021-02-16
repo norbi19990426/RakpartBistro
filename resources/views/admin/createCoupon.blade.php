@@ -9,7 +9,13 @@
             </div>
             <div class="form-group row">
                 <label for="couponName">Kupon elnezevezés:</label>
-                <input type="text" class="form-control" id="couponName" name="couponName">
+                <input type="text" class="form-control @error('couponName') is-invalid @enderror" id="couponName" name="couponName"  value="{{ old('couponName') }}" required autocomplete="couponName" autofocus>
+
+                @error('couponName')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
             </div>
             <div class="form-group row">
                 <label for="couponPercent">Százalék mennyisége:</label>

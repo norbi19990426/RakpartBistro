@@ -8,7 +8,8 @@
             ordered="{{$ordered}}"
             check="{{Auth::check()}}"
             coupons="{{$coupons}}"
-            used-coupons="{{$usedCoupons}}">
+            used-coupons="{{$usedCoupons}}"
+            coupon-used-once="{{$couponUsedOnce}}">
             </cart-component>
     </div>
 @endsection

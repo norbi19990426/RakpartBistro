@@ -13,7 +13,7 @@ class CouponController extends Controller
     public function store(){
 
         $data = request()->validate([
-            'couponName' => 'required',
+            'couponName' => 'required|max:20',
             'couponPercent' => 'required',
             'usages_id' => 'required'
         ]);

@@ -63,6 +63,7 @@ watch:{
       },
   },
   methods: {
+    //NÖVELI A QUANTITY DARABSZÁMÁT ÉS HA VAN BEJELENTKEZVE FELHASZNÁLÓ ADATBÁZISBA IS NÖVELI
     sumButton() {
       axios
         .put("/updateItemSum/" + this.id)
@@ -78,7 +79,8 @@ watch:{
             axios.post('/addToUserCart/' + this.id + "/" + this.userId)
         }
     },
-
+    //CSÖKKENTI A QUANTITY DARABSZÁMÁT ÉS HA VAN BEJELENTKEZVE FELHASZNÁLÓ ADATBÁZISBA IS CSÖKKENTI
+    //HA 1 LESZ A QUANTITY ÉRTÉKE TÖRLÉS GOMBOT AJÁNL FEL A KÖVETKEZŐ CSÖKKENTÉSNÉL, LETILTJA A GOMBOT, HA TÚL GYORSAN KEDZIK EL NYOMKODNI
     subButton() {
         if (this.quantityCount == 1) {
             this.removeButton();
@@ -97,6 +99,7 @@ watch:{
             }
         }
     },
+    //TÖRLI A CART-BA RAKOTT TERMÉKET
     removeButton() {
         Swal.fire({
           title: "Biztos benne?",

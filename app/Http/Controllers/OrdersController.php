@@ -22,6 +22,7 @@ class OrdersController extends Controller
             'telefonszam' => 'required|min:11|max:15',
             'message' => '',
             'totalPrice' => '',
+            'couponId' => ''
         ]);
 
         $order = Order::create([
@@ -33,7 +34,8 @@ class OrdersController extends Controller
             'address' => $data['address'],
             'telefonszam' => $data['telefonszam'],
             'message' => $data['message'],
-            'totalPrice' =>$data['totalPrice'],
+            'totalPrice' => $data['totalPrice'],
+            'coupon_id' => $data['couponId']
         ]);
 
 
@@ -55,6 +57,9 @@ class OrdersController extends Controller
             DB::table('users')
             ->whereIn('id', [Auth::id()])
             ->update(['ordered' => 1]);
+            DB::table('used_coupons')
+            ->whereIn('user_id', [Auth::id()])->delete();
+
         }
     }
 }

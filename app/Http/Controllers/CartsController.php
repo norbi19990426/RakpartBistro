@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\Coupon;
+use App\Models\CouponUsedOnce;
 use App\Models\Food;
 use App\Models\UsedCoupon;
 use App\Models\User;
@@ -18,6 +19,7 @@ class CartsController extends Controller
             $id = Auth::id();
             $coupons = Coupon::all();
             $usedCoupons = UsedCoupon::all();
+            $couponUsedOnce = CouponUsedOnce::all();
             $ordered = DB::table('users')
             ->select('ordered')
             ->whereIn('id', [Auth::id()])->get();
@@ -27,9 +29,10 @@ class CartsController extends Controller
             $ordered = 0;
             $coupons = 0;
             $usedCoupons = 0;
+            $couponUsedOnce = 0;
         }
 
-        return view('more-page.cart', compact('id', 'ordered', 'coupons', 'usedCoupons'));
+        return view('more-page.cart', compact('id', 'ordered', 'coupons', 'usedCoupons', 'couponUsedOnce'));
     }
 
     //VENDÉG CART-JA
@@ -143,7 +146,15 @@ class CartsController extends Controller
             'user_id' => $userId,
             'coupon_id' => $couponId
         ]);
+    }
 
+    public function couponUseOnce($userId, $couponId){
+        CouponUsedOnce::create([
+            'user_id' => $userId,
+            'coupon_id' =>$couponId
+        ]);
+
+        return response( $couponId);
     }
     protected function sessionData(Food $food)
     {

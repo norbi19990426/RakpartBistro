@@ -9,6 +9,7 @@
                 <th scope="col">Rendelés időpontja</th>
                 <th scope="col">Vásárló</th>
                 <th scope="col">Email</th>
+                <th scope="col">Telefonszám</th>
                 <th scope="col">Teljes összeg</th>
                 <th scope="col">Státusz</th>
             </tr>
@@ -20,6 +21,7 @@
                     <td @click.prevent="show(order.id)">{{order.created_at}}</td>
                     <td @click.prevent="show(order.id)">{{order.vezeteknev}} {{order.keresztnev}}</td>
                     <td @click.prevent="show(order.id)">{{order.email}}</td>
+                    <td @click.prevent="show(order.id)">{{order.telefonszam}}</td>
                     <td @click.prevent="show(order.id)">{{order.totalPrice}} HUF</td>
                     <td>
                        <select class="form-control" v-model="order.status" @change="changeOrderStatus(order.id, order.status)" >
@@ -54,7 +56,13 @@
                         </table>
                         <h5 class="mt-3"><strong>Rendelő megjegyzés:</strong></h5>
                         <p class="messageText">{{order.message}}</p>
-
+                        <h5 class="mt-3"><strong>Kupon:</strong></h5>
+                        <div v-for="coupon in allCoupon" :key="coupon.id">
+                            <div v-if="coupon.id === order.coupon_id">
+                               <p>Kupon neve: {{coupon.couponName}}</p>
+                                <p>Százalék: {{coupon.couponPercent}} %</p>
+                            </div>
+                        </div>
                         <h5 class="mt-3"><strong>Megrendelés összesítő:</strong></h5>
                         <table>
                             <thead>
@@ -87,12 +95,13 @@
 <script>
 import Swal from "sweetalert2";
 export default {
-    props:['orderManagement','orderItems', 'food', 'orderStatuses'],
+    props:['orderManagement','orderItems', 'food', 'orderStatuses', 'coupons'],
     data() {
         this.statuses = JSON.parse(this.orderStatuses);
         this.orders = JSON.parse(this.orderManagement);
         this.orderItem = JSON.parse(this.orderItems);
         this.foodItem = JSON.parse(this.food);
+        this.allCoupon = JSON.parse(this.coupons);
         return{
             selectOption: [],
             selectId: [],
@@ -103,19 +112,22 @@ export default {
                 price: 0
                 }],
             orderId: 0,
-            duplicate: false,
+            duplicate: false
         }
     },
     beforeMount(){
         this.getOrdersTable();
     },
     methods:{
+        //A BEJÖVŐ ORDEREKET BELERAKOM EGY TÖMBBE
         getOrdersTable:function(){
             this.ordersTable = this.orders;
         },
+        //AZ ORDER STÁTUSZ ÁLLÍTÓDIK ITT. (ELKÉSZÍTÉS ALATT, KISZÁLLÍTÁS ALATT, KISZÁLLÍTVA)
         changeOrderStatus(orderId, statusId){
             axios.put('/status/' + orderId + "/" +statusId);
         },
+        //KIJELÖLT ORDEREKET TÖRLI
         ordersDelete(){
             Swal.fire({
                 title: "Biztos benne?",
@@ -139,6 +151,7 @@ export default {
                 }
             });
         },
+        //MODEL MEGJELENÍTÉS, ÉS A BENNE LÉVŐ ADATOK FELDOLGOZÁSA
         show(event){
             this.orderId = event;
             let keys = Object.keys(this.orderItemsTable);
@@ -163,6 +176,7 @@ export default {
             this.duplicate = false;
             this.$modal.show('order-info');
         },
+        //MODEL KILÉPÉS
         hide(){
             this.$modal.hide('order-info');
         }

@@ -14,7 +14,7 @@ import store from "./store/index";
 Vue.prototype.$eventBus = new Vue();
 import VueJSModal from 'vue-js-modal';
 Vue.use(VueJSModal);
-
+import StarRating from 'vue-star-rating';
 
 
 /**
@@ -28,6 +28,8 @@ Vue.use(VueJSModal);
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
+Vue.component('menu-component', require('./components/MenuComponent.vue').default);
+
 Vue.component('addtocart-component', require('./components/AddToCartComponent.vue').default);
 Vue.component('badge-component', require('./components/BadgeComponent.vue').default);
 Vue.component('cart-item-component', require('./components/CartItemComponent.vue').default);
@@ -39,7 +41,8 @@ Vue.component('admin-menu-component', require('./components/AdminMenuComponent.v
 Vue.component('sidebar-component', require('./components/SidebarComponent.vue').default);
 Vue.component('order-management-component', require('./components/OrderManagementComponent.vue').default);
 Vue.component('coupon-management-component', require('./components/CouponManagementComponent.vue').default);
-
+Vue.component('star-rating-component', require('./components/StarRatingComponent.vue').default);
+Vue.component('star-rating', StarRating);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

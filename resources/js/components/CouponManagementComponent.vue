@@ -75,12 +75,28 @@ export default {
         this.getCouponsTable();
     },
     methods:{
+        // A BEJÖVŐ KUPONOKAT BELEHELYEZI EGY TÖMB-BE
         getCouponsTable:function(){
             this.couponsTable = this.allCoupon;
         },
+        // KUPON HASZNÁLHATÓSÁG VÁLTZOTATÁSA
         changeCouponUsage(couponId, usageId){
-            axios.put('/usage/' + couponId + "/" + usageId);
+             Swal.fire({
+                title: "Biztos benne?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                cancelButtonText: "Mégse",
+                confirmButtonText: "Igen, megváltoztatom!",
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire("Kupon használhatósága beállítva!");
+                    axios.put('/usage/' + couponId + "/" + usageId);
+                }
+            })
         },
+        //KIJELÖLT KUPONOK TÖRLÉSE
         couponsDelete(){
             Swal.fire({
                 title: "Biztos benne?",
@@ -92,7 +108,7 @@ export default {
                 confirmButtonText: "Igen, törlöm!",
                 }).then((result) => {
                 if (result.isConfirmed) {
-                    Swal.fire("Termék törölve!");
+                    Swal.fire("Kupon törölve!");
                 this.selectId.forEach(element => {
                     this.couponsTable.forEach((x,y) => {//id és az index párja
                         if(element == x.id){
@@ -104,6 +120,7 @@ export default {
                 }
             });
         },
+        //KUPON SZERKEZTÉS
         submitCouponEdit($couponId, $couponName, $couponPercent){
             if(this.couponName == "" && this.couponPercent == ""){
                 this.couponName = $couponName;
@@ -142,11 +159,12 @@ export default {
                     }
                 });
 
-        },
+        },//MODEL MEGJELENÍTÉS
         show(event){
             this.couponId = event;
             this.$modal.show('coupon-form');
         },
+        //MODEL BEZÁRÁS
         hide(){
             this.$modal.hide('coupon-form');
         }

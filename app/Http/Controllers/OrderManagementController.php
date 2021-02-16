@@ -21,9 +21,10 @@ class OrderManagementController extends Controller
         //dd($orders[0]->orderitem()->get());
         //dd($orders[0]->orderstatus()->get());
         //dd($statuses->get(0)->order());
+        $coupons = Coupon::all();
         $orderItems = OrderItem::all();
         $food = Food::all();
-        return view('admin.orderManagement', compact('orders', 'orderItems', 'food', 'statuses'));
+        return view('admin.orderManagement', compact('orders', 'orderItems', 'food', 'statuses', 'coupons'));
     }
     public function orderRemove($orderId){
         DB::table('orders')

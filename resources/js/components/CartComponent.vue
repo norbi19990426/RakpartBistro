@@ -15,8 +15,23 @@
             </div>
         </div>
         <div class="col-md-4">
-            <h5>A KOSÁR ÖSSZESEN</h5>
-            <p>ÖSSZEG {{totalPrice}}</p>
+            <div>
+                <h5>A KOSÁR ÖSSZESEN</h5>
+            </div>
+            <div>
+                TELJES ÖSSZEG: {{totalPrice}} HUF
+            </div>
+            <div v-if="couponPrice !== 1">
+                <div>
+                TELJES ÖSSZEG KUPONNAL: {{couponTotalPrice}} HUF
+                </div>
+                <div>
+                Használt kupon: {{couponName}}
+                </div>
+                <div>
+                    Százalék: {{couponPercent}}%
+                </div>
+            </div>
             <form class="mt-3" v-show="coupon" method="POST" enctype="multipart/form-data" @submit.prevent="getCoupon()">
                 <div class="form-group">
                     <input class="form-control form-control-lg" :disabled="usedCoupon" v-model="couponText" type="text" placeholder="Kuponkód">
@@ -37,10 +52,11 @@
             @checkout="getCart"
             :checkout-food-id="JSON.stringify(checkout)"
             :payment-route="(paymentRoute)"
-            :total-price="(totalPrice)"
+            :total-price="(couponTotalPrice)"
             :ordered="(ordered)"
             :check="(check)"
-            :coupons="(coupons)">
+            :coupons="(coupons)"
+            :coupon-id="(couponId)">
             </checkout-component>
         </div>
     </div>
@@ -51,25 +67,31 @@ import CartItemComponent from "./CartItemComponent";
 import CheckoutComponent from './CheckoutComponent.vue';
 import Swal from "sweetalert2";
 export default {
-    props: ['cart', 'userId', 'paymentRoute', 'ordered', 'check', 'coupons', 'usedCoupons'],
+    props: ['cart', 'userId', 'paymentRoute', 'ordered', 'check', 'coupons', 'usedCoupons', 'couponUsedOnce'],
     components: { CartItemComponent, CheckoutComponent},
     data(){
         this.allCoupon = JSON.parse(this.coupons);
         this.cartFood = JSON.parse(this.cart);
         this.allUsedCoupons = JSON.parse(this.usedCoupons);
+        this.allCouponUsedOnce = JSON.parse(this.couponUsedOnce);
         return {
             hideCart: true,
             hideCheckout: false,
             totalPrice: 0,
+            couponTotalPrice: 0,
             badgeCount: 0,
             cartItemsData: [],
             cartItemsCount: [],
             checkout: [],
             coupon: false,
             couponText: "",
-            bool:false,
+            correctOrFailCoupon:false,
             couponPrice: 1,
-            usedCoupon: false
+            usedCoupon: false,
+            couponId: 0,
+            couponOnceUsed: true,
+            couponName: "",
+            couponPercent: 0
         }
     },
     beforeMount(){
@@ -85,19 +107,48 @@ export default {
         this.defaultTotalCount();
     },
     methods: {
-        //ELKÜLD EGY POSTOT AZ USER_ID-VAL ÉS A COUPON_ID-VAL. ELDÖNTI HOGY LÉTEZIK-E A MEGADOTT KUPONKÓD
-        getCoupon(){
-            this.bool = false;
-            this.allCoupon.forEach(element => {
+        //MEGNÉZI, HOGY A BEÍRT KUPON LÉTEZIK-E A COUPON_USED_ONCE TÁBLÁBA
+        getCouponUsedOnce(){
+            this.couponOnceUsed = true;
+             this.allCoupon.forEach(element => {
                 if(this.couponText === element.couponName){
-                        this.bool = true;
-                        axios.post('/userUseCoupon/' + this.userId + "/" + element.id)
-                        .then(response => {
-                            this.usedCoupon = true;
-                        });
+                    this.allCouponUsedOnce.forEach(usedOnceElement => {
+                        if(usedOnceElement.user_id == this.userId && usedOnceElement.coupon_id == element.id){
+                        this.couponOnceUsed = false;
+                        }
+                    })
                 }
             })
-            if(this.bool == false){
+        },
+        //ELKÜLD EGY POSTOT AZ USER_ID-VAL ÉS A COUPON_ID-VAL ÉS BELERAKJA A USED_COUPONS ÉS A COUPON_USED_ONCE TÁBLÁBA.
+        //ELDÖNTI HOGY LÉTEZIK-E A MEGADOTT KUPONKÓD VAGY HOGY AZ EGYSZER FELHASZNÁLHATÓ KUPONT FELHASZNÁLTA-E MÁR A USER
+        //HA FELHASZNÁLÓ BEÍR EGY KUPOONT AKKOR ITT FOGJA LETILTANI IS A MEZŐT
+        getCoupon(){
+            this.getCouponUsedOnce();
+            this.correctOrFailCoupon = false;
+            this.allCoupon.forEach(element => {
+                if(this.couponText === element.couponName && this.couponOnceUsed === true){
+                            this.correctOrFailCoupon = true;
+                            axios.post('/userUseCoupon/' + this.userId + "/" + element.id)
+                                .then(response => {
+                                    this.couponId= element.id,
+                                    this.usedCoupon = true;
+                                    this.couponName = element.couponName;
+                                    this.couponPercent = element.couponPercent;
+                            });
+                            if(element.usages_id === 1){
+                            axios.post('/couponUseOnce/' + this.userId + "/" + element.id)
+                                .then(response =>{
+                                    console.log(response.data);
+                                }).catch(error => {
+                                    console.log(error.response)
+                                });
+                            }
+                            this.couponPrice = 1-element.couponPercent/100;
+                            this.totalPrice *= this.couponPrice;
+                }
+            })
+            if(this.correctOrFailCoupon == false){
                 Swal.fire({
                         icon: 'error',
                         title: 'Helytelen kuponkód',
@@ -121,8 +172,11 @@ export default {
             this.allUsedCoupons.forEach(usedCouponElement =>{
                 this.allCoupon.forEach(couponElement => {
                     if(usedCouponElement.user_id == this.userId && usedCouponElement.coupon_id == couponElement.id){
-                        this.couponPrice = couponElement.couponPercent/100;
+                        this.couponPrice = 1-couponElement.couponPercent/100;
                         this.usedCoupon = true;
+                        this.couponId = usedCouponElement.coupon_id;
+                        this.couponName = couponElement.couponName;
+                        this.couponPercent = couponElement.couponPercent;
                     }
                 })
             })
@@ -132,7 +186,7 @@ export default {
             this.hideCart = false;
             this.hideCheckout = true;
         },
-        //EZ A KASSZÁRÓL VALÓ VISSZATÉRÉST KEZELI
+        //EZ A KASSZÁRÓL VALÓ VISSZATÉRÉST KEZELI (WATCH)
         getCart(){
             this.hideCart = true;
             this.hideCheckout = false;
@@ -151,8 +205,10 @@ export default {
         //EZ AZ ÁRAK ÖSSZEADÁSA
         sumTotalPrice(){
             this.totalPrice = 0;
+            this.couponTotalPrice = 0;
             this.cartItemsData.forEach(cartItemData => {
-                this.totalPrice += cartItemData*this.couponPrice;
+                this.couponTotalPrice += cartItemData*this.couponPrice;
+                this.totalPrice += cartItemData;
             });
 
         },
@@ -161,7 +217,7 @@ export default {
             let keys = Object.keys(this.cartFood);
             keys.forEach(key => {
             let item = this.cartFood[key];
-            this.cartItemsData[item.id] = (item.price*item.quantity);
+            this.cartItemsData[item.id] = item.price*item.quantity;
             this.sumTotalPrice();
             });
         },
@@ -195,3 +251,5 @@ export default {
     }
 }
 </script>
+<style scoped>
+</style>
