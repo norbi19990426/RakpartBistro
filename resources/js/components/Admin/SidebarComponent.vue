@@ -10,7 +10,7 @@
     </div>
 </template>
 <script>
-    import { menuStore, mutations } from '../menuStore.js'
+    import { menuStore, mutations } from '../../store/menuStore.js'
 
     export default {
         methods: {

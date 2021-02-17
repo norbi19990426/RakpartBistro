@@ -32,13 +32,14 @@ Vue.component('menu-component', require('./components/MenuComponent.vue').defaul
 
 Vue.component('addtocart-component', require('./components/AddToCartComponent.vue').default);
 Vue.component('badge-component', require('./components/BadgeComponent.vue').default);
-Vue.component('cart-item-component', require('./components/CartItemComponent.vue').default);
-Vue.component('cart-component', require('./components/CartComponent.vue').default);
-Vue.component('checkout-component', require('./components/CheckoutComponent.vue').default);
+Vue.component('cart-item-component', require('./components/Cart/CartItemComponent.vue').default);
+Vue.component('cart-component', require('./components/Cart/CartComponent.vue').default);
+Vue.component('checkout-component', require('./components/Cart/CheckoutComponent.vue').default);
 
-Vue.component('admin-button-component', require('./components/AdminButtonComponent.vue').default);
-Vue.component('admin-menu-component', require('./components/AdminMenuComponent.vue').default);
-Vue.component('sidebar-component', require('./components/SidebarComponent.vue').default);
+Vue.component('admin-button-component', require('./components/Admin/AdminButtonComponent.vue').default);
+Vue.component('admin-menu-component', require('./components/Admin/AdminMenuComponent.vue').default);
+Vue.component('sidebar-component', require('./components/Admin/SidebarComponent.vue').default);
+
 Vue.component('order-management-component', require('./components/OrderManagementComponent.vue').default);
 Vue.component('coupon-management-component', require('./components/CouponManagementComponent.vue').default);
 Vue.component('star-rating-component', require('./components/StarRatingComponent.vue').default);

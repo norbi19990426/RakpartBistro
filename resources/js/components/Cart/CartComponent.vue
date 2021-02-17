@@ -1,8 +1,10 @@
 <template>
-
 <div class="container-fluid" >
-
-    <div class="row" v-show="(hideCart)">
+    <div v-show="emptyCart">
+        <h1>Még nincs terméke</h1>
+    </div>
+    <div v-show="!emptyCart">
+        <div class="row" v-show="(hideCart)">
         <div class="col-md-8" >
             <div v-for="foodItem in cartFood" :key="foodItem.id">
                 <cart-item-component
@@ -14,50 +16,51 @@
                 </cart-item-component>
             </div>
         </div>
-        <div class="col-md-4">
-            <div>
-                <h5>A KOSÁR ÖSSZESEN</h5>
-            </div>
-            <div>
-                TELJES ÖSSZEG: {{totalPrice}} HUF
-            </div>
-            <div v-if="couponPrice !== 1">
+            <div class="col-md-4">
                 <div>
-                TELJES ÖSSZEG KUPONNAL: {{couponTotalPrice}} HUF
+                    <h5>A KOSÁR ÖSSZESEN</h5>
                 </div>
                 <div>
-                Használt kupon: {{couponName}}
+                    TELJES ÖSSZEG: {{totalPrice}} HUF
                 </div>
-                <div>
-                    Százalék: {{couponPercent}}%
+                <div v-if="couponPrice !== 1">
+                    <div>
+                    TELJES ÖSSZEG KUPONNAL: {{couponTotalPrice}} HUF
+                    </div>
+                    <div>
+                    Használt kupon: {{couponName}}
+                    </div>
+                    <div>
+                        Százalék: {{couponPercent}}%
+                    </div>
                 </div>
+                <form class="mt-3" v-show="coupon" method="POST" enctype="multipart/form-data" @submit.prevent="getCoupon()">
+                    <div class="form-group">
+                        <input class="form-control form-control-lg" :disabled="usedCoupon" v-model="couponText" type="text" placeholder="Kuponkód">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" :disabled="usedCoupon" class="btn btn-primary">Kupon beváltása</button>
+                    </div>
+                </form>
+                <button class="btn btn-primary" @click="checkoutButton">Tovább a pénztárhoz</button>
+                <!--<a class="btn btn-primary" v-bind:href="menuRoute">Vissza a menübe</a>-->
             </div>
-            <form class="mt-3" v-show="coupon" method="POST" enctype="multipart/form-data" @submit.prevent="getCoupon()">
-                <div class="form-group">
-                    <input class="form-control form-control-lg" :disabled="usedCoupon" v-model="couponText" type="text" placeholder="Kuponkód">
-                </div>
-                <div class="form-group">
-                    <button type="submit" :disabled="usedCoupon" class="btn btn-primary">Kupon beváltása</button>
-                </div>
-            </form>
-            <button class="btn btn-primary" @click="checkoutButton">Tovább a pénztárhoz</button>
-            <!--<a class="btn btn-primary" v-bind:href="menuRoute">Vissza a menübe</a>-->
+            <div class="pt-2 pl-2 col-md-8" style="border-top: 1px black solid" >
+            </div>
         </div>
-        <div class="pt-2 pl-2 col-md-8" style="border-top: 1px black solid" >
-        </div>
-    </div>
-    <div v-show="(hideCheckout)">
-        <div v-if="hideCart == false">
-            <checkout-component
-            @checkout="getCart"
-            :checkout-food-id="JSON.stringify(checkout)"
-            :payment-route="(paymentRoute)"
-            :total-price="(couponTotalPrice)"
-            :ordered="(ordered)"
-            :check="(check)"
-            :coupons="(coupons)"
-            :coupon-id="(couponId)">
-            </checkout-component>
+        <div v-show="(hideCheckout)">
+            <div v-if="hideCart == false">
+                <checkout-component
+                @checkout="getCart"
+                :checkout-food-id="JSON.stringify(checkout)"
+                :payment-route="(paymentRoute)"
+                :total-price="(couponTotalPrice)"
+                :ordered="(ordered)"
+                :check="(check)"
+                :coupons="(coupons)"
+                :coupon-id="(couponId)">
+                </checkout-component>
+            </div>
         </div>
     </div>
 </div>
@@ -75,6 +78,7 @@ export default {
         this.allUsedCoupons = JSON.parse(this.usedCoupons);
         this.allCouponUsedOnce = JSON.parse(this.couponUsedOnce);
         return {
+            emptyCart: this.cartFood.length === 0,
             hideCart: true,
             hideCheckout: false,
             totalPrice: 0,
@@ -145,13 +149,13 @@ export default {
                                 });
                             }
                             this.couponPrice = 1-element.couponPercent/100;
-                            this.totalPrice *= this.couponPrice;
+                            this.couponTotalPrice = this.totalPrice*this.couponPrice;
                 }
             })
             if(this.correctOrFailCoupon == false){
                 Swal.fire({
                         icon: 'error',
-                        title: 'Helytelen kuponkód',
+                        title: 'Helytelen kuponkód!',
                 })
             }
         },
@@ -207,10 +211,9 @@ export default {
             this.totalPrice = 0;
             this.couponTotalPrice = 0;
             this.cartItemsData.forEach(cartItemData => {
-                this.couponTotalPrice += cartItemData*this.couponPrice;
                 this.totalPrice += cartItemData;
             });
-
+                this.couponTotalPrice = this.totalPrice*this.couponPrice;
         },
         //EZ TARTJA MEG AZ ÖSSZÉRTÉK ÉRTÉKÉT
         defaultTotalPrice(){

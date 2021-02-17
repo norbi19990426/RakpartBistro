@@ -1,12 +1,24 @@
 <template>
     <div>
-        <star-rating
+        <!--<star-rating
         @rating-selected="sendRating"
         v-model="rating"
         :increment="0.5"
         v-bind:star-size="30"
         text-class="custome-text">
+        </star-rating>-->
+        <star-rating
+        :rating="(rating)"
+        :read-only="true"
+        :increment="0.01"
+        v-bind:star-size="30">
         </star-rating>
+                <button class="btn btn-warning" @click.prevent="show()"></button>
+        <modal name="user-rate">
+            <div class="modal-mask">
+
+            </div>
+        </modal>
     </div>
 </template>
 <script>
@@ -22,10 +34,10 @@ export default {
         }
     },
     beforeMount(){
-        this.setRating();
+        this.avgRating();
     },
     methods: {
-        sendRating(){
+        /*sendRating(){
             this.putRating();
             Swal.fire({
                 title: 'Szavazni szeretnél?',
@@ -60,25 +72,34 @@ export default {
                         });
                     }
                 }
-                else{
-                    this.rating = 0;
-                }
             })
+        },*/
+        avgRating(){
+                axios.get('/avgRating/'+this.foodId)
+                    .then(response =>{
+                        if(response.data == 0){
+                            this.rating = 0;
+                        }
+                        else{
+                            this.rating = parseFloat(response.data);
+                        }
+                    })
         },
-        setRating(){
-            this.allRate.forEach(rateElement => {
-               if(rateElement.user_id == this.userId && rateElement.food_id == this.foodId){
-                 this.rating = rateElement.rating;
-               }
-            });
-        },
-        putRating(){
+        /*putRating(){
             this.allRate.forEach(rateElement => {
                if(rateElement.user_id == this.userId && rateElement.food_id == this.foodId){
                    this.ratePut = true;
                    this.rateId = rateElement.id;
                }
             });
+        }*/
+        //MODEL MEGJELENÍTÉS
+        show(){
+            this.$modal.show('user-rate');
+        },
+        //MODEL BEZÁRÁS
+        hide(){
+            this.$modal.hide('user-rate');
         }
     }
 }

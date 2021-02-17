@@ -11,10 +11,14 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
+use function PHPUnit\Framework\isNull;
+
 class CartsController extends Controller
 {
     public function index()
     {
+        $cart = is_null(session()->get('cart')) ? json_encode([]) : json_encode(session()->get('cart'));
+
         if (Auth::check()) {
             $id = Auth::id();
             $coupons = Coupon::all();
@@ -32,7 +36,7 @@ class CartsController extends Controller
             $couponUsedOnce = 0;
         }
 
-        return view('more-page.cart', compact('id', 'ordered', 'coupons', 'usedCoupons', 'couponUsedOnce'));
+        return view('more-page.cart', compact('id', 'ordered', 'coupons', 'usedCoupons', 'couponUsedOnce','cart'));
     }
 
     //VENDÉG CART-JA

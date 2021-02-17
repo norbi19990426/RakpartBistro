@@ -1,5 +1,5 @@
 <template>
-    <div class="col-sm-4">
+    <div class="col-sm-6">
           <div class="card">
             <div class="d-flex justify-content-between">
                 <img :src="(image)" class="float-left pr-3" >
@@ -18,7 +18,8 @@
                             :user-id="(userId)"
                             :rate="(rate)">
                         </star-rating-component>
-                            <add-to-cart-component
+
+                        <add-to-cart-component
                             :food-id="(foodId)"
                             :user-id="(userId)">
                         </add-to-cart-component>
@@ -47,7 +48,10 @@ export default {
 </script>
 <style scoped>
 .card-text{
-    max-width:200px;
+    max-width:500px;
     word-wrap:break-word;
+}
+.card{
+    margin-bottom: 30px;
 }
 </style>

@@ -18,11 +18,11 @@ class MenuController extends Controller
         $foods = Food::all();
         if(Auth::check()){
             $id = Auth::id();
-            $rate = Rating::all();
+            $rate = json_encode($rate);
         }
         else{
             $id = 0;
-            $rate = 0;
+            $rate = json_encode([]);
         }
 
         return view('more-page.menu', compact('categories', 'foods', 'id', 'rate'));
@@ -38,5 +38,12 @@ class MenuController extends Controller
         DB::table('ratings')
         ->whereIn('id', [$rateId])
         ->update(['rating' => $rate]);
+    }
+    public function avgRating($foodId){
+        $foodRate = DB::table('ratings')
+            ->whereIn('food_id', [$foodId])
+            ->groupBy('food_id')
+            ->avg('rating');
+        return response($foodRate);
     }
 }

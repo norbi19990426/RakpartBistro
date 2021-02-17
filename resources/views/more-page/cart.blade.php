@@ -2,7 +2,7 @@
 @section('content')
     <div class="container-fluid">
             <cart-component
-            cart="{{json_encode(session()->get('cart'))}}"
+            cart="{{$cart}}"
             payment-route="{{ route('paymentSuccess.index') }}"
             user-id="{{$id}}"
             ordered="{{$ordered}}"

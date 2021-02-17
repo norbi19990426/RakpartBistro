@@ -159,7 +159,8 @@ export default {
                     }
                 });
 
-        },//MODEL MEGJELENÍTÉS
+        },
+        //MODEL MEGJELENÍTÉS
         show(event){
             this.couponId = event;
             this.$modal.show('coupon-form');
