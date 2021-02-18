@@ -43,6 +43,7 @@ Vue.component('sidebar-component', require('./components/Admin/SidebarComponent.
 Vue.component('order-management-component', require('./components/OrderManagementComponent.vue').default);
 Vue.component('coupon-management-component', require('./components/CouponManagementComponent.vue').default);
 Vue.component('star-rating-component', require('./components/StarRatingComponent.vue').default);
+Vue.component('avg-rating-component', require('./components/AvgRatingComponent.vue').default);
 Vue.component('star-rating', StarRating);
 
 /**

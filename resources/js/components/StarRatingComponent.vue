@@ -1,24 +1,15 @@
 <template>
     <div>
-        <!--<star-rating
-        @rating-selected="sendRating"
-        v-model="rating"
-        :increment="0.5"
-        v-bind:star-size="30"
-        text-class="custome-text">
-        </star-rating>-->
+        <div v-if="userId != 0" class="mr-5">
         <star-rating
-        :rating="(rating)"
-        :read-only="true"
-        :increment="0.01"
-        v-bind:star-size="30">
+            @rating-selected="sendRating"
+            :rating="(userRate)"
+            v-model="(userRate)"
+            :increment="0.5"
+            v-bind:star-size="30"
+            text-class="custome-text">
         </star-rating>
-                <button class="btn btn-warning" @click.prevent="show()"></button>
-        <modal name="user-rate">
-            <div class="modal-mask">
-
-            </div>
-        </modal>
+      </div>
     </div>
 </template>
 <script>
@@ -28,16 +19,16 @@ export default {
     data(){
         this.allRate = JSON.parse(this.rate);
         return{
-            rating: 0,
+            userRate:0,
             ratePut: false,
             rateId: 0
         }
     },
     beforeMount(){
-        this.avgRating();
+        this.getRating();
     },
     methods: {
-        /*sendRating(){
+        sendRating(){
             this.putRating();
             Swal.fire({
                 title: 'Szavazni szeretnél?',
@@ -49,8 +40,10 @@ export default {
                 }).then((result) => {
                 if (result.isConfirmed) {
                     if(this.ratePut == false){
-                        axios.post('/setRating/' + this.foodId + "/" + this.rating)
+                        axios.post('/setRating/' + this.foodId + "/" + this.userRate)
                         .then(response => {
+                            this.getRating();
+                            this.$store.commit("sendRating");
                             Swal.fire({
                             icon: 'success',
                             title: 'Köszönjük a visszajelzését!',
@@ -60,9 +53,10 @@ export default {
                         });
                     }
                     else{
-                        axios.put('/putRating/' + this.rateId + "/" + this.rating)
+                        axios.put('/putRating/' + this.rateId + "/" + this.userRate)
                         .then(response => {
-                            console.log(response.data);
+                            this.getRating();
+                            this.$store.commit("putRating");
                             Swal.fire({
                             icon: 'success',
                             title: 'Köszönjük a visszajelzését!',
@@ -72,34 +66,31 @@ export default {
                         });
                     }
                 }
+                else{
+                    this.userRate = 0;
+                }
             })
-        },*/
-        avgRating(){
-                axios.get('/avgRating/'+this.foodId)
-                    .then(response =>{
-                        if(response.data == 0){
-                            this.rating = 0;
-                        }
-                        else{
-                            this.rating = parseFloat(response.data);
-                        }
-                    })
         },
-        /*putRating(){
+        getRating(){
+            axios.get('/getRating/'+this.foodId+"/"+this.userId)
+                .then(response =>{
+                response.data.forEach(element => {
+                    if(element.rating == 0){
+                        this.userRate = 0;
+                    }
+                    else{
+                        this.userRate = parseFloat(element.rating);
+                    }
+                })
+            })
+        },
+        putRating(){
             this.allRate.forEach(rateElement => {
                if(rateElement.user_id == this.userId && rateElement.food_id == this.foodId){
                    this.ratePut = true;
                    this.rateId = rateElement.id;
                }
-            });
-        }*/
-        //MODEL MEGJELENÍTÉS
-        show(){
-            this.$modal.show('user-rate');
-        },
-        //MODEL BEZÁRÁS
-        hide(){
-            this.$modal.hide('user-rate');
+            })
         }
     }
 }

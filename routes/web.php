@@ -52,6 +52,7 @@ Route::post('/setRating/{foodId}/{rate}', 'App\Http\Controllers\MenuController@s
 Route::put('/putRating/{rateId}/{rate}', 'App\Http\Controllers\MenuController@putRating')->middleware('auth');
 
 Route::get('/avgRating/{foodId}', 'App\Http\Controllers\MenuController@avgRating');
+Route::get('/getRating/{foodId}/{userId}', 'App\Http\Controllers\MenuController@getRating');
 Route::get('/menu', 'App\Http\Controllers\MenuController@index')->name('menu.index');
 
 Route::get('/cart', 'App\Http\Controllers\CartsController@index')->name('cart.index');
