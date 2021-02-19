@@ -16,16 +16,16 @@ class MenuController extends Controller
     {
         $categories = Category::all();
         $foods = Food::all();
+        $users = User::all();
+        $rate = json_encode(Rating::all());
         if(Auth::check()){
             $id = Auth::id();
-            $rate = json_encode(Rating::all());
         }
         else{
             $id = 0;
-            $rate = json_encode([]);
         }
 
-        return view('more-page.menu', compact('categories', 'foods', 'id', 'rate'));
+        return view('more-page.menu', compact('categories', 'foods', 'id', 'rate','users'));
     }
     public function setRating($foodId, $rate){
         Rating::create([

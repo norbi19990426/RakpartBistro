@@ -13,8 +13,8 @@
                 <tr>
                     <td><input type="checkbox" :value="coupon.id"  v-model="selectId"></td>
                     <th scope="row"># {{coupon.id}}</th>
-                    <td  @click.prevent="show(coupon.id)">{{coupon.couponName}}</td>
-                    <td  @click.prevent="show(coupon.id)">{{coupon.couponPercent}} %</td>
+                    <td class="editCoupon" @click.prevent="show(coupon.id)">{{coupon.couponName}}</td>
+                    <td class="editCoupon" @click.prevent="show(coupon.id)">{{coupon.couponPercent}} %</td>
                     <td>
                        <select class="form-control" v-model="coupon.usages_id" @change="changeCouponUsage(coupon.id, coupon.usages_id)">
                            <option v-for="usage in couponUsage" :key="usage.id" :value="usage.id">
@@ -32,7 +32,7 @@
                     <h3>Kupon szerkeztés</h3>
                 </div>
                 <div>
-                    <div class="modal-body"  v-for="coupon in couponsTable" :key="coupon.id">
+                    <div class="modal-body"  v-for="coupon in couponsTable" :key="coupon.id" v-if="couponId == coupon.id">
                         <form method="PUT" enctype="multipart/form-data" @submit.prevent="submitCouponEdit(coupon.id,coupon.couponName, coupon.couponPercent)" v-if="couponId == coupon.id">
                             <div class="form-group">
                                 <label for="couponName">Kupon elnezevezés:</label>
@@ -173,3 +173,8 @@ export default {
 
 }
 </script>
+<style scoped>
+.editCoupon{
+    cursor: pointer;
+}
+</style>

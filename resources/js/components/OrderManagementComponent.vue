@@ -17,12 +17,12 @@
               <tbody v-for="order in ordersTable" :key="order.id" >
                 <tr>
                     <td><input type="checkbox" :value="order.id"  v-model="selectId"></td>
-                    <th @click.prevent="show(order.id)" scope="row">#{{order.id}}</th>
-                    <td @click.prevent="show(order.id)">{{order.created_at}}</td>
-                    <td @click.prevent="show(order.id)">{{order.vezeteknev}} {{order.keresztnev}}</td>
-                    <td @click.prevent="show(order.id)">{{order.email}}</td>
-                    <td @click.prevent="show(order.id)">{{order.telefonszam}}</td>
-                    <td @click.prevent="show(order.id)">{{order.totalPrice}} HUF</td>
+                    <th class="orderInfoTable" @click.prevent="show(order.id)" scope="row">#{{order.id}}</th>
+                    <td class="orderInfoTable" @click.prevent="show(order.id)">{{order.created_at}}</td>
+                    <td class="orderInfoTable" @click.prevent="show(order.id)">{{order.vezeteknev}} {{order.keresztnev}}</td>
+                    <td class="orderInfoTable" @click.prevent="show(order.id)">{{order.email}}</td>
+                    <td class="orderInfoTable" @click.prevent="show(order.id)">{{order.telefonszam}}</td>
+                    <td class="orderInfoTable" @click.prevent="show(order.id)">{{order.totalPrice}} HUF</td>
                     <td>
                        <select class="form-control" v-model="order.status" @change="changeOrderStatus(order.id, order.status)" >
                            <option v-for="status in statuses" :key="status.id" :value="status.id">
@@ -190,5 +190,8 @@ export default {
 }
 #order_info{
     overflow: scroll;
+}
+.orderInfoTable{
+    cursor: pointer;
 }
 </style>

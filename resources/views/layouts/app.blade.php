@@ -21,7 +21,7 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar sticky-top navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container-fluid">
                 <a class="navbar-brand d-flex" href="{{ url('/') }}">
                     <div><img src="/logo/RakpartLogo.png" style="height: 40px;" class="pr-3"></div>

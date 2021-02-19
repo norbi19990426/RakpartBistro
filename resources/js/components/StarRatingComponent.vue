@@ -1,14 +1,14 @@
 <template>
     <div>
-        <div v-if="userId != 0" class="mr-5">
-        <star-rating
-            @rating-selected="sendRating"
-            :rating="(userRate)"
-            v-model="(userRate)"
-            :increment="0.5"
-            v-bind:star-size="30"
-            text-class="custome-text">
-        </star-rating>
+        <div class="d-flex justify-content-center">
+            <star-rating
+                @rating-selected="sendRating"
+                :rating="(userRate)"
+                v-model="(userRate)"
+                :increment="0.5"
+                v-bind:star-size="60"
+                class="custom-text">
+            </star-rating>
       </div>
     </div>
 </template>
@@ -95,3 +95,12 @@ export default {
     }
 }
 </script>
+<style>
+.custom-text {
+  font-weight: bold;
+  font-size: 1.2em;
+  padding-left: 10px;
+  padding-right: 10px;
+  color: #999;
+}
+</style>

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <button type="button" class="btn btn-success pull-right" v-on:click="cartButton">Kosár</button>
+        <a type="button" class="buttonBackground" v-on:click="cartButton">Kosár</a>
     </div>
 </template>
 
@@ -21,3 +21,21 @@
         }
     }
 </script>
+<style scoped>
+.buttonBackground{
+   background-image: url("/logo/menuLink.png");
+    background-size: 75px;
+    background-repeat: no-repeat;
+    width: 75px;
+    height: 50px;
+    cursor: pointer;
+    overflow: hidden;
+    padding: 15px 0;
+    text-align: center;
+    color: white;
+    text-decoration: none;
+}
+a:hover{
+      transform: scale(1.2);
+}
+</style>
