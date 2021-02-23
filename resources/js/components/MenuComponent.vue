@@ -48,7 +48,8 @@
                         <h1>{{foodName}}</h1>
                     </div>
                     <div class="modal-body">
-                        <div>
+                        <div >
+                        <h3>Saját szavazatod:</h3>
                             <star-rating-component
                                 :food-id="(foodId)"
                                 :user-id="(userId)"

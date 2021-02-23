@@ -6,7 +6,7 @@
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
-  }
+}
 .menuLink{
     background-image: url("/logo/menuLink.png");
     background-size: 110px;
@@ -15,7 +15,7 @@
     height: 80px;
     cursor: pointer;
     overflow: hidden;
-    padding: 20px 0;
+    padding: 25px 0;
     text-align: center;
     color: white;
     margin-right: 20px;

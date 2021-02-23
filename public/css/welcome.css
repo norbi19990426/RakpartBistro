@@ -1,0 +1,32 @@
+body{
+    background: url("/logo/background.jpg") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+.noPadding{
+    padding-left: 0;
+    padding-right: 0;
+}
+.welcomeCenter{
+    margin: 0;
+    padding: 0;
+    display: grid;
+    height: 100%;
+    margin-bottom: 100px;
+}
+.welcome{
+    width: 100%;
+    max-height: 100vh;
+    margin: auto;
+}
+.menuRecommenderContainer{
+    margin: 0;
+    padding: 0;
+    display: grid;
+    height: 100%;
+}
+
+
+

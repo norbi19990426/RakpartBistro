@@ -54,6 +54,8 @@ Route::put('/putRating/{rateId}/{rate}', 'App\Http\Controllers\MenuController@pu
 Route::get('/avgRating/{foodId}', 'App\Http\Controllers\MenuController@avgRating');
 Route::get('/getRating/{foodId}/{userId}', 'App\Http\Controllers\MenuController@getRating');
 Route::get('/menu', 'App\Http\Controllers\MenuController@index')->name('menu.index');
+Route::get('/', 'App\Http\Controllers\WelcomeController@index');
+Route::get('/getBestFood', 'App\Http\Controllers\WelcomeController@getBestFood');
 
 Route::get('/cart', 'App\Http\Controllers\CartsController@index')->name('cart.index');
 Route::post('/add-to-cart/{food}', 'App\Http\Controllers\CartsController@addToCart');

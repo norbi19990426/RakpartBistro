@@ -6,6 +6,7 @@
                 :rating="(userRate)"
                 v-model="(userRate)"
                 :increment="0.5"
+                :fixed-points="1"
                 v-bind:star-size="60"
                 class="custom-text">
             </star-rating>
@@ -99,8 +100,6 @@ export default {
 .custom-text {
   font-weight: bold;
   font-size: 1.2em;
-  padding-left: 10px;
-  padding-right: 10px;
   color: #999;
 }
 </style>
