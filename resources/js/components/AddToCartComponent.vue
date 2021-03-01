@@ -6,7 +6,6 @@
 
 <script>
     export default {
-
         props: ['foodId','userId'],
         methods:{
             cartButton(){

@@ -31,7 +31,7 @@ import StarRating from 'vue-star-rating';
 Vue.component('welcome-component', require('./components/WelcomeComponent.vue').default);
 Vue.component('menu-component', require('./components/MenuComponent.vue').default);
 
-Vue.component('addtocart-component', require('./components/AddToCartComponent.vue').default);
+Vue.component('add-to-cart-component', require('./components/AddToCartComponent.vue').default);
 Vue.component('badge-component', require('./components/BadgeComponent.vue').default);
 Vue.component('cart-item-component', require('./components/Cart/CartItemComponent.vue').default);
 Vue.component('cart-component', require('./components/Cart/CartComponent.vue').default);

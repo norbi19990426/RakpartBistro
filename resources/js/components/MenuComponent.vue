@@ -25,15 +25,11 @@
                         </div>
                     </div>
                         <div class="card-footer">
-                            <div class="d-flex justify-content-start">
-
-                            </div>
                             <div class="d-flex justify-content-between">
                                 <a type="button" v-if="userId != 0" class="buttonBackground" @click.prevent="show(food.id,food.foodName)">Értékelés</a>
                                 <add-to-cart-component
                                     :food-id="(food.id)"
-                                    :user-id="(userId)"
-                                    >
+                                    :user-id="(userId)">
                                 </add-to-cart-component>
                             </div>
                         </div>

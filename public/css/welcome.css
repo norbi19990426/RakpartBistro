@@ -1,20 +1,14 @@
 body{
-    background: url("/logo/background.jpg") no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
+    background-image: url("/logo/test.jpg");
     background-size: cover;
+    background-repeat: no-repeat;
 }
-.noPadding{
-    padding-left: 0;
-    padding-right: 0;
-}
-.welcomeCenter{
+.welcomeHeader{
     margin: 0;
     padding: 0;
     display: grid;
     height: 100%;
-    margin-bottom: 100px;
+    margin-bottom: 10%;
 }
 .welcome{
     width: 100%;
@@ -26,7 +20,16 @@ body{
     padding: 0;
     display: grid;
     height: 100%;
+    background-image: url("/logo/darkBrownBoard.jpeg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    border-radius: 30px;
+    height: 600px;
 }
-
+.menuRecommenderBorder{
+    border: 100px solid transparent;
+    border-image: url("/logo/ropeBorder.png") 33% round;
+}
 
 

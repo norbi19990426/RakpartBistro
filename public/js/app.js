@@ -3029,10 +3029,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -3417,8 +3413,39 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['foods', 'rates'],
+  props: ['foods', 'rates', 'userId'],
   data: function data() {
     this.allFood = JSON.parse(this.foods);
     return {
@@ -3725,7 +3752,7 @@ Vue.use((vue_js_modal__WEBPACK_IMPORTED_MODULE_2___default()));
 
 Vue.component('welcome-component', __webpack_require__(/*! ./components/WelcomeComponent.vue */ "./resources/js/components/WelcomeComponent.vue").default);
 Vue.component('menu-component', __webpack_require__(/*! ./components/MenuComponent.vue */ "./resources/js/components/MenuComponent.vue").default);
-Vue.component('addtocart-component', __webpack_require__(/*! ./components/AddToCartComponent.vue */ "./resources/js/components/AddToCartComponent.vue").default);
+Vue.component('add-to-cart-component', __webpack_require__(/*! ./components/AddToCartComponent.vue */ "./resources/js/components/AddToCartComponent.vue").default);
 Vue.component('badge-component', __webpack_require__(/*! ./components/BadgeComponent.vue */ "./resources/js/components/BadgeComponent.vue").default);
 Vue.component('cart-item-component', __webpack_require__(/*! ./components/Cart/CartItemComponent.vue */ "./resources/js/components/Cart/CartItemComponent.vue").default);
 Vue.component('cart-component', __webpack_require__(/*! ./components/Cart/CartComponent.vue */ "./resources/js/components/Cart/CartComponent.vue").default);
@@ -8570,7 +8597,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.menuRecommender{\n    width: 80%;\n    max-height: 100vh;\n    margin: auto;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.customer{\n    background-color: rgba(225,198,153,0.5);\n    color: white;\n}\n.imgClass{\n    width: 100%;\n    height: auto;\n    display: flex;\n    justify-content: flex-end;\n}\n.customerHeader{\n    display: flex;\n    justify-content: space-between;\n    border-bottom: 1px solid rgba(225,198,153);\n}\n.foodDescription{\n    display: flex;\n    justify-content: space-between;\n}\n.customerFooter{\n    border-top: 1px solid rgba(225,198,153);\n    display: flex;\n    justify-content: space-between;\n}\n.buttonBackground{\n    background-image: url(\"/logo/menuLink.png\");\n    background-size: 75px;\n    background-repeat: no-repeat;\n    width: 75px;\n    height: 50px;\n    cursor: pointer;\n    overflow: hidden;\n    padding: 15px 0;\n    text-align: center;\n    color: white;\n    text-decoration: none;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -46419,10 +46446,6 @@ var render = function() {
                       ),
                       _vm._v(" "),
                       _c("div", { staticClass: "card-footer" }, [
-                        _c("div", {
-                          staticClass: "d-flex justify-content-start"
-                        }),
-                        _vm._v(" "),
                         _c(
                           "div",
                           { staticClass: "d-flex justify-content-between" },
@@ -47070,43 +47093,85 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "row" }, [
-    _c("div", { staticClass: "col-1" }),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "col-5 bestFood" },
-      [
-        _vm._l(_vm.allFood, function(food) {
-          return _vm.foodId == food.id ? _c("div", { key: food.id }) : _vm._e()
-        }),
-        _vm._v(" "),
-        _c("img", {
-          staticClass: "menuRecommender",
-          attrs: { src: "/logo/RakpartAjánlóTábla.jpg" }
-        })
-      ],
-      2
-    ),
-    _vm._v(" "),
-    _c("div", { staticClass: "col-1" }),
-    _vm._v(" "),
-    _vm._m(0)
-  ])
+  return _c(
+    "div",
+    _vm._l(_vm.allFood, function(food) {
+      return _vm.foodId == food.id
+        ? _c("div", { key: food.id, staticClass: "row" }, [
+            _c("div", { staticClass: "col-md-6" }, [
+              _c("div", { staticClass: "card customer" }, [
+                _c(
+                  "div",
+                  { staticClass: "card-header customerHeader" },
+                  [
+                    _c("h1", [_vm._v("Vendégajánló")]),
+                    _vm._v(" "),
+                    _c("avg-rating-component", {
+                      attrs: { "food-id": food.id }
+                    })
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "row card-body" }, [
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-12" }, [
+                      _c("h2", [_vm._v(_vm._s(food.foodName))])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-md-3 col-sm-12" }, [
+                      _c("img", {
+                        staticClass: "imgClass",
+                        attrs: { src: "storage/" + food.image }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-md-9 foodDescription" }, [
+                      _c("div", { staticClass: "col-md-8 col-sm-10" }, [
+                        _c("p", { staticClass: "card-text" }, [
+                          _vm._v(_vm._s(food.description))
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-md-4 col-sm-2" }, [
+                        _c("p", [_vm._v(_vm._s(food.price) + " HUF")])
+                      ])
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "card-footer customerFooter" },
+                  [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "buttonBackground",
+                        attrs: { type: "button" }
+                      },
+                      [_vm._v("Menü")]
+                    ),
+                    _vm._v(" "),
+                    _c("add-to-cart-component", {
+                      attrs: { "food-id": food.id, "user-id": _vm.userId }
+                    })
+                  ],
+                  1
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-6" })
+          ])
+        : _vm._e()
+    }),
+    0
+  )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-5" }, [
-      _c("img", {
-        staticClass: "menuRecommender",
-        attrs: { src: "/logo/RakpartAjánlóTábla.jpg" }
-      })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
