@@ -41,20 +41,7 @@
                     <label for="description" class="col-md-4 col-form-label text-md-right">Hozzávalók: </label>
 
                     <div class="col-md-6">
-                        <input id="description"
-                        type="text"
-                        class="form-control
-                        @error('description') is-invalid
-                        @enderror"
-                        name="description"
-                        value="{{ old('description') }}"
-                        required autocomplete="description" autofocus>
-
-                        @error('description')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                        <textarea class="form-control" placeholder="Leírás" id="description" name="description" style="width: 350px"></textarea>
                     </div>
                 </div>
 

@@ -23,8 +23,8 @@ class FoodsController extends Controller
 
 
         $data = request()->validate([
-            'foodName' => 'required',
-            'description' => 'required',
+            'foodName' => 'required|max:35',
+            'description' => 'required|max:160',
             'price' => 'required',
             'image' => ['required', 'image'],
             'category_id' => 'required',

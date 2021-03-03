@@ -11,16 +11,15 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12 welcomeHeader">
-                <img class="welcome" src="/logo/Rakpart_KezdoBackground2.jpg">
+                <welcome-swiper-component></welcome-swiper-component>
             </div>
         </div>
         <div class="menuRecommenderContainer">
-            <div class="menuRecommenderBorder">
                 <welcome-component
-                foods="{{$foods}}"
-                user-id="{{$id}}">
+                    foods="{{$foods}}"
+                    user-id="{{$id}}"
+                    menu-route="{{route('menu.index')}}">
                 </welcome-component>
-            </div>
         </div>
         <div class="row" style="height: 500px">
 

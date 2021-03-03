@@ -15,10 +15,11 @@
     height: 80px;
     cursor: pointer;
     overflow: hidden;
-    padding: 25px 0;
+    padding: 25px 6px;
     text-align: center;
     color: white;
     margin-right: 20px;
+    margin-top: 20px;
 }
 .menuLink:hover{
     color: white;

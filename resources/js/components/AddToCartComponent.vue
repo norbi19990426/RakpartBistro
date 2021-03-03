@@ -22,19 +22,20 @@
 </script>
 <style scoped>
 .buttonBackground{
-   background-image: url("/logo/menuLink.png");
-    background-size: 75px;
+    background-image: url("/logo/menuLink.png");
+    background-size: 100% auto;
     background-repeat: no-repeat;
-    width: 75px;
-    height: 50px;
     cursor: pointer;
     overflow: hidden;
-    padding: 15px 0;
+    padding: 15px 19px;
     text-align: center;
     color: white;
     text-decoration: none;
 }
 a:hover{
-      transform: scale(1.2);
+    transform: scale(1.2);
+}
+a:active{
+    transform: scale(0.8);
 }
 </style>

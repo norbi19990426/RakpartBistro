@@ -1,35 +1,19 @@
 body{
-    background-image: url("/logo/test.jpg");
-    background-size: cover;
+    background-image: url("/logo/brownWater.jpg");
+    width: 100%;
+    height: auto;
     background-repeat: no-repeat;
 }
 .welcomeHeader{
+    background-image: url("/logo/Rakpart_KezdoBackground2.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
     margin: 0;
     padding: 0;
     display: grid;
     height: 100%;
     margin-bottom: 10%;
 }
-.welcome{
-    width: 100%;
-    max-height: 100vh;
-    margin: auto;
-}
-.menuRecommenderContainer{
-    margin: 0;
-    padding: 0;
-    display: grid;
-    height: 100%;
-    background-image: url("/logo/darkBrownBoard.jpeg");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    border-radius: 30px;
-    height: 600px;
-}
-.menuRecommenderBorder{
-    border: 100px solid transparent;
-    border-image: url("/logo/ropeBorder.png") 33% round;
-}
+
 
 

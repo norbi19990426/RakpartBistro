@@ -13,7 +13,7 @@ class CategoriesController extends Controller
     }
     public function store(){
         $data = request()->validate([
-            'categoryName' => 'required',
+            'categoryName' => 'required|14',
         ]);
 
         Category::create($data);

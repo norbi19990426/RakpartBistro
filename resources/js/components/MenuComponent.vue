@@ -6,7 +6,7 @@
             <div class="col-md-6" v-for="food in allFood" :key="food.id" v-if="category.id == food.category_id">
                 <div class="card">
                     <div class="d-flex justify-content-between">
-                        <img :src="('storage/'+food.image)" class="float-left pr-3" >
+                        <img :src="(storage+food.image)" class="float-left pr-3" >
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <h4 class="card-title">{{ food.foodName }}</h4>
@@ -16,7 +16,7 @@
                             </div>
                             <div class="row" >
                                 <div class="col-9">
-                                    <p class="card-text">{{food.description}}</p>
+                                    <div v-html="food.description"></div>
                                 </div>
                                 <div class="col-3">
                                     <p >{{food.price}} HUF</p>
@@ -26,7 +26,7 @@
                     </div>
                         <div class="card-footer">
                             <div class="d-flex justify-content-between">
-                                <a type="button" v-if="userId != 0" class="buttonBackground" @click.prevent="show(food.id,food.foodName)">Értékelés</a>
+                                <a type="button" v-show="userId != 0" class="buttonBackground" @click.prevent="show(food.id,food.foodName)">Értékelés</a>
                                 <add-to-cart-component
                                     :food-id="(food.id)"
                                     :user-id="(userId)">
@@ -94,7 +94,8 @@ export default {
         return{
             foodId: 0,
             foodName: "",
-            rating: 0
+            rating: 0,
+            storage: "storage/"
         }
     },
     methods:{
@@ -129,13 +130,12 @@ h2{
 }
 .buttonBackground{
     background-image: url("/logo/menuLink.png");
-    background-size: 75px;
+    background-size: 100% auto;
     background-repeat: no-repeat;
-    width: 75px;
-    height: 50px;
     cursor: pointer;
     overflow: hidden;
-    padding: 15px 0;
+    padding: 15px 7px;
+    display: block;
     text-align: center;
     color: white;
     text-decoration: none;
