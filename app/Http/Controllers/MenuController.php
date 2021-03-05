@@ -20,12 +20,14 @@ class MenuController extends Controller
         $rate = json_encode(Rating::all());
         if(Auth::check()){
             $id = Auth::id();
+            $admin = Auth::user()->utype === 'ADM';
         }
         else{
             $id = 0;
+            $admin = false;
         }
 
-        return view('more-page.menu', compact('categories', 'foods', 'id', 'rate','users'));
+        return view('more-page.menu', compact('categories', 'foods', 'id', 'rate','users', 'admin'));
     }
     public function setRating($foodId, $rate){
         Rating::create([

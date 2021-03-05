@@ -26,6 +26,8 @@ Auth::routes();
 Route::middleware(['auth:sanctum', 'verified', 'authadmin'])->group(function(){
     Route::get('/f/create', 'App\Http\Controllers\FoodsController@create')->name('admin.foods.create');
     Route::post('/f', 'App\Http\Controllers\FoodsController@store');
+    Route::post('/foodEdit/{foodId}', 'App\Http\Controllers\FoodsController@foodEdit');
+    Route::delete('/deleteFood/{foodId}', 'App\Http\Controllers\FoodsController@deleteFood');
 
     Route::get('/c/create', 'App\Http\Controllers\CategoriesController@create')->name('admin.categories.create');
     Route::post('/c', 'App\Http\Controllers\CategoriesController@store');

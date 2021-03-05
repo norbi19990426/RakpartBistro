@@ -1,20 +1,36 @@
 <template>
-    <div >
-        <div v-for="category in allCategory" :key="category.id">
-            <h2>{{category.categoryName}}</h2>
+    <div id="#top">
+        <a class="scrollToTopButton" href="#top">
+            F
+        </a>
+        <div class="row d-flex justify-content-center">
+            <a  v-for="category in allCategory" :key="category.id" :href="'#'+category.id" class="menuLink"> {{ category.categoryName }}</a>
+        </div>
+        <div v-for="category in allCategory" :key="category.id" :id="category.id" class="categoryName">
+                <h2>{{category.categoryName}}</h2>
             <div class="row">
-            <div class="col-md-6" v-for="food in allFood" :key="food.id" v-if="category.id == food.category_id">
+            <div class="col-md-12" v-for="food in foodsTable" :key="food.id" v-if="category.id == food.category_id">
                 <div class="card">
                     <div class="d-flex justify-content-between">
                         <img :src="(storage+food.image)" class="float-left pr-3" >
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <h4 class="card-title">{{ food.foodName }}</h4>
+                                <div class="d-flex">
                                     <avg-rating-component
                                         :food-id="(food.id)">
                                     </avg-rating-component>
+                                    <div v-show="admin" class="adminButtonBorder">
+                                        <a @click.prevent="foodEdit(food.id)">
+                                            <img class="adminButton" v-show="admin" src="/logo/edit.png" style="height: 30px;">
+                                        </a>
+                                        <a @click="deleteFood(food.id)">
+                                            <img class="adminButton" v-show="admin" src="/logo/deleteFood.png" style="height: 30px;">
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="row" >
+                            <div class="row">
                                 <div class="col-9">
                                     <div v-html="food.description"></div>
                                 </div>
@@ -37,6 +53,12 @@
                 </div>
             </div>
         </div>
+        <food-edit-component
+        v-show="admin"
+        :foods="JSON.stringify(allFood)"
+        :food-id="foodId"
+        @foodEdit="getFoodEdit">
+        </food-edit-component>
         <modal name="user-rate" height="auto">
             <div class="modal-mask">
                 <div class="modal-container">
@@ -59,7 +81,6 @@
                                     <div class="col-3"></div>
                                     <div class="col-3">
                                         {{user.name}}
-
                                     </div>
                                     <div class="col-3 ">
                                         <star-rating
@@ -83,9 +104,10 @@
 <script>
 import AddToCartComponent from './AddToCartComponent.vue';
 import StarRatingComponent from './StarRatingComponent.vue';
+import Swal from "sweetalert2";
 export default {
   components: { AddToCartComponent, StarRatingComponent },
-    props:['foods', 'userId', 'rate', 'categories', 'users'],
+    props:['foods', 'userId', 'rate', 'categories', 'users','admin'],
     data(){
         this.allCategory = JSON.parse(this.categories);
         this.allFood = JSON.parse(this.foods);
@@ -95,10 +117,52 @@ export default {
             foodId: 0,
             foodName: "",
             rating: 0,
-            storage: "storage/"
+            storage: "storage/",
+            foodsTable: [],
         }
     },
+    beforeMount(){
+        this.setFoodsTable();
+    },
     methods:{
+        setFoodsTable:function(){
+            this.foodsTable = this.allFood;
+        },
+        getFoodEdit:function(foodEdit){
+            this.foodTable.forEach(element => {
+               if(element.id == foodEdit.foodId){
+                    element.foodName = foodEdit.foodName;
+                    element.price = foodEdit.price;
+                    element.description = foodEdit.description;
+                    element.image = foodEdit.image;
+               }
+            });
+        },
+        deleteFood($foodId){
+            Swal.fire({
+                title: "Biztos törölni akarja ezt az ételt?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                cancelButtonText: "Mégse",
+                confirmButtonText: "Igen, törlöm!",
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire("Az étel törölve!");
+                    this.foodsTable.forEach((x,y) => {//id és az index párja
+                        if($foodId == x.id){
+                            axios.delete("/deleteFood/" + x.id);
+                            this.foodsTable.splice(y, 1);
+                        }
+                    })
+                }
+            });
+        },
+        foodEdit(foodId){
+            this.foodId = foodId;
+            this.$modal.show('food-edit');
+        },
         //MODEL MEGJELENÍTÉS
         show(foodId, foodName){
             this.foodId = foodId;
@@ -112,7 +176,33 @@ export default {
     }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
+.categoryName{
+    padding-top: 100px;
+}
+.menuLink{
+    background-image: url("/logo/menuLink.png");
+    background-size: 110px;
+    background-repeat: no-repeat;
+    width: 110px;
+    height: 80px;
+    cursor: pointer;
+    overflow: hidden;
+    padding: 25px 6px;
+    text-align: center;
+    color: white;
+    margin-right: 20px;
+    margin-top: 20px;
+}
+.menuLink:hover{
+    color: white;
+    text-decoration: none;
+    transform: scale(1.2);
+}
+.menuLink:active{
+    transform: scale(0.8);
+}
+
 .card-text{
     max-width:420px;
     word-wrap:break-word;
@@ -140,10 +230,10 @@ h2{
     color: white;
     text-decoration: none;
 }
-a:hover{
+.buttonBackground:hover{
     transform: scale(1.2);
 }
-a:active{
+.buttonBackground:active{
     transform: scale(0.8);
 }
 .custom-text {
@@ -155,5 +245,36 @@ a:active{
 }
 #user-rate{
     overflow: scroll;
+}
+.adminButtonBorder{
+    border: 3px solid black;
+    border-radius: 20px;
+    margin-left: 10px;
+}
+.adminButton:hover{
+    transform: scale(1.3);
+}
+.adminButton:active{
+    transform: scale(0.8);
+}
+.scrollToTopButton {
+  transition: all .25s ease-in-out;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  display: inline-flex;
+
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  margin: 0 3em 3em 0;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  background-color: rgb(255,255,255, 0.2);
+  color: white;
+  &:hover {
+    background-color: rgb(255,255,255, 0.6);
+  }
 }
 </style>

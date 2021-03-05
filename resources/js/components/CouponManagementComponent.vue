@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container mt-3">
         <button class="btn btn-primary mb-3" @click="couponsDelete">Kijelölt kuponok törlése</button>
         <table class="table">
             <thead>
@@ -15,12 +15,8 @@
                     <th scope="row"># {{coupon.id}}</th>
                     <td class="editCoupon" @click.prevent="show(coupon.id)">{{coupon.couponName}}</td>
                     <td class="editCoupon" @click.prevent="show(coupon.id)">{{coupon.couponPercent}} %</td>
-                    <td>
-                       <select class="form-control" v-model="coupon.usages_id" @change="changeCouponUsage(coupon.id, coupon.usages_id)">
-                           <option v-for="usage in couponUsage" :key="usage.id" :value="usage.id">
-                               {{usage.usagesName}}
-                           </option>
-                       </select>
+                    <td v-for="usage in couponUsage" :key="usage.id" v-if="coupon.usages_id == usage.id">
+                        <p>{{usage.usagesName}}</p>
                     </td>
                 </tr>
             </tbody>
@@ -33,7 +29,7 @@
                 </div>
                 <div>
                     <div class="modal-body"  v-for="coupon in couponsTable" :key="coupon.id" v-if="couponId == coupon.id">
-                        <form method="PUT" enctype="multipart/form-data" @submit.prevent="submitCouponEdit(coupon.id,coupon.couponName, coupon.couponPercent)" v-if="couponId == coupon.id">
+                        <form method="PUT" enctype="multipart/form-data" @submit.prevent="submitCouponEdit(coupon.id,coupon.couponName, coupon.couponPercent)">
                             <div class="form-group">
                                 <label for="couponName">Kupon elnezevezés:</label>
                                 <input type="text" class="form-control" :value="coupon.couponName" @change="couponName = $event.target.value">
@@ -47,7 +43,7 @@
                     </div>
                 </div>
                 <div class="modal-footer text-right">
-                    <button @click="$modal.hide('coupon-form')">Kilépés</button>
+                    <button class="btn btn-primary" @click="$modal.hide('coupon-form')">Kilépés</button>
                 </div>
             </div>
         </div>
@@ -109,14 +105,14 @@ export default {
                 }).then((result) => {
                 if (result.isConfirmed) {
                     Swal.fire("Kupon törölve!");
-                this.selectId.forEach(element => {
-                    this.couponsTable.forEach((x,y) => {//id és az index párja
-                        if(element == x.id){
-                        axios.delete("/couponsRemove/" + x.id);
-                        this.couponsTable.splice(y, 1);
-                        }
-                    })
-                });
+                    this.selectId.forEach(element => {
+                        this.couponsTable.forEach((x,y) => {//id és az index párja
+                            if(element == x.id){
+                            axios.delete("/couponsRemove/" + x.id);
+                            this.couponsTable.splice(y, 1);
+                            }
+                        })
+                    });
                 }
             });
         },
@@ -154,6 +150,8 @@ export default {
                                 element.couponPercent = response.data.couponPercent;
                            }
                         })
+                        this.couponName = "";
+                        this.couponPercent = "";
                     });
                     this.$modal.hide('coupon-form');
                     }

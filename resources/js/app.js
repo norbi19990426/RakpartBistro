@@ -64,6 +64,7 @@ Vue.component('admin-menu-component', require('./components/Admin/AdminMenuCompo
 Vue.component('sidebar-component', require('./components/Admin/SidebarComponent.vue').default);
 Vue.component('order-management-component', require('./components/OrderManagementComponent.vue').default);
 Vue.component('coupon-management-component', require('./components/CouponManagementComponent.vue').default);
+Vue.component('food-edit-component', require('./components/Admin/FoodEditComponent.vue').default);
 
 Vue.component('star-rating-component', require('./components/StarRatingComponent.vue').default);
 Vue.component('avg-rating-component', require('./components/AvgRatingComponent.vue').default);
