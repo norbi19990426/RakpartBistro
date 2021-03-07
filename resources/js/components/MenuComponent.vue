@@ -1,7 +1,7 @@
 <template>
     <div id="#top">
         <a class="scrollToTopButton" href="#top">
-            F
+            <img class="arrow" src="/logo/arrow.png" />
         </a>
         <div class="row d-flex justify-content-center">
             <a  v-for="category in allCategory" :key="category.id" :href="'#'+category.id" class="menuLink"> {{ category.categoryName }}</a>
@@ -12,10 +12,10 @@
             <div class="col-md-12" v-for="food in foodsTable" :key="food.id" v-if="category.id == food.category_id">
                 <div class="card">
                     <div class="d-flex justify-content-between">
-                        <img :src="(storage+food.image)" class="float-left pr-3" >
+                        <img :src="(storage+food.image)" class="foodImg" />
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
-                                <h4 class="card-title">{{ food.foodName }}</h4>
+                                <p class="card-title">{{ food.foodName }}</p>
                                 <div class="d-flex">
                                     <avg-rating-component
                                         :food-id="(food.id)">
@@ -31,22 +31,26 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-9">
-                                    <div v-html="food.description"></div>
+                                <div class="col-10">
+                                    <div class="description">{{food.description}}</div>
                                 </div>
-                                <div class="col-3">
-                                    <p >{{food.price}} HUF</p>
+                                <div class="col-2 price">
+                                    <p>{{food.price}} HUF</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                         <div class="card-footer">
                             <div class="d-flex justify-content-between">
-                                <a type="button" v-show="userId != 0" class="buttonBackground" @click.prevent="show(food.id,food.foodName)">Értékelés</a>
-                                <add-to-cart-component
-                                    :food-id="(food.id)"
-                                    :user-id="(userId)">
-                                </add-to-cart-component>
+                                <div class="d-flex justify-content-start">
+                                    <a type="button" v-show="userId != 0" class="buttonBackground" @click.prevent="show(food.id,food.foodName)">Értékelés</a>
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <add-to-cart-component
+                                        :food-id="(food.id)"
+                                        :user-id="(userId)">
+                                    </add-to-cart-component>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -202,18 +206,18 @@ export default {
 .menuLink:active{
     transform: scale(0.8);
 }
-
-.card-text{
-    max-width:420px;
-    word-wrap:break-word;
+.card-title{
+    font-size: 4vh;
+    font-weight: bolder;
 }
 .card{
     margin-bottom: 30px;
     background-color: rgba(245, 245, 245, 0.5);
     color: white;
 }
-img{
+.foodImg{
     margin: 10px;
+    border-radius: 10px;
 }
 h2{
     color: white;
@@ -251,6 +255,9 @@ h2{
     border-radius: 20px;
     margin-left: 10px;
 }
+.adminButton{
+    margin: 10px;
+}
 .adminButton:hover{
     transform: scale(1.3);
 }
@@ -269,12 +276,24 @@ h2{
   justify-content: center;
   margin: 0 3em 3em 0;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  background-color: rgb(255,255,255, 0.2);
+  width: 60px;
+  height: 60px;
+  background-color: rgb(255,255,255, 0.3);
   color: white;
   &:hover {
-    background-color: rgb(255,255,255, 0.6);
+    background-color: rgb(255,255,255, 0.7);
   }
+}
+.description{
+    font-size: 2.5vh;
+}
+.price{
+    font-size: 2.5vh;
+    display: flex;
+    justify-content: flex-end;
+}
+.arrow{
+    width: 100%;
+    height: auto;
 }
 </style>

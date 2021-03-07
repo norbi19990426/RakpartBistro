@@ -6,7 +6,7 @@
 
    <sidebar-component>
      <ul class="sidebar-panel-nav">
-       <li><a v-bind:href="createCategory">Új étel kategória</a></li>
+       <li><a v-bind:href="createCategory">Ételkategória</a></li>
        <li><a v-bind:href="createFood">Új étel</a></li>
        <li><a v-bind:href="orderManagement">Rendelések</a></li>
        <li><a v-bind:href="createCoupon">Új kupon</a></li>

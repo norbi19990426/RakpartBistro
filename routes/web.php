@@ -31,6 +31,8 @@ Route::middleware(['auth:sanctum', 'verified', 'authadmin'])->group(function(){
 
     Route::get('/c/create', 'App\Http\Controllers\CategoriesController@create')->name('admin.categories.create');
     Route::post('/c', 'App\Http\Controllers\CategoriesController@store');
+    Route::post('/categoryEdit/{categoryId}', 'App\Http\Controllers\CategoriesController@categoryEdit');
+    Route::get('/categoryDelete/{categoryId}', 'App\Http\Controllers\CategoriesController@categoryDelete');
 
     Route::get('/coupon/create', 'App\Http\Controllers\CouponController@create')->name('admin.createCoupon.create');
     Route::post('/coupon', 'App\Http\Controllers\CouponController@store');
