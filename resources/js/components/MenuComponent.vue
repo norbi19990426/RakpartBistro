@@ -7,7 +7,7 @@
             <a  v-for="category in allCategory" :key="category.id" :href="'#'+category.id" class="menuLink"> {{ category.categoryName }}</a>
         </div>
         <div v-for="category in allCategory" :key="category.id" :id="category.id" class="categoryName">
-                <h2>{{category.categoryName}}</h2>
+                <h1>{{category.categoryName}}</h1>
             <div class="row">
             <div class="col-md-12" v-for="food in foodsTable" :key="food.id" v-if="category.id == food.category_id">
                 <div class="card">
@@ -17,9 +17,15 @@
                             <div class="d-flex justify-content-between">
                                 <p class="card-title">{{ food.foodName }}</p>
                                 <div class="d-flex">
-                                    <avg-rating-component
-                                        :food-id="(food.id)">
-                                    </avg-rating-component>
+                                    <div  v-for="avgRatingArray in foodAvgRatingArray" :key="avgRatingArray.id" >
+                                        <star-rating v-if="avgRatingArray.food_id == food.id"
+                                            :rating="(avgRatingArray.avgRating)"
+                                            :read-only="true"
+                                            :increment="0.01"
+                                            v-bind:star-size="20"
+                                            :show-rating="false">
+                                        </star-rating>
+                                    </div>
                                     <div v-show="admin" class="adminButtonBorder">
                                         <a @click.prevent="foodEdit(food.id)">
                                             <img class="adminButton" v-show="admin" src="/logo/edit.png" style="height: 30px;">
@@ -109,6 +115,7 @@
 import AddToCartComponent from './AddToCartComponent.vue';
 import StarRatingComponent from './StarRatingComponent.vue';
 import Swal from "sweetalert2";
+import { mapState } from 'vuex';
 export default {
   components: { AddToCartComponent, StarRatingComponent },
     props:['foods', 'userId', 'rate', 'categories', 'users','admin'],
@@ -120,20 +127,65 @@ export default {
         return{
             foodId: 0,
             foodName: "",
-            rating: 0,
+            foodAvgId: 0,
+            foodAvgRating: 0,
+            foodAvgRatingArray: [],
             storage: "storage/",
             foodsTable: [],
         }
     },
+    computed: mapState({
+        whenUserRating: state => state.starRate.whenUserRating
+    }),
+    watch:{
+        whenUserRating:function(){
+            if(this.whenUserRating == true){
+                this.avgRating();
+            }
+        }
+    },
     beforeMount(){
         this.setFoodsTable();
+        this.avgRatingArray()
     },
     methods:{
+        avgRating(){
+            axios.get('/avgRating')
+                .then(response =>{
+                    let keys = Object.keys(response.data);
+                    keys.forEach(key => {
+                    let item = response.data[key];
+                        if(item.food_id == this.foodId){
+                            this.foodAvgId = item.food_id;
+                            this.foodAvgRating = item.avgRating;
+                        }
+                    });
+                    let avgKeys = Object.keys(this.foodAvgRatingArray);
+                    avgKeys.forEach(key => {
+                        let avgItem = this.foodAvgRatingArray[key];
+                        if(avgItem.food_id == this.foodId){
+                            avgItem.avgRating = this.foodAvgRating;
+                        }
+                    })
+                this.$store.commit("avgRating");
+            })
+        },
+        avgRatingArray(){
+            axios.get('/avgRating')
+                .then(response =>{
+                    let keys = Object.keys(response.data);
+                    keys.forEach(key => {
+                    let item = response.data[key];
+                        this.foodAvgRatingArray.push(item);
+                    })
+                this.$store.commit("avgRating");
+            })
+        },
         setFoodsTable:function(){
             this.foodsTable = this.allFood;
         },
         getFoodEdit:function(foodEdit){
-            this.foodTable.forEach(element => {
+            this.foodsTable.forEach(element => {
                if(element.id == foodEdit.foodId){
                     element.foodName = foodEdit.foodName;
                     element.price = foodEdit.price;
@@ -183,6 +235,7 @@ export default {
 <style lang="scss" scoped>
 .categoryName{
     padding-top: 100px;
+    color: white;
 }
 .menuLink{
     background-image: url("/logo/menuLink.png");
@@ -218,9 +271,6 @@ export default {
 .foodImg{
     margin: 10px;
     border-radius: 10px;
-}
-h2{
-    color: white;
 }
 .buttonBackground{
     background-image: url("/logo/menuLink.png");

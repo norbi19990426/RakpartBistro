@@ -44,6 +44,8 @@
                         <!-- Authentication Links -->
                             @if (Route::has('login'))
                                 @auth
+                                <profile-component user="{{json_encode(Auth::user()->profile)}}"></profile-component>
+
                                     @if (Auth::user()->utype === 'ADM')
                                         <li class="nav-item dropdown">
                                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -56,7 +58,6 @@
                                                                  document.getElementById('logout-form').submit();">
                                                     {{ __('Logout') }}
                                                 </a>
-
                                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                                     @csrf
                                                 </form>

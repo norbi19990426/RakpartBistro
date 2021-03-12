@@ -47,13 +47,14 @@ class MenuController extends Controller
             ->whereIn('food_id', [$foodId])
             ->whereIn('user_id', [$userId])
             ->get();
+
         return response($foodRate);
     }
-    public function avgRating($foodId){
+    public function avgRating(){
         $foodRate = DB::table('ratings')
-            ->whereIn('food_id', [$foodId])
-            ->groupBy('food_id')
-            ->avg('rating');
+            ->select(DB::raw('food_id, avg(rating) as avgRating'))
+             ->groupBy('food_id')
+             ->get();
         return response($foodRate);
     }
 }

@@ -5,10 +5,6 @@
                 <div class="card customer">
                         <div class="card-header customerHeader">
                         <h1 class="customerHONE">Vendégajánló</h1>
-                        <avg-rating-component
-                            :food-id="(food.id)"
-                            class="star">
-                        </avg-rating-component>
                     </div>
                     <div class="row card-body">
                         <div class="row">
@@ -44,10 +40,6 @@
                 <div class="card customer">
                         <div class="card-header customerHeader">
                         <h1 class="customerHONE">Séfajánló</h1>
-                        <avg-rating-component
-                            :food-id="(food.id)"
-                            class="star">
-                        </avg-rating-component>
                     </div>
                     <div class="row card-body">
                         <div class="row">

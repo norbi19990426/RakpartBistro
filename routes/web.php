@@ -54,8 +54,10 @@ Route::post('/userUseCoupon/{userId}/{couponId}', 'App\Http\Controllers\CartsCon
 Route::post('/couponUseOnce/{userId}/{couponId}', 'App\Http\Controllers\CartsController@couponUseOnce')->middleware('auth');
 Route::post('/setRating/{foodId}/{rate}', 'App\Http\Controllers\MenuController@setRating')->middleware('auth');
 Route::put('/putRating/{rateId}/{rate}', 'App\Http\Controllers\MenuController@putRating')->middleware('auth');
+Route::post('/profileCreate', 'App\Http\Controllers\ProfileController@createProfile')->middleware('auth');
+Route::post('/profileUpdate', 'App\Http\Controllers\ProfileController@updateProfile')->middleware('auth');
 
-Route::get('/avgRating/{foodId}', 'App\Http\Controllers\MenuController@avgRating');
+Route::get('/avgRating', 'App\Http\Controllers\MenuController@avgRating');
 Route::get('/getRating/{foodId}/{userId}', 'App\Http\Controllers\MenuController@getRating');
 Route::get('/menu', 'App\Http\Controllers\MenuController@index')->name('menu.index');
 Route::get('/', 'App\Http\Controllers\WelcomeController@index');

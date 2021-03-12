@@ -1,24 +1,20 @@
 <template>
-<div class="container-fluid" >
-    <div v-show="emptyCart">
-        <h1>Még nincs terméke</h1>
-    </div>
-    <div v-show="!emptyCart">
-        <div class="row" v-show="(hideCart)">
+<div class="container-fluid">
+    <div class="row" v-show="(hideCart)">
         <div class="col-md-8" >
             <div v-for="foodItem in cartFood" :key="foodItem.id">
                 <cart-item-component
-                @total-price="getCartItemData"
-                @remove="getRemove"
-                @badgeCount="getQuantity"
-                :user-id="(userId)"
-                :food="JSON.stringify(foodItem)">
+                    @total-price="getCartItemData"
+                    @remove="getRemove"
+                    @badgeCount="getQuantity"
+                    :user-id="(userId)"
+                    :food="JSON.stringify(foodItem)">
                 </cart-item-component>
             </div>
         </div>
-            <div class="col-md-4">
+            <div class="col-md-4 cartSummary">
                 <div>
-                    <h5>A KOSÁR ÖSSZESEN</h5>
+                    A KOSÁR ÖSSZESEN
                 </div>
                 <div>
                     TELJES ÖSSZEG: {{totalPrice}} HUF
@@ -34,15 +30,15 @@
                         Százalék: {{couponPercent}}%
                     </div>
                 </div>
-                <form class="mt-3" v-show="coupon" method="POST" enctype="multipart/form-data" @submit.prevent="getCoupon()">
+                <form v-show="coupon" method="POST" enctype="multipart/form-data" @submit.prevent="getCoupon()">
                     <div class="form-group">
-                        <input class="form-control form-control-lg" :disabled="usedCoupon" v-model="couponText" type="text" placeholder="Kuponkód">
+                        <input class="form-control-lg" :disabled="usedCoupon" v-model="couponText" type="text" placeholder="Kuponkód">
                     </div>
                     <div class="form-group">
-                        <button type="submit" :disabled="usedCoupon" class="btn btn-primary">Kupon beváltása</button>
+                        <button type="submit" :disabled="usedCoupon" class="cartButton">Kupon beváltása</button>
                     </div>
                 </form>
-                <button class="btn btn-primary" @click="checkoutButton">Tovább a pénztárhoz</button>
+                <button class="cartButton" @click="checkoutButton">Tovább a pénztárhoz</button>
                 <!--<a class="btn btn-primary" v-bind:href="menuRoute">Vissza a menübe</a>-->
             </div>
             <div class="pt-2 pl-2 col-md-8" style="border-top: 1px black solid" >
@@ -58,19 +54,19 @@
                 :ordered="(ordered)"
                 :check="(check)"
                 :coupons="(coupons)"
-                :coupon-id="(couponId)">
+                :coupon-id="(couponId)"
+                :profile="profile">
                 </checkout-component>
             </div>
         </div>
     </div>
-</div>
 </template>
 <script>
 import CartItemComponent from "./CartItemComponent";
 import CheckoutComponent from './CheckoutComponent.vue';
 import Swal from "sweetalert2";
 export default {
-    props: ['cart', 'userId', 'paymentRoute', 'ordered', 'check', 'coupons', 'usedCoupons', 'couponUsedOnce'],
+    props: ['cart', 'userId', 'paymentRoute', 'ordered', 'check', 'coupons', 'usedCoupons', 'couponUsedOnce', 'profile'],
     components: { CartItemComponent, CheckoutComponent},
     data(){
         this.allCoupon = JSON.parse(this.coupons);
@@ -78,7 +74,6 @@ export default {
         this.allUsedCoupons = JSON.parse(this.usedCoupons);
         this.allCouponUsedOnce = JSON.parse(this.couponUsedOnce);
         return {
-            emptyCart: this.cartFood.length === 0,
             hideCart: true,
             hideCheckout: false,
             totalPrice: 0,
@@ -255,4 +250,32 @@ export default {
 }
 </script>
 <style scoped>
+.cartSummary{
+    color: white;
+    font-size: 2.5vh;
+    font-weight: 900;
+    margin-top: 20px;
+}
+.form-control-lg{
+    background-color: rgba(225,198,153,0.5);
+    color: white;
+    font-weight: 900;
+}
+::placeholder{
+    color: white;
+}
+.cartButton{
+    background-color: rgba(225,198,153,0.5);
+    border: 4px solid rgba(225,198,153);
+    border-radius: 10px;
+    color: white;
+    font-weight: bolder;
+    padding: 10px;
+}
+.cartButton:hover{
+    transform: scale(1.2);
+}
+.cartButton:active{
+    transform: scale(0.8);
+}
 </style>

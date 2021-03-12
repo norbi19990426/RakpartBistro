@@ -70,7 +70,6 @@
                                     <th scope="col">#</th>
                                     <th scope="col">Étel</th>
                                     <th scope="col">Darab</th>
-                                    <th scope="col">Étel ár</th>
                                 </tr>
                             </thead>
                             <tbody v-for="foodItem in orderItemsTable">
@@ -78,7 +77,6 @@
                                     <th class="pr-5" scope="row" >#</th>
                                     <td class="pr-5">{{foodItem.foodName}}</td>
                                     <td class="pr-5">{{foodItem.qty}}</td>
-                                    <td class="pr-5">{{foodItem.price}} HUF</td>
                                  </tr>
                             </tbody>
                         </table>

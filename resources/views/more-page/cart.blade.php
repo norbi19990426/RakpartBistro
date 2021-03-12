@@ -1,15 +1,24 @@
 @extends('layouts.app')
 @section('content')
-    <div class="container-fluid">
-            <cart-component
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ asset('css/cart.css') }}" rel="stylesheet">
+</head>
+<body class="allCart">
+        <cart-component
             cart="{{$cart}}"
             payment-route="{{ route('paymentSuccess.index') }}"
             user-id="{{$id}}"
             ordered="{{$ordered}}"
             check="{{Auth::check()}}"
+            profile="{{json_encode(Auth::user()->profile)}}"
             coupons="{{$coupons}}"
             used-coupons="{{$usedCoupons}}"
             coupon-used-once="{{$couponUsedOnce}}">
-            </cart-component>
-    </div>
+        </cart-component>
+</body>
+</html>
 @endsection

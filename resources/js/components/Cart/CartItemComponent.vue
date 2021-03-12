@@ -1,24 +1,24 @@
 <template>
     <div v-if="seen">
-      <div class="row pt-3 pb-3" style="border-top: 1px solid black">
+      <div class="row pt-3 pb-3 cartItem">
         <div class="col-md-2">
           <img :src="image" />
         </div>
 
         <div class="col-md-2">
-          <h3>{{ name }}</h3>
+          <span class="foodName">{{ name }}</span>
         </div>
 
         <div class="col-md-2">{{ price }} Ft</div>
 
-        <div class="col-md">
-          <button type="button" class="btn btn-success" @click="sumButton" >
+        <div class="col-md-2">
+          <button type="button" class="cartItemButton" @click="sumButton" >
             +
           </button>
 
           <input style="width: 35px" v-model="quantityCount" />
 
-          <button type="button" :disabled="requestProcessing" class="btn btn-warning" @click="subButton">
+          <button type="button" :disabled="requestProcessing" class="cartItemButton" @click="subButton">
             -
           </button>
         </div>
@@ -26,7 +26,7 @@
         <div class="col-md-2">{{ sub_total }} HUF</div>
 
         <div class="col-md-2">
-          <button type="button" class="btn btn-dark" v-on:click="removeButton">
+          <button type="button" class="cartItemButton" v-on:click="removeButton">
             Törlés
           </button>
         </div>
@@ -127,3 +127,36 @@ watch:{
   },
 };
 </script>
+<style scoped>
+.cartItem{
+    margin: 20px;
+    font-size: 2.5vh;
+    color: white;
+    font-weight: 900;
+    border: 2px solid rgba(225,198,153);
+    border-radius: 20px;
+    box-shadow: 0px 0px 0px 3px rgba(225,198,153,0.8);
+}
+.foodName{
+    font-size: 4vh;
+    color: white;
+    font-weight: 900;
+}
+img{
+    border-radius: 10px;
+}
+.cartItemButton{
+    background-color: rgba(225,198,153,0.5);
+    border: 4px solid rgba(225,198,153);
+    border-radius: 10px;
+    color: white;
+    font-weight: bolder;
+    padding: 10px;
+}
+.cartItemButton:hover{
+    transform: scale(1.2);
+}
+.cartItemButton:active{
+    transform: scale(0.8);
+}
+</style>

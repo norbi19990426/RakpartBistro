@@ -71,16 +71,16 @@
                     v-model="form.message" style="width: 850px"></textarea>
                 </div>
                 <div class="justify-content-between">
-                    <button type="submit" class="btn btn-primary">Fizetés</button>
+                    <button type="submit" class="checkoutButton">Fizetés</button>
                 </div>
             </form>
         </div>
-        <div class="col-md-4 p-5">
-            <h5>RENDELÉS TARTALMA</h5>
-            <button class="btn btn-primary" @click="cartButton">Visszatérés a kosárhoz</button>
+        <div class="col-md-4 p-5 checkout">
+            RENDELÉS TARTALMA
+            <button class="checkoutButton" @click="cartButton">Visszatérés a kosárhoz</button>
             <div class="d-flex justify-content-between pt-3" style="border-bottom: 1px solid black">
-                <h5>Termék</h5>
-                <h5>Összeg</h5>
+                <p>Termék</p>
+                <p>Összeg</p>
             </div>
             <div v-for="item in foodItem" class="mt-3">
                 <div v-if="item != null">
@@ -100,8 +100,9 @@
 </template>
 <script>
 export default {
-    props: ['checkoutFoodId','totalPrice', 'paymentRoute', 'ordered', 'couponId'],
+    props: ['checkoutFoodId','totalPrice', 'paymentRoute', 'ordered', 'couponId','profile'],
     data(){
+    this.userProfile = JSON.parse(this.profile);
     this.foodItem = JSON.parse(this.checkoutFoodId);
         return{
             cart: false,
@@ -127,7 +128,22 @@ export default {
             this.$emit("checkout");
         }
     },
+    beforeMount(){
+        this.setProfileData();
+    },
     methods: {
+        setProfileData(){
+            if(this.userProfile != null){
+                this.form.vezeteknev = this.userProfile.vezeteknev;
+                this.form.keresztnev = this.userProfile.keresztnev;
+                this.form.iranyitoszam = this.userProfile.iranyitoszam;
+                this.form.email = this.userProfile.email;
+                this.form.varos = this.userProfile.varos;
+                this.form.address = this.userProfile.address;
+                this.form.emelet = this.userProfile.emelet;
+                this.form.telefonszam = this.userProfile.telefonszam;
+            }
+        },
         //CART-RA VISSZA GOMB
         cartButton(){
             this.cart = true;
@@ -160,3 +176,32 @@ export default {
     }
 }
 </script>
+<style scoped>
+.checkout{
+    color: white;
+    font-size: 2.5vh;
+    font-weight: 900;
+}
+.form-control{
+    background-color: rgba(225,198,153,0.5);
+    color: white;
+    font-weight: 900;
+}
+::placeholder{
+    color: white;
+}
+.checkoutButton{
+    background-color: rgba(225,198,153,0.5);
+    border: 4px solid rgba(225,198,153);
+    border-radius: 10px;
+    color: white;
+    font-weight: bolder;
+    padding: 10px;
+}
+.checkoutButton:hover{
+    transform: scale(1.2);
+}
+.checkoutButton:active{
+    transform: scale(0.8);
+}
+</style>
