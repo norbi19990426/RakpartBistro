@@ -27,16 +27,18 @@ class CartsController extends Controller
             $ordered = DB::table('users')
             ->select('ordered')
             ->whereIn('id', [Auth::id()])->get();
+            $profile = json_encode(Auth::user()->profile);
         }
         else {
             $id = 0;
             $ordered = 0;
             $coupons = 0;
-            $usedCoupons = 0;
+            $usedCoupons = json_encode([]);
             $couponUsedOnce = 0;
+            $profile = 0;
         }
 
-        return view('more-page.cart', compact('id', 'ordered', 'coupons', 'usedCoupons', 'couponUsedOnce','cart'));
+        return view('more-page.cart', compact('id', 'ordered', 'coupons', 'usedCoupons', 'couponUsedOnce','cart', 'profile'));
     }
 
     //VENDÉG CART-JA

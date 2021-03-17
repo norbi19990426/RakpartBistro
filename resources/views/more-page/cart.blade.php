@@ -14,7 +14,7 @@
             user-id="{{$id}}"
             ordered="{{$ordered}}"
             check="{{Auth::check()}}"
-            profile="{{json_encode(Auth::user()->profile)}}"
+            profile="{{$profile}}"
             coupons="{{$coupons}}"
             used-coupons="{{$usedCoupons}}"
             coupon-used-once="{{$couponUsedOnce}}">

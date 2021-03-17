@@ -68,7 +68,7 @@ export default {
                     }
                 }
                 else{
-                    this.userRate = 0;
+                    this.getRating();
                 }
             })
         },

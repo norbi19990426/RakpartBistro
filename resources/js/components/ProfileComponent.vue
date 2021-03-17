@@ -168,6 +168,7 @@
     </div>
 </template>
 <script>
+import Swal from "sweetalert2";
 export default {
     props:['user'],
     data(){
@@ -221,7 +222,13 @@ export default {
             data.append('telefonszam',this.form.telefonszam);
             axios.post('/profileCreate', data)
             .then((response) => {
-                console.log(response.data);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Sikeresen létrehozta a profilját!',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                this.$modal.hide('user-profile');
               })
              .catch(error => this.form.errors.record(error.response.data));
 
@@ -236,12 +243,15 @@ export default {
             data.append('address',this.form.address);
             data.append('emelet',this.form.emelet);
             data.append('telefonszam',this.form.telefonszam);
-            data.forEach(Element => {
-                console.log(Element);
-            })
             axios.post('/profileUpdate', data)
             .then((response) => {
-                console.log(response.data);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Sikeresen szerkeztette a profilját',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                this.$modal.hide('user-profile');
               })
              .catch(error => this.form.errors.record(error.response.data));
         },

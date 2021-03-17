@@ -70,30 +70,32 @@
                     <textarea class="form-control" placeholder="Megjegyzés"
                     v-model="form.message" style="width: 850px"></textarea>
                 </div>
-                <div class="justify-content-between">
+                <div class="d-flex justify-content-start">
                     <button type="submit" class="checkoutButton">Fizetés</button>
                 </div>
             </form>
         </div>
-        <div class="col-md-4 p-5 checkout">
-            RENDELÉS TARTALMA
+        <div class="col-md-4 checkout">
             <button class="checkoutButton" @click="cartButton">Visszatérés a kosárhoz</button>
-            <div class="d-flex justify-content-between pt-3" style="border-bottom: 1px solid black">
-                <p>Termék</p>
-                <p>Összeg</p>
-            </div>
-            <div v-for="item in foodItem" class="mt-3">
-                <div v-if="item != null">
-                    <div v-for="food in item" :key="food.id" class="d-flex justify-content-between">
-                        <p>{{food.foodName}}
-                        {{food.qty}}X</p>
-                        {{food.price*food.qty}}HUF
+            <p>RENDELÉS TARTALMA</p>
+            <div class="orderInfo">
+                <div class="headerInfo">
+                    <p>Termék</p>
+                    <p>Összeg</p>
+                </div>
+                <div v-for="item in foodItem">
+                    <div v-if="item != null">
+                        <div v-for="food in item" :key="food.id" class="bodyInfo">
+                            <p>{{food.foodName}}
+                            {{food.qty}}X</p>
+                            <p>{{food.price*food.qty}} HUF</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="d-flex justify-content-between" style="border-top: 1px solid black">
-                <div>Teljes Összeg</div>
-                <div>{{total}} HUF</div>
+                <div class="footerInfo">
+                    <div>Teljes Összeg</div>
+                    <div>{{total}} HUF</div>
+                </div>
             </div>
         </div>
     </div>
@@ -181,6 +183,35 @@ export default {
     color: white;
     font-size: 2.5vh;
     font-weight: 900;
+    margin-top: 20px;
+}
+label{
+    color: white;
+    font-size: 2.5vh;
+    font-weight: 900;
+}
+.orderInfo{
+    border: 4px solid rgba(225,198,153);
+    border-radius: 10px;
+    margin-top: 10px;
+
+}
+.headerInfo{
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 4px solid rgba(225,198,153);
+    padding: 10px;
+}
+.bodyInfo{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}
+.footerInfo{
+    display: flex;
+    justify-content: space-between;
+    border-top: 4px solid rgba(225,198,153);
+    padding: 10px;
 }
 .form-control{
     background-color: rgba(225,198,153,0.5);
@@ -196,12 +227,11 @@ export default {
     border-radius: 10px;
     color: white;
     font-weight: bolder;
-    padding: 10px;
 }
 .checkoutButton:hover{
-    transform: scale(1.2);
+    transform: scale(1.1);
 }
 .checkoutButton:active{
-    transform: scale(0.8);
+    transform: scale(0.9);
 }
 </style>

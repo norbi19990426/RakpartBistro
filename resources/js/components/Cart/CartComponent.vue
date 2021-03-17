@@ -2,6 +2,14 @@
 <div class="container-fluid">
     <div class="row" v-show="(hideCart)">
         <div class="col-md-8" >
+            <div class="row cartItemHeader">
+                <div class="col-3"></div>
+                <div class="col-2"> Étel </div>
+                <div class="col pl-5"> Ár </div>
+                <div class="col"> Mennyiség </div>
+                <div class="col pl-5"> Összeg </div>
+                <div class="col"></div>
+            </div>
             <div v-for="foodItem in cartFood" :key="foodItem.id">
                 <cart-item-component
                     @total-price="getCartItemData"
@@ -13,35 +21,37 @@
             </div>
         </div>
             <div class="col-md-4 cartSummary">
-                <div>
+                <div class="title">
                     A KOSÁR ÖSSZESEN
                 </div>
-                <div>
-                    TELJES ÖSSZEG: {{totalPrice}} HUF
+                <div class="cartInfo">
+                    <div class="info">
+                        <span>TELJES ÖSSZEG:</span> {{totalPrice}} HUF
+                    </div>
+                    <div v-if="couponPrice !== 1">
+                        <div class="info">
+                        <span>TELJES ÖSSZEG KUPONNAL:</span> {{couponTotalPrice}} HUF
+                        </div>
+                        <div class="info">
+                        <span>Használt kupon:</span> {{couponName}}
+                        </div>
+                        <div class="info">
+                            <span>Százalék:</span> {{couponPercent}}%
+                        </div>
+                    </div>
+                    <form v-show="coupon" method="POST" enctype="multipart/form-data" @submit.prevent="getCoupon()">
+                        <div class="form-group">
+                            <input class="form-control-lg" :disabled="usedCoupon" v-model="couponText" type="text" placeholder="Kuponkód">
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" :disabled="usedCoupon" class="cartButton">Kupon beváltása</button>
+                        </div>
+                    </form>
                 </div>
-                <div v-if="couponPrice !== 1">
-                    <div>
-                    TELJES ÖSSZEG KUPONNAL: {{couponTotalPrice}} HUF
-                    </div>
-                    <div>
-                    Használt kupon: {{couponName}}
-                    </div>
-                    <div>
-                        Százalék: {{couponPercent}}%
-                    </div>
-                </div>
-                <form v-show="coupon" method="POST" enctype="multipart/form-data" @submit.prevent="getCoupon()">
-                    <div class="form-group">
-                        <input class="form-control-lg" :disabled="usedCoupon" v-model="couponText" type="text" placeholder="Kuponkód">
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" :disabled="usedCoupon" class="cartButton">Kupon beváltása</button>
-                    </div>
-                </form>
                 <button class="cartButton" @click="checkoutButton">Tovább a pénztárhoz</button>
                 <!--<a class="btn btn-primary" v-bind:href="menuRoute">Vissza a menübe</a>-->
             </div>
-            <div class="pt-2 pl-2 col-md-8" style="border-top: 1px black solid" >
+            <div class="pt-2 pl-2 col-md-8" >
             </div>
         </div>
         <div v-show="(hideCheckout)">
@@ -256,6 +266,32 @@ export default {
     font-weight: 900;
     margin-top: 20px;
 }
+.cartItemHeader{
+    color: white;
+    font-size: 2.5vh;
+    font-weight: 900;
+    border: 4px solid rgba(225,198,153);
+    border-radius: 10px;
+    margin: 20px;
+}
+.cartInfo{
+    border: 4px solid rgba(225,198,153);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 15px;
+}
+.title{
+    color: white;
+    font-size: 4vh;
+    font-weight: 900;
+}
+.info{
+    color: white;
+    font-size: 2.5vh;
+    font-weight: 900;
+    display: flex;
+    justify-content: space-between;
+}
 .form-control-lg{
     background-color: rgba(225,198,153,0.5);
     color: white;
@@ -270,12 +306,11 @@ export default {
     border-radius: 10px;
     color: white;
     font-weight: bolder;
-    padding: 10px;
 }
 .cartButton:hover{
-    transform: scale(1.2);
+    transform: scale(1.1);
 }
 .cartButton:active{
-    transform: scale(0.8);
+    transform: scale(0.9);
 }
 </style>

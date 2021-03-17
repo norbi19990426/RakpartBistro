@@ -1,17 +1,17 @@
 <template>
     <div v-if="seen">
-      <div class="row pt-3 pb-3 cartItem">
-        <div class="col-md-2">
+      <div class="row cartItem">
+        <div>
           <img :src="image" />
         </div>
 
-        <div class="col-md-2">
+        <div>
           <span class="foodName">{{ name }}</span>
         </div>
 
-        <div class="col-md-2">{{ price }} Ft</div>
+        <div>{{ price }} Ft</div>
 
-        <div class="col-md-2">
+        <div>
           <button type="button" class="cartItemButton" @click="sumButton" >
             +
           </button>
@@ -23,9 +23,9 @@
           </button>
         </div>
 
-        <div class="col-md-2">{{ sub_total }} HUF</div>
+        <div>{{ sub_total }} HUF</div>
 
-        <div class="col-md-2">
+        <div>
           <button type="button" class="cartItemButton" v-on:click="removeButton">
             Törlés
           </button>
@@ -130,15 +130,18 @@ watch:{
 <style scoped>
 .cartItem{
     margin: 20px;
+    padding: 10px;
     font-size: 2.5vh;
     color: white;
     font-weight: 900;
     border: 2px solid rgba(225,198,153);
     border-radius: 20px;
     box-shadow: 0px 0px 0px 3px rgba(225,198,153,0.8);
+    display: flex;
+    justify-content: space-between;
 }
 .foodName{
-    font-size: 4vh;
+    font-size: 3.5vh;
     color: white;
     font-weight: 900;
 }
@@ -151,12 +154,11 @@ img{
     border-radius: 10px;
     color: white;
     font-weight: bolder;
-    padding: 10px;
 }
 .cartItemButton:hover{
-    transform: scale(1.2);
+    transform: scale(1.1);
 }
 .cartItemButton:active{
-    transform: scale(0.8);
+    transform: scale(0.9);
 }
 </style>

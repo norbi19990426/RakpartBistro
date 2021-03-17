@@ -11,7 +11,9 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12 welcomeHeader">
-                <welcome-swiper-component></welcome-swiper-component>
+                <welcome-swiper-component
+                menu-route="{{route('menu.index')}}">
+                </welcome-swiper-component>
             </div>
         </div>
         <div class="menuRecommenderContainer">
