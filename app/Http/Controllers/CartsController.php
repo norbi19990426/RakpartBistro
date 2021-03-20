@@ -175,6 +175,6 @@ class CartsController extends Controller
     protected function setSessionAndReturnResponse($cart)
     {
         session()->put('cart', $cart);
-        return redirect()->route('menu.index')->with('success', 'Add to Cart');
+        //return redirect()->route('menu.index')->with('success', 'Add to Cart');
     }
 }
