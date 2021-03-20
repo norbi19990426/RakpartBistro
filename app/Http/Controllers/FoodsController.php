@@ -13,7 +13,7 @@ class FoodsController extends Controller
 {
     public function create(){
 
-        $categories = DB::table('categories')->groupBy('categoryName')->get();
+        $categories = DB::table('categories')->get();
 
 
         return view('admin.foods.create', compact('categories'));
