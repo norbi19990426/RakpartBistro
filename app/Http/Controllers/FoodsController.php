@@ -28,18 +28,16 @@ class FoodsController extends Controller
             'category_id' => 'required',
         ]);
 
-        //$imagePath = request('image')->store('uploads', 'public');
+        $imagePath = request('image')->store('uploads', 'public')->file('photo');
 
-        //$image = Image::make(public_path("storage/{$imagePath}"))->fit(150, 150);
-        //$img = Image::make($request->file('photo')->getRealPath());
-
-        //$image->save();
+        $image = Image::make(public_path("storage/{$imagePath}"))->fit(150, 150);
+        $image->save();
 
         Food::create([
             'foodName' => $data['foodName'],
             'description' => $data['description'],
             'price' => $data['price'],
-            'image' => $data['image'],
+            'image' => $imagePath,
             'category_id' => $data['category_id'],
         ]);
     }
