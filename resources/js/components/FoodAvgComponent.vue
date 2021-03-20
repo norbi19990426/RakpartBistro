@@ -15,14 +15,13 @@ export default {
     props:['foodId'],
     data(){
         return{
-            foodAvgId: 0,
             foodAvgRating: 0,
         }
     },
     computed: mapState({
         whenUserRating: state => state.starRate.whenUserRating
     }),
-    //Ha a user szavaz/újra szavaz a Vuex-ben tárolt whenUserRating true lesz és újra lekéri az raing átlagot (avgRating() function).
+    //Ha a user szavaz/újra szavaz a Vuex-ben tárolt whenUserRating true lesz és újra lekéri a raing átlagot.
     watch:{
         whenUserRating:function(){
             if(this.whenUserRating == true){

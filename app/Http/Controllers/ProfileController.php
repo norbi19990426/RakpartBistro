@@ -29,6 +29,7 @@ class ProfileController extends Controller
             'emelet' => $data['emelet'],
             'telefonszam' => $data['telefonszam'],
         ]);
+        return response($data);
     }
 
     public function updateProfile(){
@@ -47,5 +48,7 @@ class ProfileController extends Controller
         auth()->user()->profile()->update(
             $data
         );
+
+        return response($data);
     }
 }

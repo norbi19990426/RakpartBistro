@@ -16,10 +16,7 @@
                 <!-- PROFIL ADATOK KIÍRATÁSA -->
                 <div class="modal-body">
                     <div class="col-11" v-if="profileHide == true">
-                        <div v-if="userProfile == null">
-                            <h1>Még nincs profilja</h1>
-                        </div>
-                        <div class="profileDataContainer" v-else>
+                        <div class="profileDataContainer">
                             <h2 class="userName">{{form.vezeteknev}} {{form.keresztnev}}</h2>
                             <div class="profileData"><h4>Irányítószám:</h4>{{form.iranyitoszam}}</div>
                             <div class="profileData"><h4>Város:</h4>{{form.varos}}</div>
@@ -29,7 +26,7 @@
                         </div>
                     </div>
                 <!-- PROFIL ADATOK SZERKEZTÉSE -->
-                    <div class="col-11" v-else-if="userProfile != null">
+                    <div class="col-11" v-else-if="hasProfile == true">
                         <form method="POST" enctype="multipart/form-data" @submit.prevent="submitProfileUpdate">
                             <div class="form-group">
                                 <label for="vezeteknev">Vezetéknév:</label>
@@ -96,7 +93,7 @@
                         </form>
                     </div>
                 <!-- HA NINCS PROFIL AKKOR EZ JELENIK MEG PROFIL LÉTREHOZÁSÁHOZ -->
-                    <div class="col-11" v-else-if="userProfile == null">
+                    <div class="col-11" v-else-if="hasProfile == false">
                         <form method="POST" enctype="multipart/form-data" @submit.prevent="submitProfileCreate">
                             <div class="form-group">
                                 <label for="vezeteknev">Vezetéknév:</label>
@@ -175,7 +172,7 @@ export default {
         this.userProfile = JSON.parse(this.user);
         return{
             profileHide: false,
-            noProfile: false,
+            hasProfile: false,
             form: new Form({
                 vezeteknev: '',
                 keresztnev: '',
@@ -194,6 +191,7 @@ export default {
     methods:{
         setProfileData(){
             if(this.userProfile != null){
+                this.hasProfile = true;
                 this.form.vezeteknev = this.userProfile.vezeteknev;
                 this.form.keresztnev = this.userProfile.keresztnev;
                 this.form.iranyitoszam = this.userProfile.iranyitoszam;
@@ -203,6 +201,16 @@ export default {
                 this.form.emelet = this.userProfile.emelet;
                 this.form.telefonszam = this.userProfile.telefonszam;
             }
+        },
+        setProfileCreateUpdateData($data){
+                this.form.vezeteknev = $data.vezeteknev;
+                this.form.keresztnev = $data.keresztnev;
+                this.form.iranyitoszam = $data.iranyitoszam;
+                this.form.email = $data.email;
+                this.form.varos = $data.varos;
+                this.form.address = $data.address;
+                this.form.emelet = $data.emelet;
+                this.form.telefonszam = $data.telefonszam;
         },
         profile(){
             this.profileHide = true;
@@ -228,6 +236,8 @@ export default {
                     showConfirmButton: false,
                     timer: 1500
                 })
+                this.hasProfile = true;
+                this.setProfileCreateUpdateData(response.data);
                 this.$modal.hide('user-profile');
               })
              .catch(error => this.form.errors.record(error.response.data));
@@ -251,6 +261,7 @@ export default {
                     showConfirmButton: false,
                     timer: 1500
                 })
+                this.setProfileCreateUpdateData(response.data);
                 this.$modal.hide('user-profile');
               })
              .catch(error => this.form.errors.record(error.response.data));

@@ -2529,6 +2529,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2560,7 +2572,8 @@ __webpack_require__.r(__webpack_exports__);
       couponId: 0,
       couponOnceUsed: true,
       couponName: "",
-      couponPercent: 0
+      couponPercent: 0,
+      cartProductCheck: false
     };
   },
   beforeMount: function beforeMount() {
@@ -2568,6 +2581,7 @@ __webpack_require__.r(__webpack_exports__);
     this.defaultTotalPrice();
     this.defaultTotalCount();
     this.getUserOrdered();
+    this.cartCheck();
   },
   created: function created() {
     this.sumTotalPrice();
@@ -2576,6 +2590,13 @@ __webpack_require__.r(__webpack_exports__);
     this.defaultTotalCount();
   },
   methods: {
+    cartCheck: function cartCheck() {
+      if (this.totalPrice !== 0) {
+        this.cartProductCheck = true;
+      } else {
+        this.cartProductCheck = false;
+      }
+    },
     //MEGNÉZI, HOGY A BEÍRT KUPON LÉTEZIK-E A COUPON_USED_ONCE TÁBLÁBA
     getCouponUsedOnce: function getCouponUsedOnce() {
       var _this = this;
@@ -2679,6 +2700,7 @@ __webpack_require__.r(__webpack_exports__);
       this.cartItemsData[cartItemData.id] = cartItemData.sub_total;
       this.checkout[cartItemData.id] = null;
       this.sumTotalPrice();
+      this.cartCheck();
     },
     //EZ AZ ÁRAK ÖSSZEADÁSA
     sumTotalPrice: function sumTotalPrice() {
@@ -3316,7 +3338,6 @@ __webpack_require__.r(__webpack_exports__);
   props: ['foodId'],
   data: function data() {
     return {
-      foodAvgId: 0,
       foodAvgRating: 0
     };
   },
@@ -3325,7 +3346,7 @@ __webpack_require__.r(__webpack_exports__);
       return state.starRate.whenUserRating;
     }
   }),
-  //Ha a user szavaz/újra szavaz a Vuex-ben tárolt whenUserRating true lesz és újra lekéri az raing átlagot (avgRating() function).
+  //Ha a user szavaz/újra szavaz a Vuex-ben tárolt whenUserRating true lesz és újra lekéri a raing átlagot.
   watch: {
     whenUserRating: function whenUserRating() {
       if (this.whenUserRating == true) {
@@ -3949,9 +3970,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['user'],
@@ -3959,7 +3977,7 @@ __webpack_require__.r(__webpack_exports__);
     this.userProfile = JSON.parse(this.user);
     return {
       profileHide: false,
-      noProfile: false,
+      hasProfile: false,
       form: new Form({
         vezeteknev: '',
         keresztnev: '',
@@ -3978,6 +3996,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     setProfileData: function setProfileData() {
       if (this.userProfile != null) {
+        this.hasProfile = true;
         this.form.vezeteknev = this.userProfile.vezeteknev;
         this.form.keresztnev = this.userProfile.keresztnev;
         this.form.iranyitoszam = this.userProfile.iranyitoszam;
@@ -3987,6 +4006,16 @@ __webpack_require__.r(__webpack_exports__);
         this.form.emelet = this.userProfile.emelet;
         this.form.telefonszam = this.userProfile.telefonszam;
       }
+    },
+    setProfileCreateUpdateData: function setProfileCreateUpdateData($data) {
+      this.form.vezeteknev = $data.vezeteknev;
+      this.form.keresztnev = $data.keresztnev;
+      this.form.iranyitoszam = $data.iranyitoszam;
+      this.form.email = $data.email;
+      this.form.varos = $data.varos;
+      this.form.address = $data.address;
+      this.form.emelet = $data.emelet;
+      this.form.telefonszam = $data.telefonszam;
     },
     profile: function profile() {
       this.profileHide = true;
@@ -4013,6 +4042,9 @@ __webpack_require__.r(__webpack_exports__);
           showConfirmButton: false,
           timer: 1500
         });
+        _this.hasProfile = true;
+
+        _this.setProfileCreateUpdateData(response.data);
 
         _this.$modal.hide('user-profile');
       })["catch"](function (error) {
@@ -4038,6 +4070,8 @@ __webpack_require__.r(__webpack_exports__);
           showConfirmButton: false,
           timer: 1500
         });
+
+        _this2.setProfileCreateUpdateData(response.data);
 
         _this2.$modal.hide('user-profile');
       })["catch"](function (error) {
@@ -11456,7 +11490,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.cartSummary[data-v-4f1abf99]{\n    color: white;\n    font-size: 2.5vh;\n    font-weight: 900;\n    margin-top: 20px;\n}\n.cartItemHeader[data-v-4f1abf99]{\n    color: white;\n    font-size: 2.5vh;\n    font-weight: 900;\n    border: 4px solid rgba(225,198,153);\n    border-radius: 10px;\n    margin: 20px;\n}\n.cartInfo[data-v-4f1abf99]{\n    border: 4px solid rgba(225,198,153);\n    border-radius: 10px;\n    padding: 20px;\n    margin-bottom: 15px;\n}\n.title[data-v-4f1abf99]{\n    color: white;\n    font-size: 4vh;\n    font-weight: 900;\n}\n.info[data-v-4f1abf99]{\n    color: white;\n    font-size: 2.5vh;\n    font-weight: 900;\n    display: flex;\n    justify-content: space-between;\n}\n.form-control-lg[data-v-4f1abf99]{\n    background-color: rgba(225,198,153,0.5);\n    color: white;\n    font-weight: 900;\n}\n[data-v-4f1abf99]::-moz-placeholder{\n    color: white;\n}\n[data-v-4f1abf99]:-ms-input-placeholder{\n    color: white;\n}\n[data-v-4f1abf99]::placeholder{\n    color: white;\n}\n.cartButton[data-v-4f1abf99]{\n    background-color: rgba(225,198,153,0.5);\n    border: 4px solid rgba(225,198,153);\n    border-radius: 10px;\n    color: white;\n    font-weight: bolder;\n}\n.cartButton[data-v-4f1abf99]:hover{\n    transform: scale(1.1);\n}\n.cartButton[data-v-4f1abf99]:active{\n    transform: scale(0.9);\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.cartSummary[data-v-4f1abf99]{\n    color: white;\n    font-size: 2.5vh;\n    font-weight: 900;\n    margin-top: 20px;\n}\n.cartItemHeader[data-v-4f1abf99]{\n    color: white;\n    font-size: 2.5vh;\n    font-weight: 900;\n    border: 4px solid rgba(225,198,153);\n    border-radius: 10px;\n    margin: 20px;\n}\n.cartInfo[data-v-4f1abf99]{\n    border: 4px solid rgba(225,198,153);\n    border-radius: 10px;\n    padding: 20px;\n    margin-bottom: 15px;\n}\n.title[data-v-4f1abf99]{\n    color: white;\n    font-size: 4vh;\n    font-weight: 900;\n}\n.info[data-v-4f1abf99]{\n    color: white;\n    font-size: 2.5vh;\n    font-weight: 900;\n    display: flex;\n    justify-content: space-between;\n}\n.form-control-lg[data-v-4f1abf99]{\n    background-color: rgba(225,198,153,0.5);\n    color: white;\n    font-weight: 900;\n}\n[data-v-4f1abf99]::-moz-placeholder{\n    color: white;\n}\n[data-v-4f1abf99]:-ms-input-placeholder{\n    color: white;\n}\n[data-v-4f1abf99]::placeholder{\n    color: white;\n}\n.cartButton[data-v-4f1abf99]{\n    background-color: rgba(225,198,153,0.5);\n    border: 4px solid rgba(225,198,153);\n    border-radius: 10px;\n    color: white;\n    font-weight: bolder;\n}\n.cartButton[data-v-4f1abf99]:hover{\n    transform: scale(1.1);\n}\n.cartButton[data-v-4f1abf99]:active{\n    transform: scale(0.9);\n}\n.stepText[data-v-4f1abf99]{\n    display: flex;\n    justify-content: space-between;\n    color: white;\n    font-size: 2.5vh;\n    width: 100%;\n}\n.stepBorder[data-v-4f1abf99]{\n    border-bottom: 4px solid rgba(225,198,153);\n    width: 6%;\n    border-bottom: 1px solid rgba(225,198,153);\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -74059,6 +74093,8 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container-fluid" }, [
+    _vm._m(0),
+    _vm._v(" "),
     _c(
       "div",
       {
@@ -74077,7 +74113,7 @@ var render = function() {
           "div",
           { staticClass: "col-md-8" },
           [
-            _vm._m(0),
+            _vm._m(1),
             _vm._v(" "),
             _vm._l(_vm.cartFood, function(foodItem) {
               return _c(
@@ -74211,7 +74247,18 @@ var render = function() {
           _vm._v(" "),
           _c(
             "button",
-            { staticClass: "cartButton", on: { click: _vm.checkoutButton } },
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.cartProductCheck,
+                  expression: "cartProductCheck"
+                }
+              ],
+              staticClass: "cartButton",
+              on: { click: _vm.checkoutButton }
+            },
             [_vm._v("Tovább a pénztárhoz")]
           )
         ]),
@@ -74259,6 +74306,26 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "container" }, [
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "stepText" }, [
+          _c("div", { staticClass: "stepCart" }, [_vm._v("1. Kosár")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "stepCheckout" }, [_vm._v("2. Pénztár")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "stepCartCheckoutEnd" }, [
+            _vm._v("3. Rendelés befejezés")
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "stepBorder" })
+      ])
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -76051,48 +76118,44 @@ var render = function() {
           _c("div", { staticClass: "modal-body" }, [
             _vm.profileHide == true
               ? _c("div", { staticClass: "col-11" }, [
-                  _vm.userProfile == null
-                    ? _c("div", [_c("h1", [_vm._v("Még nincs profilja")])])
-                    : _c("div", { staticClass: "profileDataContainer" }, [
-                        _c("h2", { staticClass: "userName" }, [
-                          _vm._v(
-                            _vm._s(_vm.form.vezeteknev) +
-                              " " +
-                              _vm._s(_vm.form.keresztnev)
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "profileData" }, [
-                          _c("h4", [_vm._v("Irányítószám:")]),
-                          _vm._v(_vm._s(_vm.form.iranyitoszam))
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "profileData" }, [
-                          _c("h4", [_vm._v("Város:")]),
-                          _vm._v(_vm._s(_vm.form.varos))
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "profileData" }, [
-                          _c("h4", [_vm._v("Lakcím:")]),
-                          _vm._v(
-                            _vm._s(_vm.form.address) +
-                              " " +
-                              _vm._s(_vm.form.emelet)
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "profileData" }, [
-                          _c("h4", [_vm._v("Email:")]),
-                          _vm._v(_vm._s(_vm.form.email))
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "profileData" }, [
-                          _c("h4", [_vm._v("Telefonszám:")]),
-                          _vm._v(_vm._s(_vm.form.telefonszam))
-                        ])
-                      ])
+                  _c("div", { staticClass: "profileDataContainer" }, [
+                    _c("h2", { staticClass: "userName" }, [
+                      _vm._v(
+                        _vm._s(_vm.form.vezeteknev) +
+                          " " +
+                          _vm._s(_vm.form.keresztnev)
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "profileData" }, [
+                      _c("h4", [_vm._v("Irányítószám:")]),
+                      _vm._v(_vm._s(_vm.form.iranyitoszam))
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "profileData" }, [
+                      _c("h4", [_vm._v("Város:")]),
+                      _vm._v(_vm._s(_vm.form.varos))
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "profileData" }, [
+                      _c("h4", [_vm._v("Lakcím:")]),
+                      _vm._v(
+                        _vm._s(_vm.form.address) + " " + _vm._s(_vm.form.emelet)
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "profileData" }, [
+                      _c("h4", [_vm._v("Email:")]),
+                      _vm._v(_vm._s(_vm.form.email))
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "profileData" }, [
+                      _c("h4", [_vm._v("Telefonszám:")]),
+                      _vm._v(_vm._s(_vm.form.telefonszam))
+                    ])
+                  ])
                 ])
-              : _vm.userProfile != null
+              : _vm.hasProfile == true
               ? _c("div", { staticClass: "col-11" }, [
                   _c(
                     "form",
@@ -76516,7 +76579,7 @@ var render = function() {
                     ]
                   )
                 ])
-              : _vm.userProfile == null
+              : _vm.hasProfile == false
               ? _c("div", { staticClass: "col-11" }, [
                   _c(
                     "form",

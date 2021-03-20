@@ -127,7 +127,6 @@ export default {
         this.setFoodsTable();
     },
     methods:{
-
         setFoodsTable:function(){
             this.foodsTable = this.allFood;
         },

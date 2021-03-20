@@ -1,5 +1,17 @@
 <template>
 <div class="container-fluid">
+    <div class="container">
+        <div class="row">
+            <div class="stepText">
+                <div class="stepCart">1. Kosár</div>
+                <div class="stepCheckout">2. Pénztár</div>
+                <div class="stepCartCheckoutEnd">3. Rendelés befejezés</div>
+            </div>
+            <div class="stepBorder">
+
+            </div>
+        </div>
+    </div>
     <div class="row" v-show="(hideCart)">
         <div class="col-md-8" >
             <div class="row cartItemHeader">
@@ -48,7 +60,7 @@
                         </div>
                     </form>
                 </div>
-                <button class="cartButton" @click="checkoutButton">Tovább a pénztárhoz</button>
+                <button class="cartButton" v-show="cartProductCheck" @click="checkoutButton">Tovább a pénztárhoz</button>
                 <!--<a class="btn btn-primary" v-bind:href="menuRoute">Vissza a menübe</a>-->
             </div>
             <div class="pt-2 pl-2 col-md-8" >
@@ -83,7 +95,7 @@ export default {
         this.cartFood = JSON.parse(this.cart);
         this.allUsedCoupons = JSON.parse(this.usedCoupons);
         this.allCouponUsedOnce = JSON.parse(this.couponUsedOnce);
-        return {
+      return {
             hideCart: true,
             hideCheckout: false,
             totalPrice: 0,
@@ -100,7 +112,8 @@ export default {
             couponId: 0,
             couponOnceUsed: true,
             couponName: "",
-            couponPercent: 0
+            couponPercent: 0,
+            cartProductCheck: false
         }
     },
     beforeMount(){
@@ -108,6 +121,7 @@ export default {
         this.defaultTotalPrice();
         this.defaultTotalCount();
         this.getUserOrdered();
+        this.cartCheck();
     },
     created(){
         this.sumTotalPrice();
@@ -116,6 +130,14 @@ export default {
         this.defaultTotalCount();
     },
     methods: {
+        cartCheck(){
+            if(this.totalPrice !== 0){
+                this.cartProductCheck = true;
+            }
+            else{
+                this.cartProductCheck = false;
+            }
+        },
         //MEGNÉZI, HOGY A BEÍRT KUPON LÉTEZIK-E A COUPON_USED_ONCE TÁBLÁBA
         getCouponUsedOnce(){
             this.couponOnceUsed = true;
@@ -210,6 +232,7 @@ export default {
             this.cartItemsData[cartItemData.id] = cartItemData.sub_total;
             this.checkout[cartItemData.id] = null;
             this.sumTotalPrice();
+            this.cartCheck();
         },
         //EZ AZ ÁRAK ÖSSZEADÁSA
         sumTotalPrice(){
@@ -312,5 +335,17 @@ export default {
 }
 .cartButton:active{
     transform: scale(0.9);
+}
+.stepText{
+    display: flex;
+    justify-content: space-between;
+    color: white;
+    font-size: 2.5vh;
+    width: 100%;
+}
+.stepBorder{
+    border-bottom: 4px solid rgba(225,198,153);
+    width: 6%;
+    border-bottom: 1px solid rgba(225,198,153);
 }
 </style>
