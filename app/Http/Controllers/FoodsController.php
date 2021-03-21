@@ -30,8 +30,7 @@ class FoodsController extends Controller
 
         $imagePath = request('image')->store('uploads', 'public');
 
-        //$image = Image::make(public_path("storage/{$imagePath}")->file('photo'))->fit(150, 150);
-        $image = Image::make(request('image')->file('photo')->getRealPath())->fit(150,150);
+        $image = Image::make(public_path("storage/{$imagePath}"))->fit(150, 150);
         $image->save();
 
         Food::create([
