@@ -1,17 +1,27 @@
 <template>
     <div class="row ml-5 mr-5">
+        <div class="container">
+            <div class="row stepRow">
+                <div class="stepText">
+                    <div>1. Kosár</div>
+                    <div>2. Pénztár</div>
+                    <div>3. Rendelés befejezés</div>
+                </div>
+                <div class="stepBorder"></div>
+            </div>
+        </div>
         <div class="col-md-8">
             <form method="POST" enctype="multipart/form-data" @submit.prevent="submitOrder">
                 <div class="d-flex">
                     <div class="form-group pr-5">
-                        <label for="vezeteknev">Vezetéknév:</label>
+                        <label class="checkoutLabel" for="vezeteknev">Vezetéknév:</label>
                         <input type="text" v-model="form.vezeteknev" class="form-control" style="width: 400px"
                         :class="{'is-invalid' : form.errors.has('vezeteknev')}"
                         @keydown="form.errors.clear('vezeteknev')">
                         <div class="invalid-feedback" v-show="form.errors.has('vezeteknev')" v-text="form.errors.get('vezeteknev')"></div>
                     </div>
                     <div class="form-group">
-                        <label for="keresztnev">Keresztnév:</label>
+                        <label class="checkoutLabel" for="keresztnev">Keresztnév:</label>
                         <input type="text"
                          v-model="form.keresztnev" class="form-control" style="width: 400px"
                         :class="{'is-invalid' : form.errors.has('keresztnev')}"
@@ -21,7 +31,7 @@
                 </div>
                 <div class="d-flex">
                     <div class="form-gorup pr-5">
-                        <label for="iranyitoszam">Irányítószám:</label>
+                        <label class="checkoutLabel" for="iranyitoszam">Irányítószám:</label>
                         <input type="number"
                         v-model="form.iranyitoszam" class="form-control" style="width: 400px"
                         :class="{'is-invalid' : form.errors.has('iranyitoszam')}"
@@ -29,7 +39,7 @@
                         <div class="invalid-feedback" v-show="form.errors.has('iranyitoszam')" v-text="form.errors.get('iranyitoszam')"></div>
                     </div>
                     <div class="form-group">
-                       <label for="varos">Város:</label>
+                       <label class="checkoutLabel" for="varos">Város:</label>
                         <input type="text"
                         v-model="form.varos" class="form-control" style="width: 400px"
                         :class="{'is-invalid' : form.errors.has('varos')}"
@@ -38,7 +48,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="address">Utca, házszám:</label>
+                    <label class="checkoutLabel" for="address">Utca, házszám:</label>
                     <input type="text" placeholder="Utcanév, házszám"
                     v-model="form.address" class="form-control" style="width: 850px"
                     :class="{'is-invalid' : form.errors.has('address')}"
@@ -50,7 +60,7 @@
                     v-model="form.emelet" class="form-control" style="width: 850px">
                 </div>
                 <div class="form-group">
-                    <label for="telefonszam">Telefonszám:</label>
+                    <label class="checkoutLabel" for="telefonszam">Telefonszám:</label>
                     <input type="number" placeholder="Pl.: 0630 123 4567" v-model="form.telefonszam"
                     class="form-control" style="width: 850px"
                       :class="{'is-invalid' : form.errors.has('telefonszam')}"
@@ -58,7 +68,7 @@
                         <div class="invalid-feedback" v-show="form.errors.has('telefonszam')" v-text="form.errors.get('telefonszam')"></div>
                 </div>
                 <div class="form-group">
-                    <label for="email">E-mail cím:</label>
+                    <label class="checkoutLabel" for="email">E-mail cím:</label>
                     <input type="email" v-model="form.email"
                     class="form-control" style="width: 850px"
                       :class="{'is-invalid' : form.errors.has('email')}"
@@ -66,7 +76,7 @@
                         <div class="invalid-feedback" v-show="form.errors.has('email')" v-text="form.errors.get('email')"></div>
                 </div>
                 <div class="form-group">
-                    <label for="message">Rendeléshez megjegyzés:</label>
+                    <label class="checkoutLabel" for="message">Rendeléshez megjegyzés:</label>
                     <textarea class="form-control" placeholder="Megjegyzés"
                     v-model="form.message" style="width: 850px"></textarea>
                 </div>
@@ -185,7 +195,7 @@ export default {
     font-weight: 900;
     margin-top: 20px;
 }
-label{
+.checkoutLabel{
     color: white;
     font-size: 2.5vh;
     font-weight: 900;
@@ -227,11 +237,36 @@ label{
     border-radius: 10px;
     color: white;
     font-weight: bolder;
+    width: 95%;
+    margin-bottom: 30px;
 }
 .checkoutButton:hover{
     transform: scale(1.1);
 }
 .checkoutButton:active{
     transform: scale(0.9);
+}
+.stepRow{
+    margin: 20px;
+}
+.stepText{
+    display: flex;
+    justify-content: space-between;
+    color: white;
+    font-size: 2.5vh;
+    width: 100%;
+    margin: 0px 20px 0px 20px;
+}
+.stepBorder{
+    background-color: rgba(255,255,255,1);
+    height: 5px;
+    width: 100%;
+}
+.stepBorder::after{
+    content: "";
+    display: block;
+    width: 50%;
+    height: 5px;
+    background-color: #A67B5B;
 }
 </style>

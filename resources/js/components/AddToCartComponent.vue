@@ -30,6 +30,7 @@
     padding: 15px 19px;
     text-align: center;
     color: white;
+    font-size:1vw;
     text-decoration: none;
 }
 a:hover{

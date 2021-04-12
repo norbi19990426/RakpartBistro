@@ -161,4 +161,11 @@ img{
 .cartItemButton:active{
     transform: scale(0.9);
 }
+.stepBorder::after{
+    content: "";
+    display: block;
+    width: 6%;
+    height: 3px;
+    background-color: rgba(225,198,153);
+}
 </style>

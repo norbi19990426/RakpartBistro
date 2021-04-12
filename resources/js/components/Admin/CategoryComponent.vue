@@ -10,7 +10,7 @@
                         @keydown="form.errors.clear('newCategory')">
                         <div class="invalid-feedback" v-show="form.errors.has('newCategory')" v-text="form.errors.get('newCategory')"></div>
                     </div>
-                    <button class="btn btn-primary mt-4">Új kategória hozzáadása</button>
+                    <button class="buttonStyle mt-4">Új kategória hozzáadása</button>
                 </form>
             </div>
         </div>
@@ -27,7 +27,7 @@
                         @keydown="form.errors.clear('changeCategory')">
                         <div class="invalid-feedback" v-show="form.errors.has('changeCategory')" v-text="form.errors.get('changeCategory')"></div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Szerkeztés</button>
+                    <button type="submit" class="buttonStyle">Szerkeztés</button>
                 </form>
             </div>
         </div>
@@ -40,7 +40,7 @@
                             <option v-for="category in allCategory" :key="category.id" :value="category.id">{{category.categoryName}}</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary">Törlés</button>
+                    <button type="submit" class="buttonStyle">Törlés</button>
                 </form>
             </div>
         </div>
@@ -124,3 +124,17 @@ export default {
     }
 }
 </script>
+<style scoped>
+.buttonStyle{
+    background-color: rgba(225,198,153,0.5);
+    border: 4px solid rgba(225,198,153);;
+    border-radius: 10px;
+    font-weight: bolder;
+}
+.buttonStyle:hover{
+    transform: scale(1.1);
+}
+.buttonStyle:active{
+    transform: scale(0.9);
+}
+</style>

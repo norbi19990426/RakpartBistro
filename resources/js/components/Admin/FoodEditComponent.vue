@@ -25,11 +25,13 @@
                                     <label for="image">Kép az ételről: </label>
                                     <input type="file" class="form-control-file" id="image" name="image">
                                 </div>
-                                <button type="submit" class="btn btn-primary mt-2">Az étel szerkeztése</button>
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" class="buttonStyle mt-2">Az étel szerkeztése</button>
+                                </div>
                             </form>
                         </div>
                     <div class="modal-footer text-right">
-                        <button class="btn btn-primary" @click="$modal.hide('food-edit')">Kilépés</button>
+                        <button class="buttonStyle" @click="$modal.hide('food-edit')">Kilépés</button>
                     </div>
                 </div>
             </div>
@@ -109,10 +111,6 @@ export default {
                         this.description = response.data.description;
                         this.image = response.data.image;
                         this.edit = true;
-
-                        this.form.foodName = "";
-                        this.form.price = "";
-                        this.form.description = "";
                         this.$modal.hide('food-edit');
                     })
                 .catch(error => this.form.errors.record(error.response.data));
@@ -126,3 +124,20 @@ export default {
     }
 }
 </script>
+<style scoped>
+.modal-mask{
+    background-color: rgba(225,198,153,0.5);
+}
+.buttonStyle{
+    background-color: rgba(225,198,153,0.5);
+    border: 4px solid rgba(225,198,153);;
+    border-radius: 10px;
+    font-weight: bolder;
+}
+.buttonStyle:hover{
+    transform: scale(1.1);
+}
+.buttonStyle:active{
+    transform: scale(0.9);
+}
+</style>

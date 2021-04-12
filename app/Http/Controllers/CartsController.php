@@ -109,15 +109,14 @@ class CartsController extends Controller
             session()->put('cart', $cart);
         }
         return response()->json(
-                [
-                    'quantity' => $cart[$id]['quantity'],
-                    'sub_total' => $cart[$id]['price'] * $cart[$id]['quantity'],
-                ],
-                200
-            );
+            [
+                'quantity' => $cart[$id]['quantity'],
+                'sub_total' => $cart[$id]['price'] * $cart[$id]['quantity'],
+            ],
+            200
+        );
     }
     //REGISZTRÁLT FELHASZNÁLÓ CART-JA
-
     public function addToUserCart($foodId, $userId)
     {
 
@@ -175,6 +174,5 @@ class CartsController extends Controller
     protected function setSessionAndReturnResponse($cart)
     {
         session()->put('cart', $cart);
-        //return redirect()->route('menu.index')->with('success', 'Add to Cart');
     }
 }

@@ -9,7 +9,6 @@
        <li><a v-bind:href="createCategory">Ételkategória</a></li>
        <li><a v-bind:href="createFood">Új étel</a></li>
        <li><a v-bind:href="orderManagement">Rendelések</a></li>
-       <li><a v-bind:href="createCoupon">Új kupon</a></li>
         <li><a v-bind:href="couponManagement">Kuponok</a></li>
      </ul>
    </sidebar-component>
@@ -20,7 +19,7 @@ import AdminButtonComponent from './AdminButtonComponent.vue';
 import SidebarComponent from './SidebarComponent.vue';
 
 export default {
-    props:['createCategory', 'createFood', 'orderManagement', 'createCoupon', 'couponManagement'],
+    props:['createCategory', 'createFood', 'orderManagement', 'couponManagement'],
     components: {
     AdminButtonComponent,
     SidebarComponent

@@ -15,6 +15,7 @@ Vue.prototype.$eventBus = new Vue();
 import VueJSModal from 'vue-js-modal';
 Vue.use(VueJSModal);
 import StarRating from 'vue-star-rating';
+Vue.use(require('vue-moment'));
 
 //SWIPER ÍGY MŰKÖDIK
 import Vue from 'vue'

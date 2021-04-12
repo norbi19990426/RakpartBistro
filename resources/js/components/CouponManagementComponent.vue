@@ -1,13 +1,18 @@
 <template>
     <div class="container mt-3">
-        <button class="btn btn-primary mb-3" @click="couponsDelete">Kijelölt kuponok törlése</button>
-        <table class="table">
+        <div class="d-flex justify-content-between">
+            <button class="buttonStyle mb-3" @click="couponsDelete">Kijelölt kuponok törlése</button>
+            <a class="linkStyle" v-bind:href="createCoupon">Új kupon</a>
+        </div>
+        <table class="table table-striped table-light">
             <thead>
-                <th scope="col"></th>
-                <th scope="col">Kupon</th>
-                <th scope="col">Kupon neve</th>
-                <th scope="col">Százalék mennyisége</th>
-                <th scope="col">Használhatóság</th>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Kupon</th>
+                    <th scope="col">Kupon neve</th>
+                    <th scope="col">Százalék mennyisége</th>
+                    <th scope="col">Használhatóság</th>
+                </tr>
             </thead>
             <tbody v-for="coupon in couponsTable" :key="coupon.id">
                 <tr>
@@ -38,12 +43,12 @@
                                 <label for="couponPercent">Százalék mennyisége:</label>
                                 <input type="number" class="form-control" :value="coupon.couponPercent" @change="couponPercent = $event.target.value">
                             </div>
-                            <button type="submit" class="btn btn-primary">Szerkeztés</button>
+                            <button type="submit" class="buttonStyle">Szerkeztés</button>
                         </form>
                     </div>
                 </div>
                 <div class="modal-footer text-right">
-                    <button class="btn btn-primary" @click="$modal.hide('coupon-form')">Kilépés</button>
+                    <button class="buttonStyle" @click="$modal.hide('coupon-form')">Kilépés</button>
                 </div>
             </div>
         </div>
@@ -54,7 +59,7 @@
 import Swal from "sweetalert2";
 
 export default {
-    props:['coupons', 'usage'],
+    props:['coupons', 'usage', 'createCoupon'],
     data(){
         this.allCoupon = JSON.parse(this.coupons);
         this.couponUsage = JSON.parse(this.usage);
@@ -175,4 +180,37 @@ export default {
 .editCoupon{
     cursor: pointer;
 }
+.buttonStyle{
+    background-color: rgba(225,198,153,0.5);
+    border: 4px solid rgba(225,198,153);;
+    border-radius: 10px;
+    font-weight: bolder;
+}
+.buttonStyle:hover{
+    transform: scale(1.1);
+}
+.buttonStyle:active{
+    transform: scale(0.9);
+}
+.linkStyle{
+    background-color: rgba(225,198,153,0.5);
+    padding: 7px;
+    margin-bottom: 15px;
+    border: 4px solid rgba(225,198,153);;
+    border-radius: 10px;
+    font-weight: bolder;
+    text-decoration: none;
+    color: black;
+}
+.linkStyle:hover{
+    transform: scale(1.1);
+}
+.linkStyle:active{
+    transform: scale(0.9);
+}
+.modal-mask{
+    background-color: rgba(225,198,153, 0.5);
+    font-weight: bolder;
+}
+
 </style>

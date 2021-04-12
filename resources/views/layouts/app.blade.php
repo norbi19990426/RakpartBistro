@@ -67,7 +67,6 @@
                                             create-category="{{route('admin.categories.create')}}"
                                             create-food="{{route('admin.foods.create')}}"
                                             order-management="{{route('admin.orderManagement.index')}}"
-                                            create-coupon="{{route('admin.createCoupon.create')}}"
                                             coupon-management="{{route('admin.couponManagement.index')}}">
                                         </admin-menu-component>
                                     @else
@@ -92,12 +91,12 @@
                                 @else
                                     @if (Route::has('register'))
                                         <li class="nav-item">
-                                            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                            <a class="nav-link" href="{{ route('register') }}">Regisztráció<!--{{ __('Register') }}--></a>
                                         </li>
                                     @endif
 
                                         <li class="nav-item">
-                                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                            <a class="nav-link" href="{{ route('login') }}">Bejelentkezés<!--{{ __('Login') }}--></a>
                                         </li>
                                 @endauth
                             @endif

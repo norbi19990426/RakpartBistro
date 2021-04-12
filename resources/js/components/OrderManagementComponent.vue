@@ -1,7 +1,7 @@
 <template>
 <div class="container-fluid">
-    <button class="btn btn-primary mb-3" @click="ordersDelete">Kijelölt rendelések törlése</button>
-    <table class="table">
+    <button class="buttonStyle mb-3" @click="ordersDelete">Kijelölt rendelések törlése</button>
+    <table class="table table-striped table-light">
         <thead>
             <tr>
                 <th scope="col"></th>
@@ -18,7 +18,7 @@
                 <tr>
                     <td><input type="checkbox" :value="order.id"  v-model="selectId"></td>
                     <th class="orderInfoTable" @click.prevent="show(order.id)" scope="row">#{{order.id}}</th>
-                    <td class="orderInfoTable" @click.prevent="show(order.id)">{{order.created_at}}</td>
+                    <td class="orderInfoTable" @click.prevent="show(order.id)">{{order.created_at |  moment("YYYY/DD/MM hh:mm")}}</td>
                     <td class="orderInfoTable" @click.prevent="show(order.id)">{{order.vezeteknev}} {{order.keresztnev}}</td>
                     <td class="orderInfoTable" @click.prevent="show(order.id)">{{order.email}}</td>
                     <td class="orderInfoTable" @click.prevent="show(order.id)">{{order.telefonszam}}</td>
@@ -83,7 +83,7 @@
                     </div>
                 </div>
                 <div class="modal-footer text-right">
-                    <button @click="$modal.hide('order-info')">Kilépés</button>
+                    <button class="buttonStyle" @click="$modal.hide('order-info')">Kilépés</button>
                 </div>
             </div>
         </div>
@@ -181,7 +181,10 @@ export default {
     },
 }
 </script>
-<style>
+<style scoped>
+.container-fluid{
+    margin-top: 20px;
+}
 .messageText{
     max-width:550px;
     word-wrap:break-word;
@@ -191,5 +194,28 @@ export default {
 }
 .orderInfoTable{
     cursor: pointer;
+}
+.buttonStyle{
+    background-color: rgba(225,198,153,0.5);
+    border: 4px solid rgba(225,198,153);;
+    border-radius: 10px;
+    font-weight: bolder;
+}
+.buttonStyle:hover{
+    transform: scale(1.1);
+}
+.buttonStyle:active{
+    transform: scale(0.9);
+}
+.modal-mask{
+    background-color: rgba(225,198,153,0.5);
+    font-weight: bolder;
+}
+.modal-header{
+    border-bottom: 1px solid rgba(225,198,153);
+}
+.modal-footer{
+    border-top: 1px solid rgba(225,198,153);
+
 }
 </style>

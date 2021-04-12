@@ -1,18 +1,16 @@
 <template>
 <div class="container-fluid">
-    <div class="container">
-        <div class="row">
-            <div class="stepText">
-                <div class="stepCart">1. Kosár</div>
-                <div class="stepCheckout">2. Pénztár</div>
-                <div class="stepCartCheckoutEnd">3. Rendelés befejezés</div>
-            </div>
-            <div class="stepBorder">
-
+    <div class="row" v-show="(hideCart)">
+        <div class="container">
+            <div class="row stepRow">
+                <div class="stepText">
+                    <div>1. Kosár</div>
+                    <div>2. Pénztár</div>
+                    <div>3. Rendelés befejezés</div>
+                </div>
+                <div class="stepBorder"></div>
             </div>
         </div>
-    </div>
-    <div class="row" v-show="(hideCart)">
         <div class="col-md-8" >
             <div class="row cartItemHeader">
                 <div class="col-3"></div>
@@ -336,16 +334,28 @@ export default {
 .cartButton:active{
     transform: scale(0.9);
 }
+.stepRow{
+    margin: 20px;
+}
 .stepText{
     display: flex;
     justify-content: space-between;
     color: white;
     font-size: 2.5vh;
     width: 100%;
+    margin: 0px 20px 0px 20px;
 }
 .stepBorder{
-    border-bottom: 4px solid rgba(225,198,153);
-    width: 6%;
-    border-bottom: 1px solid rgba(225,198,153);
+    background-color: rgba(255,255,255,1);;
+    height: 5px;
+    width: 100%;
+
+}
+.stepBorder::after{
+    content: "";
+    display: block;
+    width: 10%;
+    height: 5px;
+    background-color: #A67B5B;
 }
 </style>

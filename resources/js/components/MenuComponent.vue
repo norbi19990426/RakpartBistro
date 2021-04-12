@@ -1,53 +1,57 @@
 <template>
-    <div id="#top">
+    <div class="container-fluid" id="#top">
         <a class="scrollToTopButton" href="#top">
             <img class="arrow" src="/logo/arrow.png" />
         </a>
-        <div class="row d-flex justify-content-center">
+        <div class="row categoryButtons">
             <a  v-for="category in allCategory" :key="category.id" :href="'#'+category.id" class="menuLink"> {{ category.categoryName }}</a>
         </div>
-        <div v-for="category in allCategory" :key="category.id" :id="category.id" class="categoryName">
-                <h1>{{category.categoryName}}</h1>
-            <div class="row">
-            <div class="col-md-12" v-for="food in foodsTable" :key="food.id" v-if="category.id == food.category_id">
-                <div class="card">
-                    <div class="d-flex justify-content-between">
-                        <img :src="(storage+food.image)" class="foodImg" />
-                        <div class="card-body">
+        <div class="row">
+            <div class="container">
+                <div v-for="category in allCategory" :key="category.id" :id="category.id" class="categoryName">
+                    <h1>{{category.categoryName}}</h1>
+                <div class="row">
+                    <div class="col-md-12" v-for="food in foodsTable" :key="food.id" v-if="category.id == food.category_id">
+                        <div class="card">
                             <div class="d-flex justify-content-between">
-                                <p class="card-title">{{ food.foodName }}</p>
-                                <div class="d-flex">
-                                    <food-avg-component :food-id="food.id"></food-avg-component>
-                                    <div v-show="admin" class="adminButtonBorder">
-                                        <a @click.prevent="foodEdit(food.id)">
-                                            <img class="adminButton" v-show="admin" src="/logo/edit.png" style="height: 30px;">
-                                        </a>
-                                        <a @click="deleteFood(food.id)">
-                                            <img class="adminButton" v-show="admin" src="/logo/deleteFood.png" style="height: 30px;">
-                                        </a>
+                                <img :src="(storage+food.image)" class="foodImg" />
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <p class="card-title">{{ food.foodName }}</p>
+                                        <div class="d-flex">
+                                            <food-avg-component :food-id="food.id"></food-avg-component>
+                                            <div v-show="admin" class="adminButtonBorder">
+                                                <a @click.prevent="foodEdit(food.id)">
+                                                    <img class="adminButton" v-show="admin" src="/logo/edit.png" style="height: 30px;">
+                                                </a>
+                                                <a @click="deleteFood(food.id)">
+                                                    <img class="adminButton" v-show="admin" src="/logo/deleteFood.png" style="height: 30px;">
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-10">
+                                            <div class="description">{{food.description}}</div>
+                                        </div>
+                                        <div class="col-2 price">
+                                            <p>{{food.price}} HUF</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-10">
-                                    <div class="description">{{food.description}}</div>
-                                </div>
-                                <div class="col-2 price">
-                                    <p>{{food.price}} HUF</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                        <div class="card-footer">
-                            <div class="d-flex justify-content-between">
-                                <div class="d-flex justify-content-start">
-                                    <a type="button" v-show="userId != 0" class="buttonBackground" @click.prevent="show(food.id,food.foodName)">Értékelés</a>
-                                </div>
-                                <div class="d-flex justify-content-end">
-                                    <add-to-cart-component
-                                        :food-id="(food.id)"
-                                        :user-id="(userId)">
-                                    </add-to-cart-component>
+                                <div class="card-footer">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="d-flex justify-content-start">
+                                            <a type="button" v-show="userId != 0" class="buttonBackground" @click.prevent="show(food.id,food.foodName)">Értékelés</a>
+                                        </div>
+                                        <div class="d-flex justify-content-end">
+                                            <add-to-cart-component
+                                                :food-id="(food.id)"
+                                                :user-id="(userId)">
+                                            </add-to-cart-component>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -193,6 +197,7 @@ export default {
     overflow: hidden;
     padding: 25px 6px;
     text-align: center;
+    font-size:1vw;
     color: white;
     margin-right: 20px;
     margin-top: 20px;
@@ -204,6 +209,10 @@ export default {
 }
 .menuLink:active{
     transform: scale(0.8);
+}
+.categoryButtons{
+    display: flex;
+    justify-content: center;
 }
 .card-title{
     font-size: 4vh;
@@ -282,6 +291,8 @@ export default {
 }
 .description{
     font-size: 2.5vh;
+    max-width:700px;
+    word-wrap:break-word;
 }
 .price{
     font-size: 2.5vh;
@@ -292,4 +303,5 @@ export default {
     width: 100%;
     height: auto;
 }
+
 </style>

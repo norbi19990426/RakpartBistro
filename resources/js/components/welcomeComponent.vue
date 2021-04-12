@@ -1,29 +1,27 @@
 <template>
     <div class="menuRecommenderContainer">
         <div class="row menuRecommenderBorder"  v-for="food in allFood" :key="food.id" v-if="foodId == food.id" >
-            <div class="col-lg-6 col-md-12">
+            <div class="col-lg-6 col-md-6">
                 <div class="card customer">
-                        <div class="card-header customerHeader">
-                        <h1 class="customerHONE">Vendégajánló</h1>
+                    <div class="card-header customerHeader">
+                        <h1>Vendégajánló</h1>
                     </div>
-                    <div class="row card-body">
+                    <div class="container">
+                        <div class="row foodHeader">
+                            <h1>{{food.foodName}}</h1>
+                            <food-avg-component :food-id="food.id" class="star"></food-avg-component>
+                        </div>
                         <div class="row">
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <h1 class="customerHONE">{{food.foodName}}</h1>
-                            </div>
-                            <div class="col-xl-3 col-lg-4 col-md-3 col-sm-3 col-12">
-                                <img class="imgClass" :src="('storage/'+food.image)">
-                            </div>
-
-                                <div class="col-xl-9 col-lg-8 col-md-9 col-sm-9 col-12 foodDescription">
+                            <div class="col-7">
                                 <div class="row">
-                                     <div class="col-xl-8 col-lg-8 col-md-9 col-sm-9 col-12">
-                                    <p class="card-text">{{food.description}}</p>
+                                    <div class="foodDescription">{{food.description}}</div>
                                     </div>
-                                    <div class="col-xl-4 col-lg-4 col-md-3 col-sm-3 col-12">
-                                        <p >{{food.price}} HUF</p>
-                                    </div>
+                                <div class="row foodPrice">
+                                    <div>{{food.price}} HUF</div>
                                 </div>
+                            </div>
+                            <div class="col-5">
+                                <img class="imgClass" :src="('storage/'+food.image)">
                             </div>
                         </div>
                     </div>
@@ -36,28 +34,27 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6 col-md-12">
+            <div class="col-lg-6 col-md-6">
                 <div class="card customer">
-                        <div class="card-header customerHeader">
-                        <h1 class="customerHONE">Séfajánló</h1>
+                    <div class="card-header customerHeader">
+                        <h1>Séfajánló</h1>
                     </div>
-                    <div class="row card-body">
+                    <div class="container">
+                        <div class="row foodHeader">
+                            <h1>{{food.foodName}}</h1>
+                            <food-avg-component :food-id="food.id" class="star"></food-avg-component>
+                        </div>
                         <div class="row">
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <h1 class="customerHONE">{{food.foodName}}</h1>
+                            <div class="col-7">
+                                <div class="row">
+                                    <div class="foodDescription">{{food.description}}</div>
+                                    </div>
+                                <div class="row foodPrice">
+                                    <div>{{food.price}} HUF</div>
+                                </div>
                             </div>
-                            <div class="col-xl-3 col-lg-4 col-md-3 col-sm-3 col-12">
+                            <div class="col-5">
                                 <img class="imgClass" :src="('storage/'+food.image)">
-                            </div>
-                            <div class="col-xl-9 col-lg-8 col-md-9 col-sm-9 col-12 foodDescription">
-                               <div class="row">
-                                    <div class="col-xl-8 col-lg-8 col-md-9 col-sm-9 col-12">
-                                        <p class="card-text">{{food.description}}</p>
-                                    </div>
-                                    <div class="col-xl-4 col-lg-4 col-md-3 col-sm-3 col-12">
-                                        <p>{{food.price}} HUF</p>
-                                    </div>
-                               </div>
                             </div>
                         </div>
                     </div>
@@ -99,7 +96,7 @@ export default {
     }
 }
 </script>
-<style>
+<style scoped>
 .menuRecommenderContainer{
     background-image: url("/logo/darkBrownBoard.jpeg");
     background-repeat: no-repeat;
@@ -116,24 +113,38 @@ export default {
     background-color: rgba(225,198,153,0.5);
     color: white;
     margin-top: 10px;
+    margin-left: 60px;
+    width: 80%;
 }
 .imgClass{
     width: 100%;
-    height: auto;
-    margin-bottom: 10px;
+    border-radius: 10%;
+    margin-bottom: 10%;
 }
 .customerHeader{
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     border-bottom: 1px solid rgba(225,198,153);
 }
-.customerHONE{
+.foodHeader{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}
+h1{
     font-size:2.5vw;
 }
 .foodDescription{
+    font-size: 1vw;
+    margin: 10px;
+    max-width:250px;
+    width: 100%;
+    word-wrap:break-word;
+}
+.foodPrice{
     font-size:1vw;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
 }
 .customerFooter{
     border-top: 1px solid rgba(225,198,153);
@@ -147,6 +158,7 @@ export default {
     cursor: pointer;
     overflow: hidden;
     padding: 15px 19px;
+    font-size:1vw;
     text-align: center;
     color: white;
 }
@@ -158,26 +170,35 @@ export default {
 .buttonBackground:active{
     transform: scale(0.8);
 }
-@media screen and (max-width: 470px) {
-  .star {
-    display: none;
+@media screen and (max-width: 765px) {
+  .foodDescription {
+    font-size:1.5vw;
+  }
+  .foodPrice{
+    font-size:1.5vw;
   }
 }
-@media screen and (max-width: 576px) {
-  .customerHONE {
-    font-size:4vw;
-    display: flex;
-    justify-content: center;
+@media screen and (max-width: 600px) {
+  .foodDescription {
+    font-size:1.2vw;
   }
-  .imgClass{
-    width: 100px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;
+  .foodPrice{
+    font-size:1.2vw;
   }
-  .foodDescription{
-    font-size:2vw;
+}
+@media screen and (max-width: 520px) {
+  .foodDescription {
+    font-size:1.1vw;
+  }
+  .foodPrice{
+    font-size:1.1vw;
+  }
+  .star{
+      display: none;
+  }
+  .customer{
+    width: 100%;
+    margin: 10px 0px 0px 0px;
   }
 }
 </style>

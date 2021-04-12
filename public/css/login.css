@@ -1,0 +1,23 @@
+body{
+    background-color: rgba(225,198,153);
+    font-weight: bolder;
+}
+.container{
+    margin-top: 30px;
+}
+.card-body{
+    background-color: rgba(225,198,153,0.5);
+}
+.buttonStyle{
+    background-color: rgba(225,198,153,0.5);
+    border: 4px solid rgba(225,198,153);
+    border-radius: 10px;
+    font-weight: bolder;
+    width: 100%;
+}
+.buttonStyle:hover{
+    transform: scale(1.1);
+}
+.buttonStyle:active{
+    transform: scale(0.9);
+}

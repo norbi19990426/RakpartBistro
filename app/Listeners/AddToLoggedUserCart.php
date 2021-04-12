@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 
 class AddToLoggedUserCart{
 
+    //Bejelentkezésnél/Regisztráció utána, ha tartalmazott a kosár termékeket akkor feltölti a user_id-val megfelelően az adatbázisba
+    //De ha létezett már benne a termék, amit feltöltünk akkor csak update-t hajt végre rajta
     public function table(){
             $cart = session()->get('cart');
             $userCart = Cart::all();
@@ -31,6 +33,7 @@ class AddToLoggedUserCart{
             }
         }
     }
+    //Visszatölti a sessionbe az adatbázisba felkerült termékeket Bejelentkezésnél/Regisztráció után
     public function cart(){
         if(count(DB::table('carts')->get()) != 0){
             $cart = session()->get('cart');

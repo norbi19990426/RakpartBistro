@@ -90,4 +90,22 @@ p{
 .welcomeMenuButton:active{
     transform: scale(0.9);
 }
+@media screen and (max-width: 900px) {
+    p{
+        max-width:600px;
+    }
+}
+@media screen and (max-width: 700px) {
+    p{
+        max-width:400px;
+    }
+}
+@media screen and (max-width: 490px) {
+    p{
+        max-width:300px;
+    }
+    .welcomeMenuButton{
+        font-size: 1.3vw;
+    }
+}
 </style>
