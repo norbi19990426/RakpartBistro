@@ -137,7 +137,7 @@ export default {
                 confirmButtonText: "Igen, törlöm!",
                 }).then((result) => {
                 if (result.isConfirmed) {
-                    Swal.fire("Termék törölve!");
+                    Swal.fire("Rendelés törölve!");
                 this.selectId.forEach(element => {
                     this.ordersTable.forEach((x,y) => {//id és az index párja
                         if(element == x.id){

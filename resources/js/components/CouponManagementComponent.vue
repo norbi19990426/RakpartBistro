@@ -30,7 +30,7 @@
         <div class="modal-mask">
             <div class="modal-container" >
                 <div class="modal-header">
-                    <h3>Kupon szerkeztés</h3>
+                    <h3>Kupon szerkesztés</h3>
                 </div>
                 <div>
                     <div class="modal-body"  v-for="coupon in couponsTable" :key="coupon.id" v-if="couponId == coupon.id">
@@ -43,7 +43,7 @@
                                 <label for="couponPercent">Százalék mennyisége:</label>
                                 <input type="number" class="form-control" :value="coupon.couponPercent" @change="couponPercent = $event.target.value">
                             </div>
-                            <button type="submit" class="buttonStyle">Szerkeztés</button>
+                            <button type="submit" class="buttonStyle">Szerkesztés</button>
                         </form>
                     </div>
                 </div>

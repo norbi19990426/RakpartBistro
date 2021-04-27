@@ -3754,7 +3754,7 @@ __webpack_require__.r(__webpack_exports__);
         confirmButtonText: "Igen, törlöm!"
       }).then(function (result) {
         if (result.isConfirmed) {
-          sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire("Termék törölve!");
+          sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire("Rendelés törölve!");
 
           _this.selectId.forEach(function (element) {
             _this.ordersTable.forEach(function (x, y) {
@@ -75350,7 +75350,7 @@ var render = function() {
         _c("div", { staticClass: "modal-mask" }, [
           _c("div", { staticClass: "modal-container" }, [
             _c("div", { staticClass: "modal-header" }, [
-              _c("h3", [_vm._v("Kupon szerkeztés")])
+              _c("h3", [_vm._v("Kupon szerkesztés")])
             ]),
             _vm._v(" "),
             _c(
@@ -75417,7 +75417,7 @@ var render = function() {
                               staticClass: "buttonStyle",
                               attrs: { type: "submit" }
                             },
-                            [_vm._v("Szerkeztés")]
+                            [_vm._v("Szerkesztés")]
                           )
                         ]
                       )
