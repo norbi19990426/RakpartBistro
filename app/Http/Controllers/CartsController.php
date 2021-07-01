@@ -119,7 +119,6 @@ class CartsController extends Controller
     //REGISZTRÁLT FELHASZNÁLÓ CART-JA
     public function addToUserCart($foodId, $userId)
     {
-
         $cart = session()->get('cart');
         $decision = DB::table('carts')->whereIn('user_id', [$userId])->whereIn('food_id', [$foodId])->get();
 

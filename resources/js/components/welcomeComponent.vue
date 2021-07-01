@@ -98,16 +98,16 @@ export default {
 </script>
 <style scoped>
 .menuRecommenderContainer{
-    background-image: url("/logo/darkBrownBoard.jpeg");
+    /*background-image: url("/logo/darkBrownBoard.jpeg");
     background-repeat: no-repeat;
     background-position: center;
-    background-size: cover;
+    background-size: cover;*/
     border-radius: 30px;
 
 }
 .menuRecommenderBorder{
-    border: 100px solid transparent;
-    border-image: url("/logo/ropeBorder.png") 33% round;
+    /*border: 100px solid transparent;
+    border-image: url("/logo/ropeBorder.png") 33% round;*/
 }
 .customer{
     background-color: rgba(225,198,153,0.5);

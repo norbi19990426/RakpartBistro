@@ -1,8 +1,9 @@
 body{
-    background-image: url("/logo/brownWater.jpg");
+ /*   background-image: url("/logo/brownWater.jpg");
     width: 100%;
     height: auto;
-    background-repeat: no-repeat;
+    background-repeat: no-repeat;*/
+    background-color: rgba(225,198,153);
 }
 .welcomeHeader{
     background-image: url("/logo/Rakpart_KezdoBackground2.jpg");
